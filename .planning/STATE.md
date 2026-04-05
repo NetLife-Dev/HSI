@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** O hóspede reserva diretamente com o anfitrião numa experiência imersiva de marca própria — tão boa quanto Airbnb, sem depender de OTA.
-**Current focus:** Phase 1 — Foundation & Infraestrutura (in progress — Plan 03/05 complete)
+**Current focus:** Phase 1 — Foundation & Infraestrutura (in progress — Plan 05/05 complete)
 
 ## Milestone
 
@@ -15,7 +15,7 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 1 | Foundation & Infraestrutura | 🔄 In Progress (Plan 03/05 complete) |
+| 1 | Foundation & Infraestrutura | 🔄 In Progress (Plan 05/05 complete) |
 | 2 | Gestão de Imóveis & Face Pública | ⬜ Not started |
 | 3 | Motor de Booking | ⬜ Not started |
 | 4 | Operações — iCal, CRM & Financeiro | ⬜ Not started |
@@ -24,12 +24,12 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 **Phase:** 01-foundation-infraestrutura
-**Plan:** 01-03 (complete) → Next: 01-04
-**Stopped at:** Completed 01-03-PLAN.md
+**Plan:** 01-05 (complete) → Phase 1 all plans complete
+**Stopped at:** Completed 01-05-PLAN.md
 
 ## Last Action
 
-2026-04-05 — Plan 01-03 complete. NextAuth v5 with DrizzleAdapter, database sessions, Credentials+Resend providers, edge-safe /admin/:path* middleware, requireAuth/requireRole helpers, login page, and auth Server Actions.
+2026-04-05 — Plan 01-05 complete. CSP + security headers on every HTTP response, fire-and-forget audit log (logAction), in-memory token bucket rate limiter with 4 singleton instances, rate limit guards wired into auth Server Actions, build-blocking TypeScript errors resolved (Zod v4 API, exactOptionalPropertyTypes, Suspense boundary for useSearchParams).
 
 ## Decisions Log
 
@@ -47,6 +47,10 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 | 2026-04-05 | Middleware comment cannot reference /api/webhooks literally | matcher.test.ts checks content.not.toContain('/api/webhooks'); comment rephrased |
 | 2026-04-05 | Password reset reuses verificationTokens table | 'password-reset:' prefix on identifier avoids new table; token consumed after use |
 | 2026-04-05 | forgotPassword silently succeeds for non-existent emails | prevents email enumeration attacks |
+| 2026-04-05 | Rate limiter in-memory Map (no Redis) | Single EasyPanel instance per client; Redis adds ops overhead with no benefit for v1 |
+| 2026-04-05 | accounts.expires_at changed to integer | DrizzleAdapter DefaultPostgresAccountsTable requires PgInteger; previous text decision was incorrect |
+| 2026-04-05 | accounts token accessors renamed to snake_case | Matches DrizzleAdapter type expectations; DB column names unchanged |
+| 2026-04-05 | @auth/core/adapters AdapterUser augmented with role | Resolves @auth/drizzle-adapter vs next-auth internal @auth/core version conflict |
 
 ## Performance Metrics
 
@@ -55,7 +59,8 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 | 01 | 01 | 133min | 2 | 35 |
 | 01 | 02 | 93min | 3 | 9 |
 | 01 | 03 | 20min | 2 | 8 |
+| 01 | 05 | 65min | 3 | 13 |
 
 ## Next Step
 
-Execute Plan 01-04: Admin Dashboard & Navigation.
+Phase 1 complete (all 5 plans done). Execute Phase 1 transition or proceed to Phase 2: Gestão de Imóveis & Face Pública.
