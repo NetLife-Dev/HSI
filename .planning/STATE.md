@@ -1,3 +1,17 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
+stopped_at: Completed 01-04-PLAN.md
+last_updated: "2026-04-05T18:39:36.535Z"
+progress:
+  total_phases: 5
+  completed_phases: 0
+  total_plans: 5
+  completed_plans: 3
+---
+
 # HSI — Project State
 
 ## Project Reference
@@ -24,12 +38,12 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 **Phase:** 01-foundation-infraestrutura
-**Plan:** 01-02 (complete) → Next: 01-03
-**Stopped at:** Completed 01-02-PLAN.md
+**Plan:** 01-04 (complete) → Next: 01-05
+**Stopped at:** Completed 01-04-PLAN.md
 
 ## Last Action
 
-2026-04-05 — Plan 01-02 complete. Complete Drizzle schema for all 5 phases, migration runner with retry, instrumentation hook for auto-migration on startup.
+2026-04-05 — Plan 01-04 complete. Admin panel shell: collapsible sidebar, mobile bottom nav, sticky header with dark mode default, KpiCard component, dashboard skeleton page at /admin/dashboard.
 
 ## Decisions Log
 
@@ -44,6 +58,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 | 2026-04-05 | accounts.expiresAt as text | Auth.js drizzle adapter requires text type; integer causes silent auth failures |
 | 2026-04-05 | Migration at container startup via instrumentation.ts | EasyPanel redeploys fully automated; no manual migration step in nixpacks.toml |
 | 2026-04-05 | src/lib/audit.ts stub | Plan 01-03 imports logAction at build time; stub prevents module-not-found error |
+| 2026-04-05 | auth.ts stub for parallel execution | Plan 01-03 and 01-04 run in wave 3 simultaneously; stub prevents module-not-found in admin layout |
+| 2026-04-05 | ThemeProvider scoped to (admin) route group | Public pages use light mode; admin always starts in dark mode |
+| 2026-04-05 | localStorage hydration after mount | useEffect reads sidebar collapsed state post-SSR to avoid hydration mismatch |
 
 ## Performance Metrics
 
@@ -51,6 +68,7 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 |-------|------|----------|-------|-------|
 | 01 | 01 | 133min | 2 | 35 |
 | 01 | 02 | 93min | 3 | 9 |
+| 01 | 04 | 6min | 2 | 10 |
 
 ## Next Step
 
