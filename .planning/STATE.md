@@ -1,3 +1,17 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
+stopped_at: Completed 01-05-PLAN.md
+last_updated: "2026-04-05T20:00:00.000Z"
+progress:
+  total_phases: 5
+  completed_phases: 0
+  total_plans: 5
+  completed_plans: 5
+---
+
 # HSI — Project State
 
 ## Project Reference
@@ -5,7 +19,7 @@
 See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** O hóspede reserva diretamente com o anfitrião numa experiência imersiva de marca própria — tão boa quanto Airbnb, sem depender de OTA.
-**Current focus:** Phase 1 — Foundation & Infraestrutura (in progress — Plan 03/05 complete)
+**Current focus:** Phase 1 — Foundation & Infraestrutura (all 5 plans complete — pending verification)
 
 ## Milestone
 
@@ -15,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 1 | Foundation & Infraestrutura | 🔄 In Progress (Plan 03/05 complete) |
+| 1 | Foundation & Infraestrutura | 🔄 In Progress (Plan 05/05 complete — verifying) |
 | 2 | Gestão de Imóveis & Face Pública | ⬜ Not started |
 | 3 | Motor de Booking | ⬜ Not started |
 | 4 | Operações — iCal, CRM & Financeiro | ⬜ Not started |
@@ -24,12 +38,12 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 **Phase:** 01-foundation-infraestrutura
-**Plan:** 01-03 (complete) → Next: 01-04
-**Stopped at:** Completed 01-03-PLAN.md
+**Plan:** 01-05 (complete) → Verification pending
+**Stopped at:** Completed 01-05-PLAN.md
 
 ## Last Action
 
-2026-04-05 — Plan 01-03 complete. NextAuth v5 with DrizzleAdapter, database sessions, Credentials+Resend providers, edge-safe /admin/:path* middleware, requireAuth/requireRole helpers, login page, and auth Server Actions.
+2026-04-05 — Plan 01-05 complete. Security headers (CSP, HSTS, X-Frame-Options), audit log helper (fire-and-forget), rate limiter with 4 singletons, wired into auth Server Actions.
 
 ## Decisions Log
 
@@ -47,6 +61,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 | 2026-04-05 | Middleware comment cannot reference /api/webhooks literally | matcher.test.ts checks content.not.toContain('/api/webhooks'); comment rephrased |
 | 2026-04-05 | Password reset reuses verificationTokens table | 'password-reset:' prefix on identifier avoids new table; token consumed after use |
 | 2026-04-05 | forgotPassword silently succeeds for non-existent emails | prevents email enumeration attacks |
+| 2026-04-05 | auth.ts stub for parallel execution | Plan 01-03 and 01-04 run in wave 3 simultaneously; stub prevents module-not-found in admin layout |
+| 2026-04-05 | ThemeProvider scoped to (admin) route group | Public pages use light mode; admin always starts in dark mode |
+| 2026-04-05 | localStorage hydration after mount | useEffect reads sidebar collapsed state post-SSR to avoid hydration mismatch |
 
 ## Performance Metrics
 
@@ -55,7 +72,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 | 01 | 01 | 133min | 2 | 35 |
 | 01 | 02 | 93min | 3 | 9 |
 | 01 | 03 | 20min | 2 | 8 |
+| 01 | 04 | 6min | 2 | 10 |
+| 01 | 05 | 65min | 3 | 4 |
 
 ## Next Step
 
-Execute Plan 01-04: Admin Dashboard & Navigation.
+Verify Phase 01 completion.

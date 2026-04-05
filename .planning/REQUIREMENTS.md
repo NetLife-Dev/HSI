@@ -20,19 +20,19 @@
 
 ### Admin Layout & UX
 
-- [ ] **ADMIN-01**: Painel admin tem sidebar colapsável com navegação por módulo
-- [ ] **ADMIN-02**: Dark mode é o padrão do admin com alternância para light mode
-- [ ] **ADMIN-03**: Em mobile, sidebar se transforma em navegação inferior
-- [ ] **ADMIN-04**: Header inclui perfil do usuário e central de notificações in-app
+- [x] **ADMIN-01**: Painel admin tem sidebar colapsável com navegação por módulo
+- [x] **ADMIN-02**: Dark mode é o padrão do admin com alternância para light mode
+- [x] **ADMIN-03**: Em mobile, sidebar se transforma em navegação inferior
+- [x] **ADMIN-04**: Header inclui perfil do usuário e central de notificações in-app
 - [ ] **ADMIN-05**: Notificações in-app: nova reserva, pagamento confirmado, check-in do dia, check-out sem confirmação
 
 ### Dashboard
 
-- [ ] **DASH-01**: Dashboard exibe KPIs em tempo real: reservas ativas, faturamento do mês, taxa de ocupação, próximos check-ins
-- [ ] **DASH-02**: Gráfico de receita mensal dos últimos 12 meses
-- [ ] **DASH-03**: Gráfico de taxa de ocupação por imóvel
-- [ ] **DASH-04**: Lista das próximas reservas com ações rápidas (confirmar, ver detalhe)
-- [ ] **DASH-05**: Alertas críticos: reservas aguardando pagamento e check-outs do dia
+- [x] **DASH-01**: Dashboard exibe KPIs em tempo real: reservas ativas, faturamento do mês, taxa de ocupação, próximos check-ins
+- [x] **DASH-02**: Gráfico de receita mensal dos últimos 12 meses
+- [x] **DASH-03**: Gráfico de taxa de ocupação por imóvel
+- [x] **DASH-04**: Lista das próximas reservas com ações rápidas (confirmar, ver detalhe)
+- [x] **DASH-05**: Alertas críticos: reservas aguardando pagamento e check-outs do dia
 
 ### Property Management
 
