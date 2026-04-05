@@ -1,0 +1,160 @@
+'use server'
+
+import { signIn } from '@/lib/auth'
+import { AuthError } from 'next-auth'
+import { z } from 'zod'
+import bcrypt from 'bcryptjs'
+import crypto from 'crypto'
+import { eq, and, gt } from 'drizzle-orm'
+import { db } from '@/db/index'
+import { users, verificationTokens } from '@/db/schema'
+import { logAction } from '@/lib/audit'
+
+const loginSchema = z.object({
+  email: z.string().email('E-mail inválido'),
+  password: z.string().min(1, 'Senha obrigatória'),
+})
+
+const emailSchema = z.object({
+  email: z.string().email('E-mail inválido'),
+})
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1),
+  password: z.string().min(8, 'Senha deve ter no mínimo 8 caracteres'),
+})
+
+export async function loginWithCredentials(formData: FormData) {
+  const parsed = loginSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0]?.message ?? 'Dados inválidos' }
+  }
+
+  try {
+    await signIn('credentials', {
+      email: parsed.data.email.toLowerCase(),
+      password: parsed.data.password,
+      redirectTo: '/admin/dashboard',
+    })
+  } catch (err) {
+    if (err instanceof AuthError) {
+      // Log failed attempt (fire-and-forget — no IP here, middleware handles that via events)
+      void logAction({
+        action: 'LOGIN_FAILED',
+        metadata: { email: parsed.data.email.toLowerCase(), provider: 'credentials' },
+      })
+      return { error: 'E-mail ou senha incorretos' }
+    }
+    throw err // Re-throw redirect errors (they are normal control flow in Next.js)
+  }
+}
+
+export async function sendMagicLink(formData: FormData) {
+  const parsed = emailSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0]?.message ?? 'E-mail inválido' }
+  }
+
+  try {
+    await signIn('resend', {
+      email: parsed.data.email.toLowerCase(),
+      redirectTo: '/admin/dashboard',
+    })
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return { error: 'Não foi possível enviar o link. Tente novamente.' }
+    }
+    throw err
+  }
+}
+
+export async function forgotPassword(formData: FormData) {
+  const parsed = emailSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0]?.message ?? 'E-mail inválido' }
+  }
+
+  const email = parsed.data.email.toLowerCase()
+
+  // Check user exists — silently succeed even if not (prevents email enumeration)
+  const [user] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1)
+
+  if (!user) {
+    // Return success to prevent email enumeration
+    return { success: true }
+  }
+
+  const token = crypto.randomBytes(32).toString('hex')
+  const expires = new Date(Date.now() + 1000 * 60 * 60) // 1 hour
+
+  // Reuse verificationTokens table with 'password-reset:' prefix on identifier
+  await db.insert(verificationTokens).values({
+    identifier: `password-reset:${email}`,
+    token,
+    expires,
+  })
+
+  // TODO Phase 1: Send email via Resend with reset URL: /reset-password?token={token}&email={email}
+  // For now, log the token (dev only — remove before production)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[forgotPassword] Reset token:', token, 'for', email)
+  }
+
+  return { success: true }
+}
+
+export async function resetPassword(formData: FormData) {
+  const parsed = resetPasswordSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0]?.message ?? 'Dados inválidos' }
+  }
+
+  const { token, password } = parsed.data
+
+  // Find and validate the reset token
+  const [record] = await db
+    .select()
+    .from(verificationTokens)
+    .where(
+      and(
+        eq(verificationTokens.token, token),
+        gt(verificationTokens.expires, new Date())
+      )
+    )
+    .limit(1)
+
+  if (!record || !record.identifier.startsWith('password-reset:')) {
+    return { error: 'Token inválido ou expirado' }
+  }
+
+  const email = record.identifier.replace('password-reset:', '')
+
+  const passwordHash = await bcrypt.hash(password, 12)
+
+  await db
+    .update(users)
+    .set({ passwordHash })
+    .where(eq(users.email, email))
+
+  // Consume the token (delete after use)
+  await db
+    .delete(verificationTokens)
+    .where(
+      and(
+        eq(verificationTokens.identifier, record.identifier),
+        eq(verificationTokens.token, token)
+      )
+    )
+
+  void logAction({
+    action: 'PASSWORD_RESET',
+    entityType: 'user',
+    metadata: { email },
+  })
+
+  return { success: true }
+}
