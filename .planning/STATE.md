@@ -43,7 +43,7 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Last Action
 
-2026-04-05 — Plan 01-05 complete. CSP + security headers on every HTTP response, fire-and-forget audit log (logAction), in-memory token bucket rate limiter with 4 singleton instances, rate limit guards wired into auth Server Actions. Fixed: Zod v4 `.issues` API, `exactOptionalPropertyTypes` TS errors, Suspense boundary for `useSearchParams`, `accounts.expires_at` integer type.
+2026-04-05 — Plan 01-05 complete. CSP + security headers on every HTTP response, fire-and-forget audit log (logAction), in-memory token bucket rate limiter with 4 singleton instances, rate limit guards wired into auth Server Actions. Fixed: Zod v4 `.issues` API, `exactOptionalPropertyTypes` TS errors, Suspense boundary for `useSearchParams`, `accounts.expires_at` integer type. Audit log now captures IP and user-agent on credentials login.
 
 ## Decisions Log
 
@@ -67,6 +67,7 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 | 2026-04-05 | Rate limiter in-memory Map (no Redis) | Single EasyPanel instance per client; Redis adds ops overhead with no benefit for v1 |
 | 2026-04-05 | accounts.expires_at changed to integer | DrizzleAdapter DefaultPostgresAccountsTable requires PgInteger |
 | 2026-04-05 | @auth/core/adapters AdapterUser augmented with role | Resolves @auth/drizzle-adapter vs next-auth internal @auth/core version conflict |
+| 2026-04-05 | loginWithCredentials logs IP/userAgent directly | NextAuth signIn event has no req access; Server Action has headers() — restructured to redirect manually after logAction |
 
 ## Performance Metrics
 

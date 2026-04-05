@@ -77,13 +77,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   events: {
     async signIn({ user, account, isNewUser }) {
-      // Fire-and-forget audit log — never blocks auth flow
-      void logAction({
-        ...(user.id ? { userId: user.id, entityId: user.id } : {}),
-        action: 'LOGIN_SUCCESS',
-        entityType: 'user',
-        metadata: { provider: account?.provider, isNewUser },
-      })
+      // Log magic link / OAuth sign-ins (credentials login is logged in the Server Action with IP/userAgent)
+      if (account?.provider !== 'credentials') {
+        void logAction({
+          ...(user.id ? { userId: user.id, entityId: user.id } : {}),
+          action: 'LOGIN_SUCCESS',
+          entityType: 'user',
+          metadata: { provider: account?.provider, isNewUser },
+        })
+      }
     },
   },
 })

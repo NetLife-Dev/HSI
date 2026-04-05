@@ -10,6 +10,7 @@ import { db } from '@/db/index'
 import { users, verificationTokens } from '@/db/schema'
 import { logAction } from '@/lib/audit'
 import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { loginLimiter, magicLinkLimiter } from '@/lib/rate-limit'
 
 const loginSchema = z.object({
@@ -34,28 +35,40 @@ export async function loginWithCredentials(formData: FormData) {
 
   // Rate limit: 10 login attempts per IP per 15 minutes
   const headersList = await headers()
-  const ip = headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '127.0.0.1'
+  const ip = headersList.get('x-client-ip') ?? headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '127.0.0.1'
+  const userAgent = headersList.get('user-agent') ?? undefined
   if (!loginLimiter.check(ip, 10, 15 * 60 * 1000)) {
     return { error: 'Muitas tentativas. Tente novamente em 15 minutos.' }
   }
 
   try {
+    // No redirectTo — handle redirect manually so we can audit log with IP/userAgent first
     await signIn('credentials', {
       email: parsed.data.email.toLowerCase(),
       password: parsed.data.password,
-      redirectTo: '/admin/dashboard',
+      redirect: false,
     })
   } catch (err) {
     if (err instanceof AuthError) {
-      // Log failed attempt (fire-and-forget — no IP here, middleware handles that via events)
       void logAction({
         action: 'LOGIN_FAILED',
+        ipAddress: ip,
+        userAgent,
         metadata: { email: parsed.data.email.toLowerCase(), provider: 'credentials' },
       })
       return { error: 'E-mail ou senha incorretos' }
     }
-    throw err // Re-throw redirect errors (they are normal control flow in Next.js)
+    throw err
   }
+
+  // Login succeeded — audit log with IP and user agent before redirect
+  void logAction({
+    action: 'LOGIN_SUCCESS',
+    ipAddress: ip,
+    userAgent,
+    metadata: { provider: 'credentials' },
+  })
+  redirect('/admin/dashboard')
 }
 
 export async function sendMagicLink(formData: FormData) {
