@@ -36,17 +36,17 @@ Fase 1 (Foundation)
 
 ## Phases
 
-- [ ] **Fase 1: Foundation & Infraestrutura** — Scaffolding, schema, auth, shell admin, deploy config
-- [ ] **Fase 2: Gestão de Imóveis & Face Pública** — CRUD de imóveis, Cloudinary, homepage e página de imóvel sem booking
-- [ ] **Fase 3: Motor de Booking** — Disponibilidade, cotação, Stripe, confirmação por e-mail e voucher PDF
-- [ ] **Fase 4: Operações — iCal, CRM & Financeiro** — Sync com OTAs, CRM de hóspedes, financeiro, configurações
-- [ ] **Fase 5: Segurança, Staff & Polimento** — Audit completo, sistema de staff, notificações, rate limiting endurecido
+- [ ] **Phase 1: Foundation & Infraestrutura** — Scaffolding, schema, auth, shell admin, deploy config
+- [ ] **Phase 2: Gestão de Imóveis & Face Pública** — CRUD de imóveis, Cloudinary, homepage e página de imóvel sem booking
+- [ ] **Phase 3: Motor de Booking** — Disponibilidade, cotação, Stripe, confirmação por e-mail e voucher PDF
+- [ ] **Phase 4: Operações — iCal, CRM & Financeiro** — Sync com OTAs, CRM de hóspedes, financeiro, configurações
+- [ ] **Phase 5: Segurança, Staff & Polimento** — Audit completo, sistema de staff, notificações, rate limiting endurecido
 
 ---
 
 ## Phase Details
 
-### Fase 1: Foundation & Infraestrutura
+### Phase 1: Foundation & Infraestrutura
 
 **Goal**: O projeto existe, faz deploy no EasyPanel sem erros, e o admin consegue fazer login — nada mais, nada menos. Tudo o que vem depois depende de este alicerce estar correto.
 
@@ -84,7 +84,7 @@ Fase 1 (Foundation)
 
 ---
 
-### Fase 2: Gestão de Imóveis & Face Pública
+### Phase 2: Gestão de Imóveis & Face Pública
 
 **Goal**: O admin cadastra um imóvel completo com fotos, precificação e regras. O hóspede acessa a homepage pública e a página do imóvel com experiência cinematográfica — sem conseguir reservar ainda, mas com toda a apresentação visual e editorial.
 
@@ -122,7 +122,7 @@ Fase 1 (Foundation)
 
 ---
 
-### Fase 3: Motor de Booking
+### Phase 3: Motor de Booking
 
 **Goal**: O hóspede seleciona datas, vê a cotação completa com breakdown, preenche seus dados, paga via Stripe (cartão ou Pix) e recebe o e-mail de confirmação com voucher PDF. O admin vê a reserva confirmada no painel com timeline de auditoria.
 
@@ -162,7 +162,7 @@ Fase 1 (Foundation)
 
 ---
 
-### Fase 4: Operações — iCal, CRM & Financeiro
+### Phase 4: Operações — iCal, CRM & Financeiro
 
 **Goal**: Admin sincroniza calendários com Airbnb e Booking.com bidirecional, gerencia hóspedes numa pipeline kanban, acompanha o fluxo de caixa e configura a identidade visual da instância.
 
@@ -196,7 +196,7 @@ Fase 1 (Foundation)
 
 ---
 
-### Fase 5: Segurança, Staff & Polimento
+### Phase 5: Segurança, Staff & Polimento
 
 **Goal**: Auditoria completa de segurança, sistema de usuários staff com permissões granulares, notificações in-app operacionais, rate limiting endurecido em todos os endpoints sensíveis, e checklist de deploy para produção.
 
