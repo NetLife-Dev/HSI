@@ -9,6 +9,8 @@ import { eq, and, gt } from 'drizzle-orm'
 import { db } from '@/db/index'
 import { users, verificationTokens } from '@/db/schema'
 import { logAction } from '@/lib/audit'
+import { headers } from 'next/headers'
+import { loginLimiter, magicLinkLimiter } from '@/lib/rate-limit'
 
 const loginSchema = z.object({
   email: z.string().email('E-mail inválido'),
@@ -28,6 +30,13 @@ export async function loginWithCredentials(formData: FormData) {
   const parsed = loginSchema.safeParse(Object.fromEntries(formData))
   if (!parsed.success) {
     return { error: parsed.error.errors[0]?.message ?? 'Dados inválidos' }
+  }
+
+  // Rate limit: 10 login attempts per IP per 15 minutes
+  const headersList = await headers()
+  const ip = headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '127.0.0.1'
+  if (!loginLimiter.check(ip, 10, 15 * 60 * 1000)) {
+    return { error: 'Muitas tentativas. Tente novamente em 15 minutos.' }
   }
 
   try {
@@ -53,6 +62,11 @@ export async function sendMagicLink(formData: FormData) {
   const parsed = emailSchema.safeParse(Object.fromEntries(formData))
   if (!parsed.success) {
     return { error: parsed.error.errors[0]?.message ?? 'E-mail inválido' }
+  }
+
+  // Rate limit: 3 magic link requests per email per hour
+  if (!magicLinkLimiter.check(parsed.data.email.toLowerCase(), 3, 60 * 60 * 1000)) {
+    return { error: 'Limite de magic links atingido. Tente novamente em 1 hora.' }
   }
 
   try {
