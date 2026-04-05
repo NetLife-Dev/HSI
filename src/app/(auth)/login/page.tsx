@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { loginWithCredentials, sendMagicLink } from '@/actions/auth'
 
-export default function LoginPage() {
+function LoginForm() {
   const searchParams = useSearchParams()
   const error = searchParams.get('error')
 
@@ -120,5 +120,13 @@ export default function LoginPage() {
         </form>
       )}
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="space-y-6 animate-pulse" />}>
+      <LoginForm />
+    </Suspense>
   )
 }

@@ -12,3 +12,12 @@ declare module 'next-auth' {
     role: 'owner' | 'staff'
   }
 }
+
+// Augment @auth/core AdapterUser to include the role field added to the users table.
+// This resolves the type incompatibility between @auth/drizzle-adapter and next-auth
+// when both reference different internal copies of @auth/core.
+declare module '@auth/core/adapters' {
+  interface AdapterUser {
+    role: 'owner' | 'staff'
+  }
+}

@@ -29,7 +29,7 @@ const resetPasswordSchema = z.object({
 export async function loginWithCredentials(formData: FormData) {
   const parsed = loginSchema.safeParse(Object.fromEntries(formData))
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? 'Dados inválidos' }
+    return { error: parsed.error.issues[0]?.message ?? 'Dados inválidos' }
   }
 
   // Rate limit: 10 login attempts per IP per 15 minutes
@@ -61,7 +61,7 @@ export async function loginWithCredentials(formData: FormData) {
 export async function sendMagicLink(formData: FormData) {
   const parsed = emailSchema.safeParse(Object.fromEntries(formData))
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? 'E-mail inválido' }
+    return { error: parsed.error.issues[0]?.message ?? 'E-mail inválido' }
   }
 
   // Rate limit: 3 magic link requests per email per hour
@@ -85,7 +85,7 @@ export async function sendMagicLink(formData: FormData) {
 export async function forgotPassword(formData: FormData) {
   const parsed = emailSchema.safeParse(Object.fromEntries(formData))
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? 'E-mail inválido' }
+    return { error: parsed.error.issues[0]?.message ?? 'E-mail inválido' }
   }
 
   const email = parsed.data.email.toLowerCase()
@@ -124,7 +124,7 @@ export async function forgotPassword(formData: FormData) {
 export async function resetPassword(formData: FormData) {
   const parsed = resetPasswordSchema.safeParse(Object.fromEntries(formData))
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? 'Dados inválidos' }
+    return { error: parsed.error.issues[0]?.message ?? 'Dados inválidos' }
   }
 
   const { token, password } = parsed.data

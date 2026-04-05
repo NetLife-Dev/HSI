@@ -60,14 +60,16 @@ export const accounts = pgTable(
       .references(() => users.id, { onDelete: 'cascade' }),
     type: text('type').notNull(),
     provider: text('provider').notNull(),
+    // providerAccountId uses camelCase accessor — adapter matches by column name 'provider_account_id'
     providerAccountId: text('provider_account_id').notNull(),
-    refreshToken: text('refresh_token'),
-    accessToken: text('access_token'),
-    expiresAt: text('expires_at'), // text — NOT integer; adapter compatibility requirement
-    tokenType: text('token_type'),
+    // OAuth token fields: accessors must match @auth/drizzle-adapter DefaultPostgresAccountsTable expectations
+    refresh_token: text('refresh_token'),
+    access_token: text('access_token'),
+    expires_at: integer('expires_at'), // integer (Unix timestamp seconds) — required by @auth/drizzle-adapter type
+    token_type: text('token_type'),
     scope: text('scope'),
-    idToken: text('id_token'),
-    sessionState: text('session_state'),
+    id_token: text('id_token'),
+    session_state: text('session_state'),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.provider, t.providerAccountId] }),
