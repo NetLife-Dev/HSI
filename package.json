@@ -1,16 +1,20 @@
 {
-  "name": "hsi-bootstrap",
+  "name": "hostsemimposto",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
     "@base-ui/react": "^1.3.0",
+    "@hookform/resolvers": "^5.2.2",
     "@react-pdf/renderer": "^4.3.3",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
@@ -21,13 +25,14 @@
     "lucide-react": "^1.7.0",
     "motion": "^12.38.0",
     "next": "15.5.14",
-    "next-auth": "^5.0.0-beta.30",
+    "next-auth": "5.0.0-beta.30",
     "next-themes": "^0.4.6",
     "node-cron": "^3.0.3",
     "node-ical": "^0.21.0",
     "postgres": "^3.4.8",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-hook-form": "^7.72.1",
     "shadcn": "^4.1.2",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
@@ -38,6 +43,7 @@
     "@eslint/eslintrc": "^3",
     "@prisma/client": "^7.6.0",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/bcryptjs": "^2.4.6",
@@ -49,10 +55,12 @@
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "15.5.14",
-    "jsdom": "^29.0.1",
     "prisma": "^7.6.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.2"
+  },
+  "overrides": {
+    "jsdom": "25.0.1"
   }
 }
