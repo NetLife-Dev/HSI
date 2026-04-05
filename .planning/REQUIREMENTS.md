@@ -177,7 +177,7 @@
 ### Deployment & Ops
 
 - [x] **OPS-01**: Projeto configurado com `output: 'standalone'` no next.config.ts para deploy em container *(completed: 01-01)*
-- [ ] **OPS-02**: Migrations do Drizzle são executadas automaticamente no startup antes de iniciar o servidor
+- [x] **OPS-02**: Migrations do Drizzle são executadas automaticamente no startup antes de iniciar o servidor
 - [x] **OPS-03**: `NEXT_PUBLIC_*` variáveis de ambiente documentadas para configuração no EasyPanel antes do primeiro build *(completed: 01-01)*
 - [x] **OPS-04**: Prisma Studio disponível para inspeção visual do banco via túnel SSH (nunca exposto publicamente) *(completed: 01-01)*
 - [x] **OPS-05**: Prisma é dependência de desenvolvimento apenas (`devDependencies`); não afeta build de produção *(completed: 01-01)*
