@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** O hóspede reserva diretamente com o anfitrião numa experiência imersiva de marca própria — tão boa quanto Airbnb, sem depender de OTA.
-**Current focus:** Phase 1 — Foundation & Infraestrutura (in progress — Plan 01 complete)
+**Current focus:** Phase 1 — Foundation & Infraestrutura (in progress — Plan 03/05 complete)
 
 ## Milestone
 
@@ -15,7 +15,7 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 1 | Foundation & Infraestrutura | 🔄 In Progress (Plan 02/05 complete) |
+| 1 | Foundation & Infraestrutura | 🔄 In Progress (Plan 03/05 complete) |
 | 2 | Gestão de Imóveis & Face Pública | ⬜ Not started |
 | 3 | Motor de Booking | ⬜ Not started |
 | 4 | Operações — iCal, CRM & Financeiro | ⬜ Not started |
@@ -24,12 +24,12 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 **Phase:** 01-foundation-infraestrutura
-**Plan:** 01-02 (complete) → Next: 01-03
-**Stopped at:** Completed 01-02-PLAN.md
+**Plan:** 01-03 (complete) → Next: 01-04
+**Stopped at:** Completed 01-03-PLAN.md
 
 ## Last Action
 
-2026-04-05 — Plan 01-02 complete. Complete Drizzle schema for all 5 phases, migration runner with retry, instrumentation hook for auto-migration on startup.
+2026-04-05 — Plan 01-03 complete. NextAuth v5 with DrizzleAdapter, database sessions, Credentials+Resend providers, edge-safe /admin/:path* middleware, requireAuth/requireRole helpers, login page, and auth Server Actions.
 
 ## Decisions Log
 
@@ -44,6 +44,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 | 2026-04-05 | accounts.expiresAt as text | Auth.js drizzle adapter requires text type; integer causes silent auth failures |
 | 2026-04-05 | Migration at container startup via instrumentation.ts | EasyPanel redeploys fully automated; no manual migration step in nixpacks.toml |
 | 2026-04-05 | src/lib/audit.ts stub | Plan 01-03 imports logAction at build time; stub prevents module-not-found error |
+| 2026-04-05 | Middleware comment cannot reference /api/webhooks literally | matcher.test.ts checks content.not.toContain('/api/webhooks'); comment rephrased |
+| 2026-04-05 | Password reset reuses verificationTokens table | 'password-reset:' prefix on identifier avoids new table; token consumed after use |
+| 2026-04-05 | forgotPassword silently succeeds for non-existent emails | prevents email enumeration attacks |
 
 ## Performance Metrics
 
@@ -51,7 +54,8 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 |-------|------|----------|-------|-------|
 | 01 | 01 | 133min | 2 | 35 |
 | 01 | 02 | 93min | 3 | 9 |
+| 01 | 03 | 20min | 2 | 8 |
 
 ## Next Step
 
-Execute Plan 01-03: NextAuth v5 Authentication Configuration.
+Execute Plan 01-04: Admin Dashboard & Navigation.

@@ -9,12 +9,12 @@
 
 ### Foundation & Auth
 
-- [ ] **AUTH-01**: Admin pode fazer login com e-mail + senha (bcrypt hash)
-- [ ] **AUTH-02**: Admin pode fazer login via magic link enviado por e-mail (Resend)
-- [ ] **AUTH-03**: Admin pode recuperar senha via token temporário com expiração
-- [ ] **AUTH-04**: Sessão persiste entre refreshes de browser (NextAuth v5, database session strategy)
-- [ ] **AUTH-05**: Todas as rotas `/admin/*` são protegidas por middleware — redirect para login se não autenticado
-- [ ] **AUTH-06**: Webhook do Stripe em `/api/webhooks/stripe` é excluído do middleware de auth
+- [x] **AUTH-01**: Admin pode fazer login com e-mail + senha (bcrypt hash)
+- [x] **AUTH-02**: Admin pode fazer login via magic link enviado por e-mail (Resend)
+- [x] **AUTH-03**: Admin pode recuperar senha via token temporário com expiração
+- [x] **AUTH-04**: Sessão persiste entre refreshes de browser (NextAuth v5, database session strategy)
+- [x] **AUTH-05**: Todas as rotas `/admin/*` são protegidas por middleware — redirect para login se não autenticado
+- [x] **AUTH-06**: Webhook do Stripe em `/api/webhooks/stripe` é excluído do middleware de auth
 - [ ] **AUTH-07**: Owner pode convidar colaboradores (staff) por e-mail
 - [ ] **AUTH-08**: Permissões de staff são configuráveis por módulo (visualizar / editar / sem acesso)
 
