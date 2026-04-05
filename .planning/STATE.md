@@ -43,7 +43,7 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Last Action
 
-2026-04-05 — Plan 01-05 complete. Security headers (CSP, HSTS, X-Frame-Options), audit log helper (fire-and-forget), rate limiter with 4 singletons, wired into auth Server Actions.
+2026-04-05 — Plan 01-05 complete. CSP + security headers on every HTTP response, fire-and-forget audit log (logAction), in-memory token bucket rate limiter with 4 singleton instances, rate limit guards wired into auth Server Actions. Fixed: Zod v4 `.issues` API, `exactOptionalPropertyTypes` TS errors, Suspense boundary for `useSearchParams`, `accounts.expires_at` integer type.
 
 ## Decisions Log
 
@@ -64,6 +64,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 | 2026-04-05 | auth.ts stub for parallel execution | Plan 01-03 and 01-04 run in wave 3 simultaneously; stub prevents module-not-found in admin layout |
 | 2026-04-05 | ThemeProvider scoped to (admin) route group | Public pages use light mode; admin always starts in dark mode |
 | 2026-04-05 | localStorage hydration after mount | useEffect reads sidebar collapsed state post-SSR to avoid hydration mismatch |
+| 2026-04-05 | Rate limiter in-memory Map (no Redis) | Single EasyPanel instance per client; Redis adds ops overhead with no benefit for v1 |
+| 2026-04-05 | accounts.expires_at changed to integer | DrizzleAdapter DefaultPostgresAccountsTable requires PgInteger |
+| 2026-04-05 | @auth/core/adapters AdapterUser augmented with role | Resolves @auth/drizzle-adapter vs next-auth internal @auth/core version conflict |
 
 ## Performance Metrics
 
@@ -73,8 +76,8 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 | 01 | 02 | 93min | 3 | 9 |
 | 01 | 03 | 20min | 2 | 8 |
 | 01 | 04 | 6min | 2 | 10 |
-| 01 | 05 | 65min | 3 | 4 |
+| 01 | 05 | 65min | 3 | 13 |
 
 ## Next Step
 
-Verify Phase 01 completion.
+Verify Phase 01 completion and transition to Phase 02.

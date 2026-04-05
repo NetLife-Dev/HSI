@@ -56,7 +56,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return {
           id: user.id,
           email: user.email,
-          name: user.name ?? undefined,
+          name: user.name ?? null,
           role: user.role ?? 'owner',
         }
       },
@@ -79,10 +79,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ user, account, isNewUser }) {
       // Fire-and-forget audit log — never blocks auth flow
       void logAction({
-        userId: user.id,
+        ...(user.id ? { userId: user.id, entityId: user.id } : {}),
         action: 'LOGIN_SUCCESS',
         entityType: 'user',
-        entityId: user.id,
         metadata: { provider: account?.provider, isNewUser },
       })
     },

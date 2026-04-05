@@ -235,7 +235,7 @@ Fase 1 (Foundation)
 
 | Fase | Planos Completos | Status | Concluída |
 |------|-----------------|--------|-----------|
-| 1. Foundation & Infraestrutura | 3/5 | In Progress|  |
+| 1. Foundation & Infraestrutura | 5/5 | Complete | 2026-04-05 |
 | 2. Gestão de Imóveis & Face Pública | 0/? | Not started | - |
 | 3. Motor de Booking | 0/? | Not started | - |
 | 4. Operações — iCal, CRM & Financeiro | 0/? | Not started | - |
