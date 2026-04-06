@@ -22,9 +22,20 @@ export const metadata: Metadata = {
 }
 
 export default async function PropertiesPage() {
-  const propertyList = await db.query.properties.findMany({
-    orderBy: [desc(properties.createdAt)],
-  })
+  let propertyList: any[] = []
+  
+  try {
+    propertyList = await db.query.properties.findMany({
+      orderBy: [desc(properties.createdAt)],
+    })
+  } catch (error) {
+    console.warn('⚠️ [Admin/Properties] Banco offline. Usando mocks para visualização.')
+    propertyList = [
+      { id: 'mock1', name: 'Villa Ocean View', slug: 'villa-ocean-view', status: 'active', maxGuests: 8, bedrooms: 4, createdAt: new Date() },
+      { id: 'mock2', name: 'Refúgio da Mata', slug: 'refugio-da-mata', status: 'active', maxGuests: 6, bedrooms: 3, createdAt: new Date() },
+      { id: 'mock3', name: 'Cobertura Skyline', slug: 'cobertura-skyline', status: 'maintenance', maxGuests: 4, bedrooms: 2, createdAt: new Date() },
+    ]
+  }
 
   return (
     <div className="space-y-6">

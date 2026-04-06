@@ -8,7 +8,7 @@ interface LogActionParams {
   entityId?: string
   metadata?: Record<string, unknown>
   ipAddress?: string
-  userAgent?: string
+  userAgent?: string | null
 }
 
 /**

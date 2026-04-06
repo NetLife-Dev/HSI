@@ -62,6 +62,8 @@ export function PropertyForm({ initialData }: PropertyFormProps) {
         ? await updateProperty(initialData.id, data) 
         : await createProperty(data)
 
+      console.log('[PropertyForm] Action result:', result)
+
       if (result.error) {
         toast.error(result.error)
       } else {

@@ -2,6 +2,8 @@ import { CalendarDays, DollarSign, Home, TrendingUp } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { KpiCard } from '@/components/admin/KpiCard'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 
 export default function DashboardPage() {
   // Realistic Mock Data for UI/UX testing in current restricted DB state

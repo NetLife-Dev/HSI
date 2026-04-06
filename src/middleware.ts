@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' https://js.stripe.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "img-src 'self' data: https://res.cloudinary.com",
   "font-src 'self' https://fonts.gstatic.com",

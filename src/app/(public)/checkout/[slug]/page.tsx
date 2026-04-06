@@ -191,15 +191,8 @@ export default async function CheckoutPage({
                    </div>
                 </div>
 
-                <Link href="/checkout/sucesso" className="w-full">
-                  <Button className="w-full h-16 rounded-2xl text-md font-bold tracking-widest uppercase bg-accent text-accent-foreground hover:bg-accent-hover hover:scale-[1.02] transition-transform shadow-xl border-0">
-                     Confirmar e Pagar
-                  </Button>
-                </Link>
-
-                <div className="flex items-center justify-center gap-2 text-[10px] text-white/30 uppercase font-bold tracking-widest mt-6">
-                   <Lock size={10} />
-                   Secure SSL Encryption
+                <div className="mt-8 p-4 rounded-2xl bg-white/5 border border-white/10 text-[10px] text-white/40 leading-relaxed italic">
+                   Ao clicar em confirmar no formulário ao lado, você será redirecionado para o Stripe para o pagamento seguro.
                 </div>
              </div>
           </div>
