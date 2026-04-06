@@ -115,39 +115,47 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-/* Dark mode CSS variables for admin panel */
+/* Dark mode CSS variables for admin panel (Fintech Carbon Aesthetic) */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --background: oklch(0.18 0.01 260); /* Matte Carbon */
+  --foreground: oklch(0.985 0 0); /* Pure White */
+  --card: oklch(0.22 0.01 260); /* Slightly Elevated Carbon */
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
+  --popover: oklch(0.25 0.01 260);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
+  
+  /* Accent: Metallic Gold keeping brand unity */
+  --primary: oklch(0.77 0.14 80); 
+  --primary-foreground: oklch(0.18 0.01 260);
+  
+  --secondary: oklch(0.3 0.01 260);
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
+  --muted: oklch(0.28 0.01 260);
+  --muted-foreground: oklch(0.7 0.02 260);
+  --accent: oklch(0.3 0.01 260);
   --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
+  --destructive: oklch(0.6 0.2 25);
+  
+  /* Borders and Rings for Aviation Cockpit Feel */
+  --border: oklch(0.3 0.01 260);
+  --input: oklch(0.28 0.01 260);
+  --ring: oklch(0.77 0.14 80);
+  
+  /* Charts */
+  --chart-1: oklch(0.77 0.14 80);  /* Gold */
+  --chart-2: oklch(0.69 0.17 162); /* Emerald */
+  --chart-3: oklch(0.8 0.1 230);   /* Cyan */
+  --chart-4: oklch(0.6 0.15 300);  /* Purple */
+  --chart-5: oklch(0.5 0.2 20);    /* Deep Red */
+  
+  --sidebar: oklch(0.18 0.01 260);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-primary: oklch(0.77 0.14 80);
+  --sidebar-primary-foreground: oklch(0.18 0.01 260);
+  --sidebar-accent: oklch(0.25 0.01 260);
   --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-border: oklch(0.25 0.01 260);
+  --sidebar-ring: oklch(0.77 0.14 80);
 
   --color-background: #0a0a0a;
   --color-surface: #111111;

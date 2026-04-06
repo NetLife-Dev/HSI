@@ -31,11 +31,11 @@ export function KpiCard({
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="flex-1 space-y-1">
-            <p className="text-sm text-[var(--color-text-secondary)]">{label}</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">{label}</p>
             {loading ? (
-              <Skeleton className="h-8 w-24" />
+              <Skeleton className="h-8 w-24 bg-[var(--color-border)]" />
             ) : (
-              <p className="text-2xl font-semibold text-[var(--color-text-primary)]">
+              <p className="text-3xl font-mono tracking-tight tabular-nums text-[var(--color-text-primary)]">
                 {value ?? '—'}
               </p>
             )}
