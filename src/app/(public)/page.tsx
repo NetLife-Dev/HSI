@@ -58,7 +58,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="relative bg-black min-h-screen">
+    <div className="relative bg-background min-h-screen">
       {/* Cinematic Hero Section */}
       <section className="relative h-screen min-h-[800px] flex items-end pb-32 overflow-hidden">
         {/* Background Video/Image Layer */}
@@ -79,12 +79,12 @@ export default async function HomePage() {
           <div className="flex flex-col lg:flex-row items-end justify-between gap-12 w-full">
              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-12 duration-1000 max-w-3xl">
                 <div className="flex items-center gap-3">
-                   <div className="w-12 h-[2px] bg-primary" />
+                   <div className="w-12 h-[2px] bg-accent" />
                    <span className="text-white uppercase tracking-[0.3em] font-light text-sm">Coleção Exclusiva</span>
                 </div>
-                <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9]">
-                  O Ápice do <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-200">
+                <h1 className="text-6xl md:text-8xl font-display text-white tracking-tight leading-[0.9]">
+                  O Ápice da <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-amber-200">
                     Sua Estadia.
                   </span>
                 </h1>
@@ -93,7 +93,7 @@ export default async function HomePage() {
                 </p>
                 <div className="pt-4 flex flex-wrap gap-6">
                   <Link href="#colecao">
-                     <Button className="rounded-full h-14 px-8 text-sm uppercase tracking-widest font-bold shadow-2xl shadow-primary/30 hover:scale-105 transition-transform group">
+                     <Button className="rounded-full h-14 px-8 text-sm uppercase tracking-widest font-bold shadow-2xl shadow-accent/20 bg-accent text-accent-foreground hover:bg-accent-hover hover:scale-105 transition-all group">
                         Ver a Coleção
                         <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />
                      </Button>
@@ -114,7 +114,7 @@ export default async function HomePage() {
                 <div className="w-full h-[1px] bg-white/10" />
                 <div className="space-y-2">
                    <p className="text-white/50 uppercase tracking-widest text-xs font-bold">Reserva Direta</p>
-                   <p className="text-primary text-xl font-medium tracking-tight">Sem Taxas Ocultas</p>
+                   <p className="text-accent text-xl font-display italic tracking-tight">Sem Taxas Ocultas</p>
                 </div>
              </div>
           </div>
@@ -122,15 +122,15 @@ export default async function HomePage() {
       </section>
 
       {/* The Exclusive Collection */}
-      <section id="colecao" className="py-32 bg-slate-50 relative rounded-t-[3rem] -mt-10 z-20">
+      <section id="colecao" className="py-32 bg-surface relative rounded-t-[3rem] -mt-10 z-20">
          <div className="container mx-auto px-6 lg:px-12">
             <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-20">
                <div className="space-y-4">
-                  <div className="flex items-center gap-3 text-primary">
+                  <div className="flex items-center gap-3 text-accent">
                      <Diamond size={16} />
                      <span className="uppercase tracking-[0.2em] font-bold text-sm">O Portfólio</span>
                   </div>
-                  <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-900">
+                  <h2 className="text-4xl md:text-6xl font-display tracking-tight text-text-primary">
                      Propriedades <br /> Assinadas.
                   </h2>
                </div>
