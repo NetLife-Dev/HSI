@@ -22,6 +22,7 @@ const credentialsSchema = z.object({
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
+  trustHost: true,
   /* adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
@@ -67,10 +68,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       },
     }),
-    Resend({
+    /* Resend({
       apiKey: process.env.AUTH_RESEND_KEY!,
       from: process.env.AUTH_FROM_EMAIL ?? 'noreply@hostsemimposto.com.br',
-    }),
+    }), */
   ],
   callbacks: {
     async jwt({ token, user }) {
