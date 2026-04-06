@@ -9,6 +9,7 @@ export const authConfig: NextAuthConfig = {
   // tokens are stored in encrypted JWTs (cookie) not in the sessions DB table.
   // Staff session revocability (Phase 5) will use a JWT blocklist via the DB.
   session: { strategy: 'jwt' },
+  trustHost: true,
   pages: {
     signIn: '/login',
     verifyRequest: '/verify',

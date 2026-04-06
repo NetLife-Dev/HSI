@@ -22,12 +22,12 @@ const credentialsSchema = z.object({
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
-  adapter: DrizzleAdapter(db, {
+  /* adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
     sessionsTable: sessions,
     verificationTokensTable: verificationTokens,
-  }),
+  }), */
   providers: [
     Credentials({
       credentials: {
