@@ -1,8 +1,5 @@
-[phases.build]
-cmds = [
-  "npm ci",
-  "npm run build"
-]
+[phases.install]
+cmds = ["npm install"]
 
-[start]
-cmd = "npx tsx src/db/migrate.ts && cp -r .next/static .next/standalone/.next/static && cp -r public .next/standalone/public && node .next/standalone/server.js"
+[phases.build]
+cmds = ["npm run build"]
