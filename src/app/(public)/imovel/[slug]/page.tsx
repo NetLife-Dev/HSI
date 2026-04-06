@@ -59,7 +59,7 @@ export default async function PropertyDetailsPage({ params }: any) {
         { id: "1", url: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" },
         { id: "2", url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" },
         { id: "3", url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" },
-        { id: "4", url: "https://images.unsplash.com/photo-1600607687931-cebf004f5605?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" }
+        { id: "4", url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" }
       ],
       basePrice: 125000,
       cleaningFee: 25000

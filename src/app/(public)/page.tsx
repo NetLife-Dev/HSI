@@ -52,7 +52,7 @@ export default async function HomePage() {
         locationAddress: 'Jurerê Internacional, SC',
         maxGuests: 4,
         basePrice: 350000,
-        images: [{ url: 'https://images.unsplash.com/photo-1600607687931-cebf004f5605?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80' }]
+        images: [{ url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80' }]
       }
     ]
   }
