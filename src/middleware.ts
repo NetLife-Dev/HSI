@@ -1,4 +1,3 @@
-import { auth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -30,10 +29,11 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
   return response
 }
 
-// Wrap NextAuth's auth middleware to add security headers to every response.
-// The matcher below is the ONLY path scoped for auth — all other routes pass through
-// with only security headers applied.
-export default auth(function middleware(req: NextRequest) {
+// Edge-compatible middleware: checks session cookie presence only.
+// Full session validation (DB lookup) happens in (admin)/layout.tsx via await auth(),
+// which runs in Node.js runtime and has full database access.
+// This two-layer approach is required because Edge runtime cannot connect to PostgreSQL.
+export default function middleware(req: NextRequest) {
   const response = NextResponse.next()
 
   // Extract client IP for rate limiters downstream
@@ -41,8 +41,23 @@ export default auth(function middleware(req: NextRequest) {
   const clientIp = forwardedFor?.split(',')[0]?.trim() ?? 'unknown'
   response.headers.set('x-client-ip', clientIp)
 
+  // First-pass auth: redirect to /login if no session cookie present.
+  // The (admin)/layout.tsx performs the definitive DB-backed session validation.
+  const isAdminRoute = req.nextUrl.pathname.startsWith('/admin')
+  if (isAdminRoute) {
+    const sessionCookie =
+      req.cookies.get('authjs.session-token') ??
+      req.cookies.get('__Secure-authjs.session-token')
+
+    if (!sessionCookie) {
+      const loginUrl = new URL('/login', req.url)
+      loginUrl.searchParams.set('callbackUrl', req.nextUrl.pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+  }
+
   return applySecurityHeaders(response)
-})
+}
 
 export const config = {
   // CRITICAL: This exact matcher is intentional and must not be changed.

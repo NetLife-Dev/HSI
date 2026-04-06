@@ -13,6 +13,7 @@ import {
   verificationTokens,
 } from '@/db/schema'
 import { logAction } from '@/lib/audit'
+import { authConfig } from '@/auth.config'
 
 const credentialsSchema = z.object({
   email: z.string().email(),
@@ -20,18 +21,13 @@ const credentialsSchema = z.object({
 })
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
     sessionsTable: sessions,
     verificationTokensTable: verificationTokens,
   }),
-  session: { strategy: 'database' },
-  pages: {
-    signIn: '/login',
-    verifyRequest: '/verify',
-    error: '/login',
-  },
   providers: [
     Credentials({
       credentials: {
@@ -67,10 +63,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, user }) {
-      if (session.user && user) {
-        session.user.id = user.id
-        session.user.role = (user as { role?: 'owner' | 'staff' }).role ?? 'owner'
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+        token.role = (user as { role?: 'owner' | 'staff' }).role ?? 'owner'
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user && token) {
+        session.user.id = token.id as string
+        session.user.role = (token.role as 'owner' | 'staff') ?? 'owner'
       }
       return session
     },
