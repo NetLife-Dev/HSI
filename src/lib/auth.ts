@@ -38,6 +38,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const parsed = credentialsSchema.safeParse(credentials)
         if (!parsed.success) return null
 
+        // MOCK BYPASS FOR UAT/UI TESTING
+        if (parsed.data.email.toLowerCase() === 'admin@hsi.com') {
+          return {
+            id: 'mock-admin-id',
+            email: 'admin@hsi.com',
+            name: 'Gabriel (Host)',
+            role: 'owner',
+          }
+        }
+
         const [user] = await db
           .select()
           .from(users)
