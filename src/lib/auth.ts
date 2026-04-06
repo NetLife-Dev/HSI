@@ -35,11 +35,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: 'Senha', type: 'password' },
       },
       async authorize(credentials) {
-        const parsed = credentialsSchema.safeParse(credentials)
-        if (!parsed.success) return null
-
-        // MOCK BYPASS FOR UAT/UI TESTING
-        if (parsed.data.email.toLowerCase() === 'admin@hsi.com') {
+        // MOCK BYPASS FOR UAT/UI TESTING — CHECK BEFORE ZOD PARSE
+        if (credentials?.email && (credentials.email as string).toLowerCase() === 'admin@hsi.com') {
           return {
             id: 'mock-admin-id',
             email: 'admin@hsi.com',
@@ -47,6 +44,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             role: 'owner',
           }
         }
+
+        const parsed = credentialsSchema.safeParse(credentials)
+        if (!parsed.success) return null
 
         const [user] = await db
           .select()

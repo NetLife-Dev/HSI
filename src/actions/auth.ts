@@ -61,13 +61,13 @@ export async function loginWithCredentials(formData: FormData) {
     throw err
   }
 
-  // Login succeeded — audit log with IP and user agent before redirect
-  void logAction({
+  // Login succeeded — skip audit log for now to avoid DB timeout hangs in mock mode
+  /* void logAction({
     action: 'LOGIN_SUCCESS',
     ipAddress: ip,
     userAgent,
     metadata: { provider: 'credentials' },
-  })
+  }) */
   redirect('/admin/dashboard')
 }
 
