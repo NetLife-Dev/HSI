@@ -29,21 +29,21 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 1 | Foundation & Infraestrutura | 🔄 In Progress (Plan 05/05 complete — verifying) |
-| 2 | Gestão de Imóveis & Face Pública | ⬜ Not started |
+| 1 | Foundation & Infraestrutura | ✅ Complete |
+| 2 | Gestão de Imóveis & Face Pública | 🔄 In Progress |
 | 3 | Motor de Booking | ⬜ Not started |
 | 4 | Operações — iCal, CRM & Financeiro | ⬜ Not started |
 | 5 | Segurança, Staff & Polimento | ⬜ Not started |
 
 ## Current Position
 
-**Phase:** 01-foundation-infraestrutura
-**Plan:** 01-05 (complete) → Verification pending
-**Stopped at:** Completed 01-05-PLAN.md
+**Phase:** 03-motor-booking
+**Plan:** 03-04 (iCal Sincronization)
+**Stopped at:** Completed Checkout Flow UX (Plan 03-03). Waiting for Database connectivity to implement DB updates and iCal outbound.
 
 ## Last Action
 
-2026-04-05 — Plan 01-05 complete. CSP + security headers on every HTTP response, fire-and-forget audit log (logAction), in-memory token bucket rate limiter with 4 singleton instances, rate limit guards wired into auth Server Actions. Fixed: Zod v4 `.issues` API, `exactOptionalPropertyTypes` TS errors, Suspense boundary for `useSearchParams`, `accounts.expires_at` integer type. Audit log now captures IP and user-agent on credentials login.
+2026-04-05 — Completed Phase 02 Plans 01 & 02. Implemented Property CRUD, Tiptap Rich Text Editor, and Cloudinary-backed Image Management with drag-and-drop reordering and cover image selection. Unified property management into a tabbed interface.
 
 ## Decisions Log
 
@@ -81,4 +81,5 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Next Step
 
-Verify Phase 01 completion and transition to Phase 02.
+Start Phase 02: Gestão de Imóveis & Face Pública.
+

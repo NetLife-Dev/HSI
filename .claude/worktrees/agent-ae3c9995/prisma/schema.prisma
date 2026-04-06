@@ -1,0 +1,12 @@
+// This file is for Prisma Studio only (dev tool).
+// The source of truth for the schema is src/db/schema.ts (Drizzle).
+// Keep in sync by running: npx prisma db pull after each Drizzle migration.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+// Tables will be populated after running: npx prisma db pull

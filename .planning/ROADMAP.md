@@ -36,7 +36,7 @@ Fase 1 (Foundation)
 
 ## Phases
 
-- [ ] **Phase 1: Foundation & Infraestrutura** — Scaffolding, schema, auth, shell admin, deploy config
+- [x] **Phase 1: Foundation & Infraestrutura** — Scaffolding, schema, auth, shell admin, deploy config
 - [ ] **Phase 2: Gestão de Imóveis & Face Pública** — CRUD de imóveis, Cloudinary, homepage e página de imóvel sem booking
 - [ ] **Phase 3: Motor de Booking** — Disponibilidade, cotação, Stripe, confirmação por e-mail e voucher PDF
 - [ ] **Phase 4: Operações — iCal, CRM & Financeiro** — Sync com OTAs, CRM de hóspedes, financeiro, configurações
@@ -235,11 +235,11 @@ Fase 1 (Foundation)
 
 | Fase | Planos Completos | Status | Concluída |
 |------|-----------------|--------|-----------|
-| 1. Foundation & Infraestrutura | 5/5 | Complete | 2026-04-05 |
-| 2. Gestão de Imóveis & Face Pública | 0/? | Not started | - |
-| 3. Motor de Booking | 0/? | Not started | - |
-| 4. Operações — iCal, CRM & Financeiro | 0/? | Not started | - |
-| 5. Segurança, Staff & Polimento | 0/? | Not started | - |
+| 1. Foundation & Infraestrutura | 5/5 | ✅ Complete | 2026-04-05 |
+| 2. Gestão de Imóveis & Face Pública | 5/5 | ✅ Complete | 2026-04-05 |
+| 3. Motor de Booking | 4/4 | ✅ Complete | 2026-04-06 |
+| 4. Operações — iCal, CRM & Financeiro | 4/4 | ✅ Complete | 2026-04-06 |
+| 5. Segurança, Staff & Polimento | 1/? | 🔄 In Progress | - |
 
 ---
 

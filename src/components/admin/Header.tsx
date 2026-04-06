@@ -35,17 +35,45 @@ export function Header({ session }: HeaderProps) {
         <ThemeToggle />
 
         {/* Notification bell */}
-        <Button variant="ghost" size="icon" className="relative h-9 w-9" aria-label="Notificações">
-          <Bell size={18} className="text-[var(--color-text-secondary)]" />
-          {unreadCount > 0 && (
-            <Badge
-              variant="destructive"
-              className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px]"
-            >
-              {unreadCount > 9 ? '9+' : unreadCount}
-            </Badge>
-          )}
-        </Button>
+        <DropdownMenu>
+           <DropdownMenuTrigger asChild>
+             <Button variant="ghost" size="icon" className="relative h-9 w-9" aria-label="Notificações">
+               <Bell size={18} className="text-[var(--color-text-secondary)]" />
+               <Badge
+                 variant="destructive"
+                 className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] animate-pulse"
+               >
+                 3
+               </Badge>
+             </Button>
+           </DropdownMenuTrigger>
+           <DropdownMenuContent align="end" className="w-80 p-0">
+             <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                 <p className="font-bold text-sm">Notificações</p>
+                 <span className="text-[10px] text-primary font-bold uppercase cursor-pointer hover:underline">Marcar todas lidas</span>
+             </div>
+             <div className="max-h-[300px] overflow-y-auto">
+                <div className="p-4 border-b border-slate-50 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 cursor-pointer">
+                   <p className="text-sm font-bold text-slate-900 dark:text-slate-100">Nova Reserva Confirmada</p>
+                   <p className="text-xs text-slate-500 mt-1">Fernando Silva fechou Refúgio da Mata por R$ 6.600.</p>
+                   <p className="text-[10px] text-slate-400 mt-2 font-medium">Há 5 min</p>
+                </div>
+                <div className="p-4 border-b border-slate-50 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 cursor-pointer">
+                   <p className="text-sm font-bold text-slate-900 dark:text-slate-100">Lead Pede Contato</p>
+                   <p className="text-xs text-slate-500 mt-1">Marcela preencheu os dados, mas abandonou o Checkout.</p>
+                   <p className="text-[10px] text-slate-400 mt-2 font-medium">Há 20 min</p>
+                </div>
+                <div className="p-4 border-b border-slate-50 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 cursor-pointer">
+                   <p className="text-sm font-bold text-slate-900 dark:text-slate-100 flex gap-2"><div className="w-2 h-2 rounded-full bg-rose-500 mt-1.5"/>Atenção: Check-in Hoje</p>
+                   <p className="text-xs text-slate-500 mt-1">Jéssica fará o Check-in às 14:00 na Villa Ocean View.</p>
+                   <p className="text-[10px] text-slate-400 mt-2 font-medium">Há 2 horas</p>
+                </div>
+             </div>
+             <div className="p-2 border-t border-slate-100 dark:border-slate-800 text-center">
+                 <button className="text-xs text-primary font-bold hover:underline">Ver todo o histórico</button>
+             </div>
+           </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* User menu */}
         <DropdownMenu>
