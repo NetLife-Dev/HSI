@@ -49,15 +49,13 @@ export function Header({ session }: HeaderProps) {
 
         {/* User menu */}
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
-              <Avatar className="h-7 w-7">
-                <AvatarImage src={session.user?.image ?? undefined} />
-                <AvatarFallback className="text-xs bg-[var(--color-accent)] text-white">
-                  {session.user?.name?.charAt(0).toUpperCase() ?? 'A'}
-                </AvatarFallback>
-              </Avatar>
-            </Button>
+          <DropdownMenuTrigger className="h-9 w-9 rounded-full inline-flex items-center justify-center hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer">
+            <Avatar className="h-7 w-7">
+              <AvatarImage src={session.user?.image ?? undefined} />
+              <AvatarFallback className="text-xs bg-[var(--color-accent)] text-white">
+                {session.user?.name?.charAt(0).toUpperCase() ?? 'A'}
+              </AvatarFallback>
+            </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <div className="px-3 py-2">

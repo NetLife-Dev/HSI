@@ -83,15 +83,10 @@ pending: 9
 ## Gaps
 
 - truth: "Dashboard abre sem erros de console — sidebar e header renderizam corretamente"
-  status: failed
+  status: fixed
   reason: "User reported: 3 erros de console — (1) asChild prop passado para DOM em TooltipTrigger/Sidebar.tsx; (2) button>button aninhado em Header.tsx DropdownMenuTrigger wrapping Button component; (3) hydration error consequente"
   severity: minor
   test: 2
-  artifacts:
-    - src/components/ui/tooltip.tsx:25 — TooltipPrimitive.Trigger recebe asChild mas Base UI não suporta
-    - src/components/ui/dropdown-menu.tsx:18 — DropdownMenuTrigger wraps Button (button>button)
-    - src/components/admin/Header.tsx:52-53 — DropdownMenuTrigger>Button causa nesting inválido
-    - src/components/admin/Sidebar.tsx:73 — TooltipTrigger com asChild em Base UI
-  missing:
-    - Corrigir TooltipTrigger para não passar asChild ao DOM
-    - Corrigir Header.tsx: remover Button dentro de DropdownMenuTrigger (usar div/span ou asChild corretamente)
+  fix: |
+    - Header.tsx: removido Button wrapper de DropdownMenuTrigger; estilos aplicados diretamente no Trigger (Base UI não suporta asChild)
+    - Sidebar.tsx: substituído <TooltipTrigger asChild><Link> pelo padrão render prop do Base UI: <TooltipTrigger render={<Link>} />

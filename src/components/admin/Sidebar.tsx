@@ -67,24 +67,29 @@ export function Sidebar({ session }: SidebarProps) {
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
             const Icon = item.icon
+            const linkClassName = cn(
+              'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
+              isActive
+                ? 'bg-[var(--color-accent)] text-white'
+                : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-elevated)] hover:text-[var(--color-text-primary)]',
+              collapsed && 'justify-center px-2'
+            )
 
             return (
-              <Tooltip key={item.href} disableHoverableContent={!collapsed}>
-                <TooltipTrigger asChild>
-                  <Link
-                    href={item.href}
-                    className={cn(
-                      'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
-                      isActive
-                        ? 'bg-[var(--color-accent)] text-white'
-                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-elevated)] hover:text-[var(--color-text-primary)]',
-                      collapsed && 'justify-center px-2'
-                    )}
-                  >
-                    <Icon size={18} className="shrink-0" />
-                    {!collapsed && <span>{item.label}</span>}
-                  </Link>
-                </TooltipTrigger>
+              <Tooltip key={item.href}>
+                <TooltipTrigger
+                  // Base UI render prop (function form): merges trigger event handlers into Link
+                  render={(props) => (
+                    <Link
+                      {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+                      href={item.href}
+                      className={linkClassName}
+                    >
+                      <Icon size={18} className="shrink-0" />
+                      {!collapsed && <span>{item.label}</span>}
+                    </Link>
+                  )}
+                />
                 {collapsed && (
                   <TooltipContent side="right">
                     {item.label}
