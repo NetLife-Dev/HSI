@@ -47,7 +47,7 @@ export function AvailabilityCalendar({
   }
 
   return (
-    <div className="space-y-4 dark text-white">
+    <div className="space-y-4 dark text-white overflow-x-auto">
       <div className="p-4 bg-transparent flex items-center justify-center">
         <Calendar
           mode="range"
@@ -58,7 +58,7 @@ export function AvailabilityCalendar({
           locale={ptBR}
           className="rounded-3xl"
           classNames={{
-            disabled: "text-white/20 line-through opacity-30 cursor-not-allowed",
+            disabled: "opacity-10 cursor-not-allowed line-through",
           }}
         />
       </div>
