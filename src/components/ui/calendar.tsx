@@ -34,7 +34,7 @@ function Calendar({
           buttonVariants({ variant: "outline" }),
           "h-10 w-10 bg-white/5 border-white/10 p-0 text-white hover:bg-accent hover:text-black hover:border-accent transition-all rounded-full pointer-events-auto"
         ),
-        month_grid: "w-full border-collapse space-y-2",
+        month_grid: "w-full border-collapse space-y-2 mx-auto",
         weekdays: "flex w-full justify-between items-center mb-6 px-1",
         weekday:
           "text-white/20 w-10 font-black text-[0.65rem] uppercase tracking-widest text-center",
