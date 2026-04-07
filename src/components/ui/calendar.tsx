@@ -19,38 +19,38 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-6 pt-12 bg-black/20 rounded-[2.5rem] border border-white/10 relative", className)}
+      className={cn("p-4 pt-16 bg-black/40 rounded-[3rem] border border-white/5 relative", className)}
       classNames={{
-        months: "flex flex-col sm:flex-row gap-12 sm:gap-20 justify-center",
+        months: "w-full flex flex-col sm:flex-row gap-12 justify-center",
         month: "space-y-8 flex-1",
-        month_caption: "flex justify-center pt-2 relative items-center mb-8",
-        caption_label: "text-lg font-black uppercase tracking-[0.5em] text-white",
-        nav: "flex items-center justify-between absolute h-12 w-full left-0 top-6 px-4 z-20 pointer-events-none",
+        month_caption: "flex justify-center relative items-center mb-10",
+        caption_label: "text-base font-black uppercase tracking-[0.4em] text-white/90",
+        nav: "flex items-center justify-between absolute h-12 w-full left-0 top-6 px-6 z-20 pointer-events-none",
         button_previous: cn(
           buttonVariants({ variant: "outline" }),
-          "h-10 w-10 bg-white/5 border-white/10 p-0 text-white hover:bg-accent hover:text-black hover:border-accent transition-all rounded-full pointer-events-auto"
+          "h-10 w-10 bg-white/5 border-white/10 p-0 text-white hover:bg-accent hover:text-black hover:border-accent transition-all rounded-full pointer-events-auto backdrop-blur-sm"
         ),
         button_next: cn(
           buttonVariants({ variant: "outline" }),
-          "h-10 w-10 bg-white/5 border-white/10 p-0 text-white hover:bg-accent hover:text-black hover:border-accent transition-all rounded-full pointer-events-auto"
+          "h-10 w-10 bg-white/5 border-white/10 p-0 text-white hover:bg-accent hover:text-black hover:border-accent transition-all rounded-full pointer-events-auto backdrop-blur-sm"
         ),
         month_grid: "w-full border-collapse space-y-2 mx-auto",
-        weekdays: "flex w-full justify-between items-center mb-6 px-1",
+        weekdays: "flex w-full justify-between items-center mb-6 px-1 opacity-50",
         weekday:
-          "text-white/20 w-10 font-black text-[0.65rem] uppercase tracking-widest text-center",
+          "text-white w-10 font-black text-[0.6rem] uppercase tracking-widest text-center",
         week: "flex w-full mt-2 justify-between",
         day: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20",
         day_button: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-11 w-11 p-0 font-bold transition-all rounded-xl text-white/50 hover:bg-white/10 hover:text-white text-sm"
+          "h-12 w-12 p-0 font-bold transition-all rounded-2xl text-white/40 hover:bg-white/5 hover:text-white text-sm"
         ),
-        selected: "bg-accent/20 rounded-xl",
-        range_start: "day-range-start !bg-accent !text-black rounded-xl shadow-[0_0_25px_rgba(224,176,80,0.4)] z-10 scale-105 font-black",
-        range_end: "day-range-end !bg-accent !text-black rounded-xl shadow-[0_0_25px_rgba(224,176,80,0.4)] z-10 scale-105 font-black",
+        selected: "bg-accent/20 rounded-2xl",
+        range_start: "day-range-start !bg-accent !text-black rounded-2xl shadow-[0_0_20px_rgba(224,176,80,0.3)] z-10 scale-110 font-black",
+        range_end: "day-range-end !bg-accent !text-black rounded-2xl shadow-[0_0_20px_rgba(224,176,80,0.3)] z-10 scale-110 font-black",
         range_middle: "!bg-accent/10 !text-accent rounded-none",
-        today: "text-accent font-black border-2 border-accent/30 rounded-2xl",
-        outside: "opacity-5 pointer-events-none grayscale",
-        disabled: "text-white/10 opacity-20 cursor-not-allowed line-through",
+        today: "text-accent font-black border-2 border-accent/20 rounded-2xl",
+        outside: "opacity-0 pointer-events-none grayscale",
+        disabled: "text-white/5 opacity-10 cursor-not-allowed line-through grayscale font-normal",
         hidden: "invisible",
         ...classNames,
       }}

@@ -64,19 +64,25 @@ export function AvailabilityCalendar({
       </div>
       
       {range?.from && (
-        <div className="flex items-center justify-between px-6 py-4 bg-accent/10 rounded-2xl border border-accent/20 animate-in fade-in slide-in-from-top-2 duration-300">
-          <div className="flex flex-col">
-            <span className="text-[10px] uppercase font-black tracking-widest text-accent/60">Período Selecionado</span>
-            <div className="text-sm font-bold text-white">
+        <div className="flex items-center justify-between px-8 py-6 bg-accent/5 rounded-[2rem] border border-accent/10 animate-in fade-in zoom-in duration-500">
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] uppercase font-black tracking-widest text-accent/50">Período de Estadia</span>
+            <div className="text-base font-black text-white flex items-center gap-2">
               {format(range.from, "dd 'de' MMM", { locale: ptBR })}
-              {range.to && ` — ${format(range.to, "dd 'de' MMM", { locale: ptBR })}`}
+              {range.to && (
+                <>
+                  <span className="text-accent/30">—</span>
+                  {format(range.to, "dd 'de' MMM", { locale: ptBR })}
+                </>
+              )}
             </div>
           </div>
-          {range.to && (
-            <div className="text-right">
-              <span className="text-[10px] uppercase font-black tracking-widest text-accent/60">Noites</span>
-              <div className="text-lg font-black text-accent">
+          {range.to && range.from.getTime() !== range.to.getTime() && (
+            <div className="text-right flex flex-col gap-1">
+              <span className="text-[10px] uppercase font-black tracking-widest text-accent/50">Total</span>
+              <div className="text-2xl font-black text-accent tracking-tighter">
                 {Math.ceil((range.to.getTime() - range.from.getTime()) / (1000 * 60 * 60 * 24))}
+                <span className="text-xs ml-1 uppercase text-white/40 tracking-normal">Noites</span>
               </div>
             </div>
           )}

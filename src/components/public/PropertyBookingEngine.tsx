@@ -122,14 +122,14 @@ export function PropertyBookingEngine({ property }: { property: any }) {
                     </div>
                   </div>
                 </DialogTrigger>
-                <DialogContent className="bg-[#111] border-white/10 text-white rounded-[3rem] p-0 overflow-hidden max-w-sm border shadow-[0_0_80px_rgba(224,176,80,0.15)]">
-                   <div className="p-8 space-y-6">
+                <DialogContent className="bg-[#111] border-white/10 text-white rounded-[3.5rem] p-0 overflow-hidden sm:max-w-md border shadow-[0_0_100px_rgba(224,176,80,0.15)]">
+                   <div className="p-10 space-y-8">
                       <DialogHeader>
-                        <DialogTitle className="text-2xl font-black uppercase tracking-tighter text-center">Datas da Estadia</DialogTitle>
+                        <DialogTitle className="text-3xl font-black uppercase tracking-tighter text-center">Datas da Estadia</DialogTitle>
                       </DialogHeader>
                       <AvailabilityCalendar onRangeSelect={(r) => {
                         setDateRange(r)
-                        if (r?.from && r?.to) {
+                        if (r?.from && r?.to && r.from.getTime() !== r.to.getTime()) {
                           setTimeout(() => setIsCalendarOpen(false), 800)
                         }
                       }} />
