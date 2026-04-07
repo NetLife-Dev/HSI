@@ -12,7 +12,7 @@ export interface MockProperty {
   status: 'active' | 'inactive' | 'maintenance'
   featured: boolean
   basePrice: number // em centavos
-  images: { url: string; isCover: boolean }[]
+  images: { id: string; url: string; isCover: boolean }[]
   createdAt: Date
 }
 
@@ -32,8 +32,8 @@ export const MOCK_PROPERTIES: MockProperty[] = [
     featured: true,
     basePrice: 450000,
     images: [
-      { url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80', isCover: true },
-      { url: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80', isCover: false }
+      { id: 'img-1-1', url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80', isCover: true },
+      { id: 'img-1-2', url: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80', isCover: false }
     ],
     createdAt: new Date()
   },
@@ -52,8 +52,8 @@ export const MOCK_PROPERTIES: MockProperty[] = [
     featured: true,
     basePrice: 320000,
     images: [
-      { url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80', isCover: true },
-      { url: 'https://images.unsplash.com/photo-1600566753190-17f0bbc2a6c3?auto=format&fit=crop&w=1200&q=80', isCover: false }
+      { id: 'img-2-1', url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80', isCover: true },
+      { id: 'img-2-2', url: 'https://images.unsplash.com/photo-1600566753190-17f0bbc2a6c3?auto=format&fit=crop&w=1200&q=80', isCover: false }
     ],
     createdAt: new Date()
   },
@@ -72,8 +72,8 @@ export const MOCK_PROPERTIES: MockProperty[] = [
     featured: true,
     basePrice: 580000,
     images: [
-      { url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', isCover: true },
-      { url: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200&q=80', isCover: false }
+      { id: 'img-3-1', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', isCover: true },
+      { id: 'img-3-2', url: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200&q=80', isCover: false }
     ],
     createdAt: new Date()
   },
@@ -92,7 +92,7 @@ export const MOCK_PROPERTIES: MockProperty[] = [
     featured: false,
     basePrice: 720000,
     images: [
-      { url: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80', isCover: true }
+      { id: 'img-4-1', url: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80', isCover: true }
     ],
     createdAt: new Date()
   },
@@ -111,7 +111,7 @@ export const MOCK_PROPERTIES: MockProperty[] = [
     featured: false,
     basePrice: 280000,
     images: [
-      { url: 'https://images.unsplash.com/photo-1449156001433-4d7698a6ec2c?auto=format&fit=crop&w=1200&q=80', isCover: true }
+      { id: 'img-5-1', url: 'https://images.unsplash.com/photo-1449156001433-4d7698a6ec2c?auto=format&fit=crop&w=1200&q=80', isCover: true }
     ],
     createdAt: new Date()
   }
