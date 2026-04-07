@@ -41,9 +41,10 @@ export default async function HomePage() {
               muted 
               loop 
               playsInline 
-              className="w-full h-full object-cover opacity-80 transition-opacity duration-[2s]"
+              preload="auto"
+              className="w-full h-full object-cover opacity-80"
            >
-              <source src="/images/video%20do%20hero.mp4" type="video/mp4" />
+              <source src="/images/hero-video.mp4" type="video/mp4" />
            </video>
            {/* Cinematic Gradient Overlays */}
            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />

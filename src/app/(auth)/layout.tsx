@@ -11,7 +11,7 @@ export default function AuthLayout({
       <div className="relative hidden lg:block overflow-hidden bg-[#0A0D14]">
         <div className="absolute inset-0 z-0 animate-cinematic-zoom">
            <Image
-              src="/luxury_villa_login_bg_1775517556055.png"
+              src="/images/mock/exterior.png"
               alt="Luxury Host Experience"
               fill
               className="object-cover brightness-75 contrast-125"
