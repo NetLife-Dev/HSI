@@ -6,6 +6,7 @@ import { PropertyCard } from '@/components/public/PropertyCard'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { MOCK_PROPERTIES } from '@/lib/mock-data'
 
 export default async function CatalogPage() {
   let allProperties: any[] = []
@@ -20,8 +21,11 @@ export default async function CatalogPage() {
       orderBy: (properties, { desc }) => [desc(properties.createdAt)],
     })
   } catch (error) {
-    console.log("Mock Mode Active for Catalog")
+    console.log("Mock Mode Active for Catalog (Database Error)")
   }
+
+  // UAT Fallback: Se o banco estiver vazio, mostramos os mocks luxuosos
+  const displayProperties = allProperties.length > 0 ? allProperties : MOCK_PROPERTIES
 
   return (
     <div className="bg-slate-50 min-h-screen pt-32 pb-24">
@@ -31,7 +35,7 @@ export default async function CatalogPage() {
            <div className="flex flex-col md:flex-row justify-between items-end gap-6">
               <div className="space-y-2">
                  <h1 className="text-4xl font-bold tracking-tight text-slate-900">Encontre o seu Retiro</h1>
-                 <p className="text-slate-500 font-medium">Explore nossa seleção exclusiva de {allProperties.length} propriedades.</p>
+                 <p className="text-slate-500 font-medium">Explore nossa seleção exclusiva de {displayProperties.length} propriedades.</p>
               </div>
               <div className="flex items-center gap-2">
                  <Badge variant="outline" className="bg-white border-primary/20 text-primary px-4 py-1.5 rounded-full font-bold uppercase tracking-wider text-[10px]">
@@ -68,13 +72,13 @@ export default async function CatalogPage() {
         </div>
 
         {/* Property Grid */}
-        {allProperties.length === 0 ? (
+        {displayProperties.length === 0 ? (
           <div className="bg-white rounded-[3rem] p-24 text-center border-2 border-dashed border-slate-100 italic text-slate-300">
             Estamos preparando novas surpresas para você. Volte em breve!
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {allProperties.map((property) => (
+            {displayProperties.map((property) => (
               <PropertyCard key={property.id} property={property} />
             ))}
           </div>

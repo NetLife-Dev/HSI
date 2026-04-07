@@ -16,11 +16,11 @@ import {
 } from '@/components/ui/table'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { MOCK_PROPERTIES } from '@/lib/mock-data'
 
 export const metadata: Metadata = {
   title: 'Imóveis — Admin',
 }
-
 export default async function PropertiesPage() {
   let propertyList: any[] = []
   
@@ -30,12 +30,10 @@ export default async function PropertiesPage() {
     })
   } catch (error) {
     console.warn('⚠️ [Admin/Properties] Banco offline. Usando mocks para visualização.')
-    propertyList = [
-      { id: 'mock1', name: 'Villa Ocean View', slug: 'villa-ocean-view', status: 'active', maxGuests: 8, bedrooms: 4, createdAt: new Date() },
-      { id: 'mock2', name: 'Refúgio da Mata', slug: 'refugio-da-mata', status: 'active', maxGuests: 6, bedrooms: 3, createdAt: new Date() },
-      { id: 'mock3', name: 'Cobertura Skyline', slug: 'cobertura-skyline', status: 'maintenance', maxGuests: 4, bedrooms: 2, createdAt: new Date() },
-    ]
   }
+
+  // UAT Fallback: Mostrar mocks se o banco estiver vazio
+  const displayProperties = propertyList.length > 0 ? propertyList : MOCK_PROPERTIES
 
   return (
     <div className="space-y-6">
@@ -69,14 +67,14 @@ export default async function PropertiesPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {propertyList.length === 0 ? (
+            {displayProperties.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="h-24 text-center text-[var(--color-text-secondary)] text-sm italic">
                   Nenhum imóvel cadastrado ainda.
                 </TableCell>
               </TableRow>
             ) : (
-              propertyList.map((property) => (
+              displayProperties.map((property) => (
                 <TableRow key={property.id}>
                   <TableCell className="font-medium text-[var(--color-text-primary)]">
                     {property.name}

@@ -6,6 +6,7 @@ import { db } from '@/db/index'
 import { properties } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { PropertyCard } from '@/components/public/PropertyCard'
+import { MOCK_PROPERTIES } from '@/lib/mock-data'
 
 export default async function HomePage() {
   let featuredProperties: any[] = []
@@ -26,35 +27,7 @@ export default async function HomePage() {
 
   // Preenchendo com Mocks Luxuosos caso esteja vazio (modo UAT)
   if (featuredProperties.length === 0) {
-    featuredProperties = [
-      {
-        id: 'mock1',
-        name: 'Villa Ocean View',
-        slug: 'villa-ocean-view',
-        locationAddress: 'Praia do Forte, Bahia',
-        maxGuests: 8,
-        basePrice: 150000,
-        images: [{ url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80' }]
-      },
-      {
-        id: 'mock2',
-        name: 'Refúgio da Mata',
-        slug: 'refugio-da-mata',
-        locationAddress: 'Trancoso, Bahia',
-        maxGuests: 6,
-        basePrice: 220000,
-        images: [{ url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80' }]
-      },
-      {
-        id: 'mock3',
-        name: 'Cobertura Skyline',
-        slug: 'cobertura-skyline',
-        locationAddress: 'Jurerê Internacional, SC',
-        maxGuests: 4,
-        basePrice: 350000,
-        images: [{ url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80' }]
-      }
-    ]
+    featuredProperties = MOCK_PROPERTIES.filter(p => p.featured)
   }
 
   return (
