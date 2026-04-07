@@ -9,7 +9,7 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({ property }: PropertyCardProps) {
-  const coverImage = property.images?.[0]?.url || '/images/placeholder.jpg'
+  const coverImage = property.images?.[0]?.url || '/images/mock/exterior.png'
 
   return (
     <div className="group relative bg-[#111] rounded-[2.5rem] p-3 border border-white/5 shadow-2xl hover:shadow-accent/10 transition-all duration-500 overflow-hidden">

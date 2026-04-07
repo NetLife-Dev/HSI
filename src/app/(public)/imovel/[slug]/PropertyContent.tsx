@@ -17,7 +17,7 @@ import { Badge } from '@/components/ui/badge'
 
 export function PropertyContent({ property }: { property: any }) {
   const images = property.images || []
-  const heroImage = images[0]?.url || ''
+  const heroImage = images[0]?.url || '/images/mock/exterior.png'
   
   return (
     <div className="bg-black mix-blend-normal overflow-hidden select-none text-white">
@@ -86,19 +86,20 @@ export function PropertyContent({ property }: { property: any }) {
               </div>
               
               {/* Feature Image */}
-              {images[1] && (
-                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm group">
-                    <img src={images[1].url} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 grayscale hover:grayscale-0" />
-                 </div>
-              )}
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm group">
+                 <img src={images[1]?.url || '/images/mock/bedroom.png'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 grayscale hover:grayscale-0" alt="Interior" />
+              </div>
            </div>
         </div>
       </section>
 
       {/* 3. CINEMATIC FULL BLEED IMAGES WITH OVERLAYS */}
-      {images.slice(2, 4).map((img: any, i: number) => (
+      {[
+        images[2]?.url || '/images/mock/living.png',
+        images[3]?.url || '/images/mock/outdoor.png'
+      ].map((imgUrl: string, i: number) => (
          <section key={i} className="relative h-[80vh] w-full border-t-[20px] border-black">
-            <img src={img.url} className="w-full h-full object-cover opacity-70" />
+            <img src={imgUrl} className="w-full h-full object-cover opacity-70" alt={`Highlight ${i+1}`} />
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent flex items-center">
                <div className="container mx-auto px-4 max-w-6xl">
                   <h3 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-white max-w-2xl leading-[0.85]">
