@@ -31,16 +31,16 @@ export function PropertyBookingEngine({ property }: { property: any }) {
   const totalPrice = nights > 0 ? totalNightsPrice + cleaningFee : 0
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 relative items-start">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-16 relative items-start">
       {/* Left: Description & Services */}
-      <div className="lg:col-span-2 space-y-16">
+      <div className="space-y-16">
         <section className="space-y-6">
           <div className="flex items-center gap-3">
-            <div className="w-1 h-8 bg-primary rounded-full" />
-            <h2 className="text-2xl font-bold tracking-tight">Experiência Única</h2>
+            <div className="w-1 h-8 bg-accent rounded-full" />
+            <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter text-white">A Experiência</h2>
           </div>
           <div 
-            className="prose prose-slate prose-lg max-w-none text-slate-600 leading-loose"
+            className="prose prose-invert prose-lg max-w-none text-white/60 leading-relaxed font-medium"
             dangerouslySetInnerHTML={{ __html: property.description || '' }}
           />
         </section>
@@ -48,88 +48,89 @@ export function PropertyBookingEngine({ property }: { property: any }) {
         {/* Calendário de Disponibilidade */}
         <section className="space-y-6 flex flex-col">
           <div className="flex items-center gap-3">
-            <div className="w-1 h-8 bg-primary rounded-full" />
-            <h2 className="text-2xl font-bold tracking-tight">Datas Disponíveis</h2>
+            <div className="w-1 h-8 bg-accent rounded-full" />
+            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-white">Disponibilidade</h2>
           </div>
-          <AvailabilityCalendar onRangeSelect={setDateRange} />
+          <div className="rounded-[2.5rem] border border-white/10 bg-[#151515] p-6 shadow-2xl">
+            <AvailabilityCalendar onRangeSelect={setDateRange} />
+          </div>
         </section>
 
-        <section className="space-y-8 p-12 bg-slate-50 rounded-[3rem] border border-slate-100 relative overflow-hidden group">
+        <section className="space-y-8 p-8 md:p-12 bg-[#151515] rounded-[3rem] border border-white/10 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
-            <Sparkles size={120} className="text-primary" />
+            <Sparkles size={120} className="text-accent" />
           </div>
-          <h3 className="text-xl font-bold flex items-center gap-3">
-            <Info size={20} className="text-primary" />
-            Comodidades & Amenidades
+          <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter text-white flex items-center gap-3">
+            <Info size={24} className="text-accent" />
+            Comodidades
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-6">
-            {['Ar Condicionado', 'Piscina Privada', 'Wi-Fi 500mbps', 'Estacionamento', 'Churrasqueira', 'Cozinha Gourmet'].map((item) => (
-              <div key={item} className="flex items-center gap-3 group/item">
-                <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-slate-400 group-hover/item:bg-primary group-hover/item:text-white transition-all shadow-sm">
-                  <ShieldCheck size={14} />
+          <div className="grid grid-cols-2 gap-y-8 gap-x-6">
+            {['Ar Condicionado', 'Piscina Privada', 'Wi-Fi Gigante', 'Heliponto', 'Chef Privado', 'Automação'].map((item) => (
+              <div key={item} className="flex items-center gap-3 group/item cursor-default">
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 group-hover/item:bg-accent group-hover/item:text-black group-hover/item:border-accent transition-all shadow-sm">
+                  <ShieldCheck size={16} />
                 </div>
-                <span className="font-bold text-sm text-slate-700 tracking-tight">{item}</span>
+                <span className="font-bold text-sm text-white/80 tracking-tight">{item}</span>
               </div>
             ))}
           </div>
         </section>
 
         <section className="space-y-6">
-          <h3 className="text-xl font-bold">Regras da Hospedagem</h3>
-          <p className="text-slate-500 leading-relaxed italic border-l-4 border-slate-200 pl-6 py-2">
+          <h3 className="text-2xl font-black uppercase tracking-tighter text-white">Regras</h3>
+          <p className="text-white/50 leading-relaxed italic border-l-4 border-accent pl-6 py-2">
             {property.rules || 'O proprietário ainda não definiu regras específicas. Por favor, trate este patrimônio como se fosse seu.'}
           </p>
         </section>
       </div>
 
       {/* Right: Booking Sidebar Sticky */}
-      <aside className="sticky top-32 space-y-6">
-        <Card className="rounded-[2.5rem] p-4 border-slate-100 shadow-2xl shadow-slate-200 transition-all hover:shadow-primary/5 border-2 border-transparent hover:border-primary/5">
-          <CardContent className="p-6 space-y-6">
-            <div className="flex items-center justify-between">
+      <aside className="sticky top-32">
+        <Card className="rounded-[2.5rem] bg-[#1a1a1a] border-white/10 shadow-2xl transition-all hover:shadow-accent/5 border group">
+          <CardContent className="p-8 md:p-10 space-y-8">
+            <div className="flex items-center justify-between border-b border-white/10 pb-8">
               <div className="flex flex-col">
-                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Base por noite</span>
-                <p className="text-3xl font-black text-slate-900 leading-none">
+                <span className="text-[10px] uppercase font-black text-accent tracking-[0.2em] mb-2">Base por noite</span>
+                <p className="text-4xl md:text-5xl font-black text-white leading-none tracking-tighter">
                   {(basePrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}
-                  <span className="text-sm font-medium text-slate-400">/noite</span>
+                  <span className="text-sm font-medium text-white/40">/noite</span>
                 </p>
               </div>
-              <Badge variant="outline" className="text-[10px] border-emerald-500/20 text-emerald-600 bg-emerald-50 py-1">Sem taxas OTA</Badge>
             </div>
 
             <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-2">
-                <div className={cn("rounded-2xl p-4 bg-slate-50 border flex flex-col gap-1 transition-colors relative overflow-hidden", dateRange?.from ? 'border-primary/30' : 'border-slate-100 cursor-pointer')}>
-                  {dateRange?.from && <div className="absolute inset-0 bg-primary/5" />}
-                  <span className="text-[9px] uppercase font-bold text-slate-500 relative z-10">Check-In</span>
-                  <span className={cn("text-xs font-bold flex items-center gap-2 relative z-10", dateRange?.from ? 'text-primary' : 'text-slate-900')}>
-                    <Calendar size={12} className={dateRange?.from ? 'text-primary' : 'text-slate-400'} />
+              <div className="grid grid-cols-2 gap-3">
+                <div className={cn("rounded-2xl p-4 bg-black/40 border border-white/5 flex flex-col gap-2 transition-colors relative overflow-hidden", dateRange?.from ? 'border-accent/50' : 'cursor-pointer')}>
+                  {dateRange?.from && <div className="absolute inset-0 bg-accent/5" />}
+                  <span className="text-[9px] uppercase font-black tracking-widest text-white/40 relative z-10">Check-In</span>
+                  <span className={cn("text-sm font-bold flex items-center gap-2 relative z-10", dateRange?.from ? 'text-accent' : 'text-white')}>
+                    <Calendar size={14} className={dateRange?.from ? 'text-accent' : 'text-white/40'} />
                     {dateRange?.from ? format(dateRange.from, 'dd/MM/yyyy') : 'Adicionar'}
                   </span>
                 </div>
-                <div className={cn("rounded-2xl p-4 bg-slate-50 border flex flex-col gap-1 transition-colors relative overflow-hidden", dateRange?.to ? 'border-primary/30' : 'border-slate-100 cursor-pointer')}>
-                  {dateRange?.to && <div className="absolute inset-0 bg-primary/5" />}
-                  <span className="text-[9px] uppercase font-bold text-slate-500 relative z-10">Check-Out</span>
-                  <span className={cn("text-xs font-bold flex items-center gap-2 relative z-10", dateRange?.to ? 'text-primary' : 'text-slate-900')}>
-                    <Calendar size={12} className={dateRange?.to ? 'text-primary' : 'text-slate-400'} />
+                <div className={cn("rounded-2xl p-4 bg-black/40 border border-white/5 flex flex-col gap-2 transition-colors relative overflow-hidden", dateRange?.to ? 'border-accent/50' : 'cursor-pointer')}>
+                  {dateRange?.to && <div className="absolute inset-0 bg-accent/5" />}
+                  <span className="text-[9px] uppercase font-black tracking-widest text-white/40 relative z-10">Check-Out</span>
+                  <span className={cn("text-sm font-bold flex items-center gap-2 relative z-10", dateRange?.to ? 'text-accent' : 'text-white')}>
+                    <Calendar size={14} className={dateRange?.to ? 'text-accent' : 'text-white/40'} />
                     {dateRange?.to ? format(dateRange.to, 'dd/MM/yyyy') : 'Adicionar'}
                   </span>
                 </div>
               </div>
-              <div className="rounded-2xl p-4 bg-slate-50 border border-slate-100 flex items-center justify-between relative focus-within:ring-2 ring-primary/20">
-                <div className="flex flex-col gap-1 w-full">
-                  <span className="text-[9px] uppercase font-bold text-slate-500">Hóspedes</span>
+              <div className="rounded-2xl p-4 bg-black/40 border border-white/5 flex items-center justify-between relative focus-within:ring-1 ring-accent">
+                <div className="flex flex-col gap-2 w-full">
+                  <span className="text-[9px] uppercase font-black tracking-widest text-white/40">Hóspedes</span>
                   <select 
                     value={guests} 
                     onChange={(e) => setGuests(Number(e.target.value))}
-                    className="bg-transparent text-xs font-bold text-slate-900 w-full appearance-none outline-none cursor-pointer"
+                    className="bg-transparent text-sm font-bold text-white w-full appearance-none outline-none cursor-pointer"
                   >
                     {Array.from({ length: property.maxGuests || 1 }).map((_, i) => (
-                      <option key={i + 1} value={i + 1}>{i + 1} Hóspede{i > 0 ? 's' : ''}</option>
+                      <option key={i + 1} value={i + 1} className="bg-[#111]">{i + 1} Hóspede{i > 0 ? 's' : ''}</option>
                     ))}
                   </select>
                 </div>
-                <Users size={16} className="text-slate-400 pointer-events-none" />
+                <Users size={16} className="text-white/40 pointer-events-none" />
               </div>
             </div>
 
@@ -140,43 +141,43 @@ export function PropertyBookingEngine({ property }: { property: any }) {
                     router.push(`/checkout/${property.slug}?checkin=${format(dateRange.from, 'yyyy-MM-dd')}&checkout=${format(dateRange.to, 'yyyy-MM-dd')}&guests=${guests}`)
                  }
               }}
-              className="w-full py-8 rounded-3xl text-xl font-black tracking-tight shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:hover:scale-100"
+              className="w-full py-8 rounded-3xl text-xl font-black uppercase tracking-widest shadow-2xl shadow-accent/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:hover:scale-100 disabled:shadow-none bg-accent hover:bg-white text-black"
             >
-              {nights === 0 ? 'Selecione as Datas' : 'Reservar Agora'}
+              {nights === 0 ? 'Selecione Datas' : 'Comprar Agora'}
             </Button>
 
-            <div className="flex items-center justify-center gap-2 text-[10px] text-slate-400 uppercase font-black tracking-[0.1em]">
-              <Zap size={10} className="fill-slate-400" />
+            <div className="flex items-center justify-center gap-2 text-[10px] text-white/30 uppercase font-black tracking-[0.2em]">
+              <Zap size={10} className="fill-white/30" />
               Reserva Direta Garantida
             </div>
 
             {nights > 0 && (
-              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <Separator className="bg-slate-100 my-6" />
-                <div className="space-y-4">
-                  <div className="flex justify-between text-sm text-slate-600">
-                    <span>{nights} {nights === 1 ? 'noite' : 'noites'} x {(basePrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-                    <span className="font-bold">{(totalNightsPrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-                  </div>
-                  <div className="flex justify-between text-sm text-slate-600 pb-4 border-b border-dashed border-slate-200">
-                    <span>Taxa de limpeza (Única)</span>
-                    <span className="font-bold">{(cleaningFee / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-                  </div>
-                  <div className="flex justify-between text-xl font-black text-slate-900 pt-2 items-center">
-                    <span>Total</span>
-                    <span className="text-primary decoration-primary/20">{(totalPrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-                  </div>
-                </div>
+              <div className="pt-8 border-t border-white/10 space-y-4 animate-slide-up">
+                 <div className="flex justify-between items-center text-sm font-medium">
+                    <span className="text-white/60">{nights} {nights === 1 ? 'noite' : 'noites'}</span>
+                    <span className="text-white">{(totalNightsPrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                 </div>
+                 <div className="flex justify-between items-center text-sm font-medium">
+                    <span className="text-white/60">Taxa de Limpeza</span>
+                    <span className="text-white">{(cleaningFee / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                 </div>
+                 <Separator className="bg-white/10 my-4" />
+                 <div className="flex justify-between items-center">
+                    <span className="text-xs uppercase font-black tracking-[0.2em] text-white">Total</span>
+                    <span className="text-3xl font-black text-accent">
+                       {(totalPrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                    </span>
+                 </div>
               </div>
             )}
           </CardContent>
         </Card>
 
         {/* Direct Support Card */}
-        <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white space-y-4 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-primary/20 scale-150 blur-3xl opacity-20 pointer-events-none" />
+        <div className="mt-8 bg-[#151515] rounded-[2.5rem] p-8 text-white space-y-4 relative overflow-hidden border border-white/10">
+          <div className="absolute inset-0 bg-accent/5 scale-150 blur-3xl opacity-20 pointer-events-none" />
           <div className="flex items-center gap-3">
-            <Smartphone size={20} className="text-primary group-hover:rotate-12 transition-transform" />
+            <Smartphone size={20} className="text-accent" />
             <h4 className="font-bold">Dúvidas?</h4>
           </div>
           <p className="text-xs text-slate-400 leading-relaxed">Fale com o proprietário antes de alugar.</p>

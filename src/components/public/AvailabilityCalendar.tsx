@@ -47,8 +47,8 @@ export function AvailabilityCalendar({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="p-4 bg-white rounded-3xl border border-slate-100 shadow-sm flex items-center justify-center">
+    <div className="space-y-4 dark text-white">
+      <div className="p-4 bg-transparent flex items-center justify-center">
         <Calendar
           mode="range"
           selected={range}
@@ -58,24 +58,24 @@ export function AvailabilityCalendar({
           locale={ptBR}
           className="rounded-3xl"
           classNames={{
-            day_disabled: "text-slate-200 line-through opacity-30 cursor-not-allowed",
+            day_disabled: "text-white/20 line-through opacity-30 cursor-not-allowed",
           }}
         />
       </div>
       
       {range?.from && (
-        <div className="flex items-center justify-between px-6 py-4 bg-primary/5 rounded-2xl border border-primary/10 animate-in fade-in slide-in-from-top-2 duration-300">
+        <div className="flex items-center justify-between px-6 py-4 bg-accent/10 rounded-2xl border border-accent/20 animate-in fade-in slide-in-from-top-2 duration-300">
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase font-black tracking-widest text-primary/60">Período Selecionado</span>
-            <div className="text-sm font-bold text-slate-900">
+            <span className="text-[10px] uppercase font-black tracking-widest text-accent/60">Período Selecionado</span>
+            <div className="text-sm font-bold text-white">
               {format(range.from, "dd 'de' MMM", { locale: ptBR })}
               {range.to && ` — ${format(range.to, "dd 'de' MMM", { locale: ptBR })}`}
             </div>
           </div>
           {range.to && (
             <div className="text-right">
-              <span className="text-[10px] uppercase font-black tracking-widest text-primary/60">Noites</span>
-              <div className="text-lg font-black text-primary">
+              <span className="text-[10px] uppercase font-black tracking-widest text-accent/60">Noites</span>
+              <div className="text-lg font-black text-accent">
                 {Math.ceil((range.to.getTime() - range.from.getTime()) / (1000 * 60 * 60 * 24))}
               </div>
             </div>
