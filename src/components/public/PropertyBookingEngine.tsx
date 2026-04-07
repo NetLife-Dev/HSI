@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { DateRange } from 'react-day-picker'
-import { Calendar, ShieldCheck, Info, Sparkles, Smartphone, Send, Zap } from 'lucide-react'
+import { Calendar, ShieldCheck, Info, Sparkles, Smartphone, Send, Zap, Users } from 'lucide-react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useRouter } from 'next/navigation'
