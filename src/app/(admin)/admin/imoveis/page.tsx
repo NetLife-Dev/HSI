@@ -99,7 +99,9 @@ export default async function PropertiesPage() {
                     {property.maxGuests} hóspedes / {property.bedrooms} quartos
                   </TableCell>
                   <TableCell className="text-sm text-[var(--color-text-secondary)]">
-                    {format(property.createdAt!, 'dd/MM/yyyy', { locale: ptBR })}
+                    {property.createdAt 
+                      ? format(new Date(property.createdAt), 'dd/MM/yyyy', { locale: ptBR })
+                      : 'N/A'}
                   </TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="sm" asChild>
