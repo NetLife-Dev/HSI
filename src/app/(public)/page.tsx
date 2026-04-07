@@ -34,18 +34,20 @@ export default async function HomePage() {
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black">
       {/* Cinematic Hero Section */}
       <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden border-b-[20px] border-[#0a0a0a]">
-        {/* Background Video/Image Layer */}
+        {/* Background Video Layer */}
         <div className="absolute inset-0 w-full h-full z-0">
-           <Image
-             src="/images/mock/exterior.png"
-             alt="Luxury Villa"
-             fill
-             priority
-             className="object-cover opacity-80"
-           />
+           <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline 
+              className="w-full h-full object-cover opacity-80 transition-opacity duration-[2s]"
+           >
+              <source src="/images/video%20do%20hero.mp4" type="video/mp4" />
+           </video>
            {/* Cinematic Gradient Overlays */}
-           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent" />
+           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent opacity-90" />
         </div>
 
         <div className="relative container mx-auto px-6 lg:px-12 z-10 w-full h-full flex flex-col justify-end pb-32">

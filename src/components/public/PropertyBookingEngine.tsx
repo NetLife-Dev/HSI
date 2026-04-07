@@ -18,6 +18,7 @@ export function PropertyBookingEngine({ property }: { property: any }) {
   const router = useRouter()
   const [dateRange, setDateRange] = useState<DateRange | undefined>()
   const [guests, setGuests] = useState(1)
+  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([])
 
   const nights = dateRange?.from && dateRange?.to 
     ? Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24))
@@ -26,9 +27,16 @@ export function PropertyBookingEngine({ property }: { property: any }) {
   const basePrice = property.basePrice || 85000 // fallback mock
   const cleaningFee = property.cleaningFee || 15000
   
+  const selectedServices = (property.services || []).filter((s: any) => selectedServiceIds.includes(s.id))
+  const servicesTotal = selectedServices.reduce((acc: number, s: any) => {
+    if (s.unit === 'per_day') return acc + (s.price * nights)
+    if (s.unit === 'per_guest') return acc + (s.price * guests)
+    return acc + s.price
+  }, 0)
+
   // Basic Pricing Logic
   const totalNightsPrice = nights * basePrice
-  const totalPrice = nights > 0 ? totalNightsPrice + cleaningFee : 0
+  const totalPrice = nights > 0 ? totalNightsPrice + cleaningFee + servicesTotal : 0
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-16 relative items-start">
@@ -132,13 +140,56 @@ export function PropertyBookingEngine({ property }: { property: any }) {
                 </div>
                 <Users size={16} className="text-white/40 pointer-events-none" />
               </div>
+
+              {/* Serviços Concierge */}
+              {property.services && property.services.length > 0 && (
+                <div className="space-y-3 pt-4 border-t border-white/5">
+                  <span className="text-[9px] uppercase font-black tracking-[0.2em] text-accent/60">Serviços Exclusivos</span>
+                  <div className="grid grid-cols-1 gap-2">
+                    {property.services.map((service: any) => (
+                      <div 
+                        key={service.id}
+                        onClick={() => {
+                          const isSelected = selectedServiceIds.includes(service.id)
+                          if (isSelected) {
+                            setSelectedServiceIds(selectedServiceIds.filter(id => id !== service.id))
+                          } else {
+                            setSelectedServiceIds([...selectedServiceIds, service.id])
+                          }
+                        }}
+                        className={cn(
+                          "flex items-center justify-between p-4 rounded-xl border transition-all cursor-pointer",
+                          selectedServiceIds.includes(service.id) 
+                            ? 'bg-accent/10 border-accent/40 shadow-[0_0_10px_rgba(224,176,80,0.1)]' 
+                            : 'bg-black/20 border-white/5 hover:border-white/20'
+                        )}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={cn(
+                            "w-4 h-4 rounded border flex items-center justify-center transition-colors",
+                            selectedServiceIds.includes(service.id) ? 'bg-accent border-accent' : 'border-white/20'
+                          )}>
+                            {selectedServiceIds.includes(service.id) && <Zap size={10} className="text-black fill-current" />}
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-white">{service.name}</p>
+                            <p className="text-[9px] text-white/40">{service.unit === 'per_day' ? '+ R$ ' + (service.price/100) + '/dia' : '+ R$ ' + (service.price/100)}</p>
+                          </div>
+                        </div>
+                        <Sparkles size={12} className={cn(selectedServiceIds.includes(service.id) ? 'text-accent' : 'text-white/10')} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <Button 
               disabled={nights === 0}
               onClick={() => {
                  if (dateRange?.from && dateRange?.to) {
-                    router.push(`/checkout/${property.slug}?checkin=${format(dateRange.from, 'yyyy-MM-dd')}&checkout=${format(dateRange.to, 'yyyy-MM-dd')}&guests=${guests}`)
+                    const servicesQuery = selectedServiceIds.length > 0 ? `&services=${selectedServiceIds.join(',')}` : ''
+                    router.push(`/checkout/${property.slug}?checkin=${format(dateRange.from, 'yyyy-MM-dd')}&checkout=${format(dateRange.to, 'yyyy-MM-dd')}&guests=${guests}${servicesQuery}`)
                  }
               }}
               className="w-full py-8 rounded-3xl text-xl font-black uppercase tracking-widest shadow-2xl shadow-accent/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:hover:scale-100 disabled:shadow-none bg-accent hover:bg-white text-black"
@@ -161,6 +212,12 @@ export function PropertyBookingEngine({ property }: { property: any }) {
                     <span className="text-white/60">Taxa de Limpeza</span>
                     <span className="text-white">{(cleaningFee / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                  </div>
+                 {servicesTotal > 0 && (
+                    <div className="flex justify-between items-center text-sm font-medium animate-in fade-in zoom-in-95">
+                      <span className="text-white/60">Serviços Concierge</span>
+                      <span className="text-white">{(servicesTotal / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    </div>
+                  )}
                  <Separator className="bg-white/10 my-4" />
                  <div className="flex justify-between items-center">
                     <span className="text-xs uppercase font-black tracking-[0.2em] text-white">Total</span>

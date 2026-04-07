@@ -13,6 +13,8 @@ export interface MockProperty {
   featured: boolean
   basePrice: number // em centavos
   images: { id: string; url: string; isCover: boolean }[]
+  seasonalPricing?: { name: string; startDate: string; endDate: string; pricePerNight: number }[]
+  services?: { id: string; name: string; description: string; price: number; unit: string }[]
   createdAt: Date
 }
 
@@ -36,6 +38,14 @@ export const MOCK_PROPERTIES: MockProperty[] = [
       { id: 'img-1-2', url: '/images/mock/living.png', isCover: false },
       { id: 'img-1-3', url: '/images/mock/bedroom.png', isCover: false },
       { id: 'img-1-4', url: '/images/mock/outdoor.png', isCover: false }
+    ],
+    seasonalPricing: [
+      { name: 'Réveillon', startDate: '2024-12-28', endDate: '2025-01-05', pricePerNight: 850000 },
+      { name: 'Carnaval', startDate: '2025-02-28', endDate: '2025-03-05', pricePerNight: 650000 }
+    ],
+    services: [
+      { id: 's1', name: 'Aluguel de Jet Ski', description: 'Sea-Doo Spark por dia', price: 85000, unit: 'per_day' },
+      { id: 's2', name: 'Faxina Extra', description: 'Limpeza completa durante a estadia', price: 15000, unit: 'total' }
     ],
     createdAt: new Date()
   },

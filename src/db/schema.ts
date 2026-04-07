@@ -116,6 +116,7 @@ export const properties = pgTable('properties', {
   status: propertyStatusEnum('status').default('active').notNull(),
   featured: boolean('featured').default(false).notNull(),
   cleaningFee: integer('cleaning_fee').notNull().default(0), // centavos
+  basePrice: integer('base_price').notNull().default(0), // centavos
   minNights: integer('min_nights').default(1).notNull(),
   ownerId: uuid('owner_id')
     .notNull()
@@ -214,6 +215,8 @@ export const bookings = pgTable('bookings', {
   stripePaymentIntentId: text('stripe_payment_intent_id'),
   stripeProductId: text('stripe_product_id'),
   stripePriceId: text('stripe_price_id'),
+  couponId: uuid('coupon_id').references(() => coupons.id),
+  selectedServices: jsonb('selected_services').default([]), // array of { id: string, name: string, price: number, unit: string }
   // Lifecycle timestamps
   canceledAt: timestamp('canceled_at', { withTimezone: true }),
   checkInAt: timestamp('check_in_at', { withTimezone: true }),
@@ -225,6 +228,34 @@ export const bookings = pgTable('bookings', {
 export const processedWebhookEvents = pgTable('processed_webhook_events', {
   stripeEventId: text('stripe_event_id').primaryKey(),
   processedAt: timestamp('processed_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+// ─── Coupons & Services ────────────────────────────────────────────────────────
+
+export const coupons = pgTable('coupons', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  code: text('code').unique().notNull(),
+  discountPercent: integer('discount_percent'), // null if amount
+  discountAmount: integer('discount_amount'), // centavos
+  maxUses: integer('max_uses'),
+  usedCount: integer('used_count').default(0).notNull(),
+  validUntil: date('valid_until'),
+  isActive: boolean('is_active').default(true).notNull(),
+  stripeCouponId: text('stripe_coupon_id'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+})
+
+export const propertyServices = pgTable('property_services', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  propertyId: uuid('property_id')
+    .notNull()
+    .references(() => properties.id, { onDelete: 'cascade' }),
+  name: text('name').notNull(),
+  description: text('description'),
+  price: integer('price').notNull(), // centavos
+  unit: text('unit').default('total').notNull(), // 'total', 'per_night', 'per_guest'
+  icon: text('icon'), // lucide icon name
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 })
 
 // ─── Financial ────────────────────────────────────────────────────────────────
@@ -380,6 +411,7 @@ export const propertiesRelations = relations(properties, ({ one, many }) => ({
   icalFeeds: many(icalFeeds),
   crmLeads: many(crmLeads),
   proposals: many(proposals),
+  services: many(propertyServices),
 }))
 
 export const bookingsRelations = relations(bookings, ({ one }) => ({

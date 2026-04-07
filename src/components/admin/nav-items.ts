@@ -4,6 +4,8 @@ import {
   Calendar,
   Users,
   DollarSign,
+  Ticket,
+  Sparkles,
   Settings,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -19,6 +21,8 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Imóveis', href: '/admin/imoveis', icon: Home },
   { label: 'Reservas', href: '/admin/reservas', icon: Calendar },
   { label: 'Hóspedes', href: '/admin/hospedes', icon: Users },
+  { label: 'Serviços', href: '/admin/servicos', icon: Sparkles },
+  { label: 'Cupons', href: '/admin/cupons', icon: Ticket },
   { label: 'Financeiro', href: '/admin/financeiro', icon: DollarSign },
   { label: 'Configurações', href: '/admin/configuracoes', icon: Settings },
 ]
