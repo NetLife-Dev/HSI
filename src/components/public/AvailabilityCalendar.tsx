@@ -58,7 +58,7 @@ export function AvailabilityCalendar({
           locale={ptBR}
           className="rounded-3xl"
           classNames={{
-            day_disabled: "text-white/20 line-through opacity-30 cursor-not-allowed",
+            disabled: "text-white/20 line-through opacity-30 cursor-not-allowed",
           }}
         />
       </div>
