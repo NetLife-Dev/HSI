@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { MapPin, Users, BedDouble, Bath, Star, Heart } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 
 interface PropertyCardProps {
   property: any // To be typed properly with Drizzle inferred type
