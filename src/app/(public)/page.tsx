@@ -31,84 +31,60 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="relative bg-background min-h-screen">
+    <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black">
       {/* Cinematic Hero Section */}
-      <section className="relative h-screen min-h-[800px] flex items-end pb-32 overflow-hidden">
+      <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden border-b-[20px] border-[#0a0a0a]">
         {/* Background Video/Image Layer */}
-        <div className="absolute inset-0 w-full h-full">
+        <div className="absolute inset-0 w-full h-full z-0">
            <Image
-             src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2560&q=100"
+             src="/images/mock/exterior.png"
              alt="Luxury Villa"
              fill
              priority
-             className="object-cover scale-105 animate-[kenburns_30s_ease-in-out_infinite_alternate]"
+             className="object-cover opacity-80"
            />
-           {/* Gradient Overlay for Typography readability */}
+           {/* Cinematic Gradient Overlays */}
            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-           <div className="absolute inset-0 bg-black/20" />
+           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent" />
         </div>
 
-        <div className="relative container mx-auto px-6 lg:px-12 z-10 w-full">
-          <div className="flex flex-col lg:flex-row items-end justify-between gap-12 w-full">
-             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-12 duration-1000 max-w-3xl">
-                <div className="flex items-center gap-3">
-                   <div className="w-12 h-[2px] bg-accent" />
-                   <span className="text-white uppercase tracking-[0.3em] font-light text-sm">Coleção Exclusiva</span>
-                </div>
-                <h1 className="text-6xl md:text-8xl font-display text-white tracking-tight leading-[0.9]">
-                  O Ápice da <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-amber-200">
-                    Sua Estadia.
-                  </span>
-                </h1>
-                <p className="text-lg md:text-xl text-white/70 font-light max-w-xl leading-relaxed">
-                  Um portfólio restrito de obras-primas arquitetônicas. Sem taxas de intermediários. Serviço de concierge sob demanda.
-                </p>
-                <div className="pt-4 flex flex-wrap gap-6">
-                  <Link href="#colecao">
-                     <Button className="rounded-full h-14 px-8 text-sm uppercase tracking-widest font-bold shadow-2xl shadow-accent/20 bg-accent text-accent-foreground hover:bg-accent-hover hover:scale-105 transition-all group">
-                        Ver a Coleção
-                        <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />
-                     </Button>
-                  </Link>
-                  <Button variant="outline" className="rounded-full h-14 px-8 bg-white/5 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 hover:text-white transition-all gap-3 uppercase tracking-widest text-sm font-bold">
-                     <Play className="w-4 h-4" />
-                     Vídeo Tour
-                  </Button>
-                </div>
-             </div>
-
-             {/* Right Floating Stats Box */}
-             <div className="hidden lg:flex flex-col items-start gap-8 bg-white/5 backdrop-blur-xl border border-white/10 p-10 rounded-[2.5rem] animate-in fade-in slide-in-from-right-12 duration-1000 delay-300">
-                <div className="space-y-2">
-                   <p className="text-white/50 uppercase tracking-widest text-xs font-bold">Propriedades Selecionadas</p>
-                   <p className="text-white text-5xl font-black">06</p>
-                </div>
-                <div className="w-full h-[1px] bg-white/10" />
-                <div className="space-y-2">
-                   <p className="text-white/50 uppercase tracking-widest text-xs font-bold">Reserva Direta</p>
-                   <p className="text-accent text-xl font-display italic tracking-tight">Sem Taxas Ocultas</p>
-                </div>
-             </div>
-          </div>
+        <div className="relative container mx-auto px-6 lg:px-12 z-10 w-full h-full flex flex-col justify-end pb-32">
+           <div className="space-y-6 lg:w-2/3 animate-slide-up">
+              <div className="flex items-center gap-3">
+                 <div className="w-12 h-1 bg-accent" />
+                 <span className="text-accent uppercase tracking-[0.4em] font-black text-xs">Exclusivo</span>
+              </div>
+              <h1 className="text-6xl md:text-[8rem] font-black tracking-tighter uppercase leading-[0.85] text-white drop-shadow-2xl">
+                Sua <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
+                  Estadia.
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/50 font-medium max-w-2xl leading-relaxed">
+                Um mapa de possibilidades ilimitadas. Onde o topo do luxo encontra a discrição absoluta.
+              </p>
+              
+              <div className="pt-8 flex flex-col sm:flex-row gap-6">
+                <Link href="#colecao">
+                   <Button className="w-full sm:w-auto h-16 px-12 text-lg uppercase tracking-widest font-black bg-accent text-black hover:bg-white hover:scale-105 transition-all shadow-2xl shadow-accent/20">
+                      Explorar Mapa
+                   </Button>
+                </Link>
+              </div>
+           </div>
         </div>
       </section>
 
       {/* The Exclusive Collection */}
-      <section id="colecao" className="py-32 bg-surface relative rounded-t-[3rem] -mt-10 z-20">
-         <div className="container mx-auto px-6 lg:px-12">
-            <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-20">
-               <div className="space-y-4">
-                  <div className="flex items-center gap-3 text-accent">
-                     <Diamond size={16} />
-                     <span className="uppercase tracking-[0.2em] font-bold text-sm">O Portfólio</span>
-                  </div>
-                  <h2 className="text-4xl md:text-6xl font-display tracking-tight text-text-primary">
-                     Propriedades <br /> Assinadas.
-                  </h2>
-               </div>
-               <p className="text-slate-500 text-lg max-w-sm leading-relaxed pb-2">
-                  Cada residência foi cuidadosamente curada para oferecer privacidade, design e uma experiência indescritível.
+      <section id="colecao" className="py-32 bg-[#050505] relative z-20 border-b-[20px] border-[#0a0a0a]">
+         <div className="container mx-auto px-4 max-w-7xl">
+            <div className="flex flex-col gap-6 mb-20 text-center items-center">
+               <div className="w-1 h-12 bg-accent rounded-full" />
+               <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">
+                  O <span className="text-accent">Portfólio.</span>
+               </h2>
+               <p className="text-white/50 font-medium tracking-widest uppercase text-xs">
+                  Sem intermediários. Sem regras ocultas.
                </p>
             </div>
 
@@ -121,21 +97,24 @@ export default async function HomePage() {
       </section>
 
       {/* Immersive CTA */}
-      <section className="py-32 relative overflow-hidden bg-black text-white">
-         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3&auto=format&fit=crop&w=2560&q=80')] bg-cover bg-center opacity-30 mix-blend-luminosity" />
-         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
+      <section className="h-[70vh] min-h-[600px] relative overflow-hidden flex items-center justify-center">
+         <div className="absolute inset-0 z-0">
+           <Image
+             src="/images/mock/living.png"
+             alt="Living Room"
+             fill
+             className="object-cover opacity-40 scale-105"
+           />
+           <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+         </div>
          
-         <div className="container mx-auto px-6 lg:px-12 relative z-10 text-center space-y-10">
-            <Sparkles className="w-16 h-16 text-primary mx-auto opacity-50" />
-            <h2 className="text-5xl md:text-7xl font-black tracking-tighter max-w-4xl mx-auto leading-tight">
-               Sua próxima narrativa começa aqui.
+         <div className="container mx-auto px-6 relative z-10 text-center space-y-12">
+            <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] text-white">
+               A Noite <span className="text-accent">Começa</span><br />Aqui.
             </h2>
-            <p className="text-xl text-white/50 max-w-2xl mx-auto leading-relaxed">
-               Reserve diretamente com nossa equipe. Garantimos a melhor tarifa e um atendimento digno da sua exigência.
-            </p>
-            <div className="pt-8">
-               <Button size="lg" className="rounded-full h-16 px-12 text-lg uppercase tracking-widest font-black shadow-2xl shadow-primary/20">
-                  Falar com Consultor VIP
+            <div className="pt-4 flex justify-center">
+               <Button size="lg" className="h-20 px-16 text-xl uppercase tracking-widest font-black bg-white text-black hover:bg-accent hover:scale-110 transition-transform shadow-2xl">
+                  Agendar Diretamente
                </Button>
             </div>
          </div>
