@@ -28,7 +28,7 @@ import { createCoupon } from '@/actions/coupons'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
-export function CouponsClient({ initialCoupons }: { initialCoupons: any[] }) {
+export function CouponsClient({ initialCoupons = [] }: { initialCoupons: any[] }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
@@ -63,8 +63,8 @@ export function CouponsClient({ initialCoupons }: { initialCoupons: any[] }) {
     })
   }
 
-  const filteredCoupons = initialCoupons.filter(coupon => 
-    coupon.code.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCoupons = (initialCoupons || []).filter(coupon => 
+    coupon.code?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
@@ -193,7 +193,11 @@ export function CouponsClient({ initialCoupons }: { initialCoupons: any[] }) {
                     <TableCell>
                       <div className="flex items-center gap-2 text-xs font-medium text-white/40 uppercase tracking-widest">
                         <Calendar size={12} />
-                        {coupon.validUntil || 'Vitalício'}
+                        {coupon.validUntil ? (
+                           typeof coupon.validUntil === 'string' 
+                            ? coupon.validUntil 
+                            : new Date(coupon.validUntil).toLocaleDateString('pt-BR')
+                        ) : 'Vitalício'}
                       </div>
                     </TableCell>
                     <TableCell className="text-right">

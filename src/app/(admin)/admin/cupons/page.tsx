@@ -4,7 +4,14 @@ import { getCoupons } from '@/actions/coupons'
 import { CouponsClient } from './CouponsClient'
 
 export default async function CouponsPage() {
-  const coupons = await getCoupons()
+  const couponsData = await getCoupons()
+  
+  // Serialize to avoid transport errors with complex objects (Date, uuid)
+  const coupons = couponsData.map(c => ({
+    ...c,
+    createdAt: c.createdAt instanceof Date ? c.createdAt.toISOString() : c.createdAt,
+    validUntil: c.validUntil instanceof Date ? c.validUntil.toISOString().split('T')[0] : c.validUntil,
+  }))
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
