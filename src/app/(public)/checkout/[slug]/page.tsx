@@ -32,7 +32,7 @@ export default async function CheckoutPage({
       locationAddress: "Praia do Forte, Bahia",
       maxGuests: 8, bedrooms: 4, bathrooms: 5,
       rules: "Proibido som alto após as 22h. Não permitimos festas sem autorização prévia.",
-      images: [{ id: "v1", url: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" }],
+      images: [{ id: "v1", url: "/images/mock/exterior.png" }],
       basePrice: 150000, cleaningFee: 25000
     },
     'refugio-da-mata': {
