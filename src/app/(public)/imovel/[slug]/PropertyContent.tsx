@@ -18,8 +18,23 @@ import { Separator } from '@/components/ui/separator'
 
 export function PropertyContent({ property }: { property: any }) {
   return (
-    <div className="bg-white min-h-screen pt-24 pb-32 overflow-hidden">
-      <div className="container mx-auto px-4 space-y-12">
+    <div className="relative min-h-screen pt-24 pb-32 overflow-hidden bg-slate-50">
+      {/* Immersive Background Effect */}
+      {property.images?.[0]?.url && (
+        <>
+          <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden h-[60vh]">
+            <img 
+              src={property.images[0].url} 
+              alt="" 
+              className="w-full h-full object-cover blur-[60px] opacity-20 scale-110 animate-ken-burns" 
+            />
+          </div>
+          <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-white/50 to-white/95 h-[60vh]" />
+          <div className="fixed top-[60vh] bottom-0 left-0 right-0 z-0 bg-slate-50 pointer-events-none" />
+        </>
+      )}
+
+      <div className="container mx-auto px-4 space-y-12 relative z-10">
         
         {/* Navigation Breadcrumb with Native CSS Animation */}
         <div className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 animate-slide-up" style={{ animationDelay: '0.2s' }}>

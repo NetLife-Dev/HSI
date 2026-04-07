@@ -17,6 +17,7 @@ import { Separator } from '@/components/ui/separator'
 export function PropertyBookingEngine({ property }: { property: any }) {
   const router = useRouter()
   const [dateRange, setDateRange] = useState<DateRange | undefined>()
+  const [guests, setGuests] = useState(1)
 
   const nights = dateRange?.from && dateRange?.to 
     ? Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24))
@@ -115,12 +116,20 @@ export function PropertyBookingEngine({ property }: { property: any }) {
                   </span>
                 </div>
               </div>
-              <div className="rounded-2xl p-4 bg-slate-50 border border-slate-100 flex items-center justify-between cursor-not-allowed">
-                <div className="flex flex-col gap-1">
+              <div className="rounded-2xl p-4 bg-slate-50 border border-slate-100 flex items-center justify-between relative focus-within:ring-2 ring-primary/20">
+                <div className="flex flex-col gap-1 w-full">
                   <span className="text-[9px] uppercase font-bold text-slate-500">Hóspedes</span>
-                  <span className="text-xs font-bold text-slate-900">{property.maxGuests} Disp.</span>
+                  <select 
+                    value={guests} 
+                    onChange={(e) => setGuests(Number(e.target.value))}
+                    className="bg-transparent text-xs font-bold text-slate-900 w-full appearance-none outline-none cursor-pointer"
+                  >
+                    {Array.from({ length: property.maxGuests || 1 }).map((_, i) => (
+                      <option key={i + 1} value={i + 1}>{i + 1} Hóspede{i > 0 ? 's' : ''}</option>
+                    ))}
+                  </select>
                 </div>
-                <Users size={16} className="text-slate-400" />
+                <Users size={16} className="text-slate-400 pointer-events-none" />
               </div>
             </div>
 
@@ -128,7 +137,7 @@ export function PropertyBookingEngine({ property }: { property: any }) {
               disabled={nights === 0}
               onClick={() => {
                  if (dateRange?.from && dateRange?.to) {
-                    router.push(`/checkout/${property.slug}?checkin=${format(dateRange.from, 'yyyy-MM-dd')}&checkout=${format(dateRange.to, 'yyyy-MM-dd')}`)
+                    router.push(`/checkout/${property.slug}?checkin=${format(dateRange.from, 'yyyy-MM-dd')}&checkout=${format(dateRange.to, 'yyyy-MM-dd')}&guests=${guests}`)
                  }
               }}
               className="w-full py-8 rounded-3xl text-xl font-black tracking-tight shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:hover:scale-100"

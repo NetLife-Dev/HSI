@@ -14,6 +14,9 @@ export function PublicHeader() {
   const isHome = pathname === '/'
 
   useEffect(() => {
+    // Force light mode on public routes to avoid admin dark mode bleeding
+    document.documentElement.classList.remove('dark')
+    
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
     }
@@ -54,12 +57,11 @@ export function PublicHeader() {
         </nav>
 
         <div className="flex items-center gap-4">
-          <Link href="/admin/login" className="hidden sm:block text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-primary">
-            Admin
+          <Link href="/imoveis">
+            <Button size="sm" className="hidden sm:flex rounded-full px-6 shadow-md hover:shadow-primary/20">
+              Reservar Agora
+            </Button>
           </Link>
-          <Button size="sm" className="hidden sm:flex rounded-full px-6 shadow-md hover:shadow-primary/20">
-            Reservar Agora
-          </Button>
           
           <button 
             className="md:hidden p-2 text-foreground"
@@ -101,9 +103,11 @@ export function PublicHeader() {
           >
             Fale Conosco
           </Link>
-          <Button className="w-full rounded-xl py-6 text-lg tracking-tight">
-            Ver Disponibilidade
-          </Button>
+          <Link href="/imoveis" className="w-full">
+            <Button className="w-full rounded-xl py-6 text-lg tracking-tight">
+              Ver Disponibilidade
+            </Button>
+          </Link>
         </div>
       )}
     </header>

@@ -142,6 +142,45 @@ export default async function CheckoutPage({
                   </p>
                </div>
             </section>
+
+            {/* Extra Services */}
+            <section className="bg-surface-elevated rounded-[2.5rem] p-8 md:p-10 border border-border-subtle shadow-sm space-y-6">
+               <div className="flex items-center justify-between">
+                 <h2 className="text-xl font-display font-medium text-text-primary">Serviços Adicionais</h2>
+                 <span className="text-[10px] uppercase font-bold tracking-widest text-accent bg-accent/10 px-3 py-1 rounded-full">Exclusivo</span>
+               </div>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-surface border border-border-subtle rounded-2xl flex flex-col justify-between hover:border-accent transition-colors cursor-pointer group">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="font-bold text-sm text-text-primary group-hover:text-accent transition-colors">Concierge Premium</h4>
+                        <p className="text-xs text-text-tertiary mt-1">Compras de mercado antes de sua chegada</p>
+                      </div>
+                      <div className="w-5 h-5 rounded border border-border-subtle flex items-center justify-center shrink-0"></div>
+                    </div>
+                    <span className="font-bold text-accent text-sm">R$ 150,00</span>
+                  </div>
+
+                  <div className="p-4 bg-surface border border-border-subtle rounded-2xl flex flex-col justify-between hover:border-accent transition-colors cursor-pointer group">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="font-bold text-sm text-text-primary group-hover:text-accent transition-colors">Transfer Aeroporto</h4>
+                        <p className="text-xs text-text-tertiary mt-1">Van executiva ida e volta</p>
+                      </div>
+                      <div className="w-5 h-5 rounded border border-border-subtle flex items-center justify-center shrink-0"></div>
+                    </div>
+                    <span className="font-bold text-accent text-sm">R$ 450,00</span>
+                  </div>
+               </div>
+            </section>
+
+            {/* Action Area */}
+            <div className="pt-4 flex flex-col gap-4">
+               <Button className="w-full h-16 rounded-2xl text-xl font-bold tracking-tight shadow-xl shadow-accent/20 hover:scale-[1.01] transition-transform">
+                  Pagar de Forma Segura (Stripe)
+               </Button>
+               <p className="text-xs text-center text-text-tertiary font-medium">Você não será cobrado agora.</p>
+            </div>
           </div>
 
           {/* Sticky Summary Card */}
@@ -177,6 +216,14 @@ export default async function CheckoutPage({
                       <span className="text-white/50">Taxa de Limpeza</span>
                       <span className="font-bold text-white">{(cleaningFee / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                    </div>
+                </div>
+
+                <div className="space-y-3 mb-6">
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-white/50">Cupom / Voucher</label>
+                  <div className="flex gap-2">
+                    <Input placeholder="Código promocional" className="bg-white/5 border-white/10 text-white placeholder:text-white/30 rounded-xl h-12 focus-visible:ring-accent/50" />
+                    <Button variant="outline" className="bg-transparent border-white/10 text-white hover:text-white rounded-xl h-12 px-6 hover:bg-white/10 border font-bold text-xs uppercase tracking-widest">Aplicar</Button>
+                  </div>
                 </div>
 
                 <Separator className="bg-white/10 mb-6" />

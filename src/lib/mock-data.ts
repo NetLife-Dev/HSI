@@ -33,7 +33,10 @@ export const MOCK_PROPERTIES: MockProperty[] = [
     basePrice: 450000,
     images: [
       { id: 'img-1-1', url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80', isCover: true },
-      { id: 'img-1-2', url: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80', isCover: false }
+      { id: 'img-1-2', url: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80', isCover: false },
+      { id: 'img-1-3', url: 'https://images.unsplash.com/photo-1628624747186-a941c476b7ef?auto=format&fit=crop&w=1200&q=80', isCover: false },
+      { id: 'img-1-4', url: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80', isCover: false },
+      { id: 'img-1-5', url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80', isCover: false }
     ],
     createdAt: new Date()
   },

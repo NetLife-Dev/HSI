@@ -16,10 +16,7 @@ export function PublicFooter() {
           <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed pr-4">
             A plataforma líder para reservas diretas de aluguéis de temporada de luxo. Melhores preços, sem taxas ocultas, atendimento direto com o anfitrião.
           </p>
-          <div className="flex gap-4">
-            <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all font-bold text-xs uppercase" aria-label="Instagram">IG</a>
-            <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all font-bold text-xs uppercase" aria-label="Facebook">FB</a>
-          </div>
+
         </div>
 
         {/* Explore */}
