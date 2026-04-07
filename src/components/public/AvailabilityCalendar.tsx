@@ -47,16 +47,16 @@ export function AvailabilityCalendar({
   }
 
   return (
-    <div className="space-y-4 dark text-white overflow-x-auto">
-      <div className="p-4 bg-transparent flex items-center justify-center">
+    <div className="space-y-4 dark text-white">
+      <div className="p-0 bg-transparent flex items-center justify-center">
         <Calendar
           mode="range"
           selected={range}
           onSelect={handleSelect}
           disabled={isDateDisabled}
-          numberOfMonths={2}
+          numberOfMonths={1}
           locale={ptBR}
-          className="rounded-3xl"
+          className="rounded-[2.5rem] border-0 bg-transparent shadow-none"
           classNames={{
             disabled: "opacity-10 cursor-not-allowed line-through",
           }}
