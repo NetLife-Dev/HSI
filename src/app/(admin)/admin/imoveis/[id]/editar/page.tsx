@@ -4,6 +4,7 @@ import { db } from '@/db/index'
 import { properties } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { PropertyForm } from '@/components/admin/properties/PropertyForm'
+import { MOCK_PROPERTIES } from '@/lib/mock-data'
 
 export const metadata: Metadata = {
   title: 'Editar Imóvel — Admin',
@@ -16,14 +17,25 @@ interface EditPropertyPageProps {
 export default async function EditPropertyPage({ params }: EditPropertyPageProps) {
   const { id } = await params
 
-  const property = await db.query.properties.findFirst({
-    where: eq(properties.id, id),
-    with: {
-      images: {
-        orderBy: (images, { asc }) => [asc(images.order)],
-      },
-    },
-  })
+  let property: any = null
+
+  // UAT Fallback: Se for um ID de mock, pegamos dos mocks
+  if (id.startsWith('mock')) {
+    property = MOCK_PROPERTIES.find(p => p.id === id)
+  } else {
+    try {
+      property = await db.query.properties.findFirst({
+        where: eq(properties.id, id),
+        with: {
+          images: {
+            orderBy: (images, { asc }) => [asc(images.order)],
+          },
+        },
+      })
+    } catch (e) {
+      console.warn('⚠️ [Admin/Edit] Erro ao buscar imóvel. Possível UUID inválido em modo UAT.')
+    }
+  }
 
   if (!property) {
     notFound()
