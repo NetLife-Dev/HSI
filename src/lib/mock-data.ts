@@ -32,7 +32,7 @@ export const MOCK_PROPERTIES: MockProperty[] = [
     amenities: ['Piscina Infinita', 'Sauna', 'Ducha Externa', 'Chef Privado', 'Wi-Fi 6G'],
     status: 'active',
     featured: true,
-    basePrice: 450000,
+    basePrice: 150000,
     images: [
       { id: 'img-1-1', url: '/images/mock/exterior.png', isCover: true },
       { id: 'img-1-2', url: '/images/mock/living.png', isCover: false },

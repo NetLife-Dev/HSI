@@ -31,7 +31,7 @@ export function PropertyBookingEngine({ property }: { property: any }) {
     ? Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24))
     : 0
 
-  const basePrice = property.basePrice || 85000 
+  const basePrice = property.basePrice || 0
   const cleaningFee = property.cleaningFee || 15000
   
   const selectedServices = (property.services || []).filter((s: any) => selectedServiceIds.includes(s.id))

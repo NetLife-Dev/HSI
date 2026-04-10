@@ -13,6 +13,8 @@ import { Separator } from '@/components/ui/separator'
 import { CheckoutForm } from './CheckoutForm'
 import { calculateBookingPrice } from '@/actions/bookings'
 
+import { MOCK_PROPERTIES } from '@/lib/mock-data'
+
 export default async function CheckoutPage({
   params,
   searchParams
@@ -29,21 +31,6 @@ export default async function CheckoutPage({
   const checkoutDate = parseISO(checkout ?? '')
   const nights = differenceInDays(checkoutDate, checkinDate)
 
-  const MOCK_PROPERTIES: Record<string, any> = {
-    'villa-ocean-view': {
-      id: "mock1", name: "Villa Ocean View", slug: "villa-ocean-view",
-      locationAddress: "Praia do Forte, Bahia",
-      maxGuests: 8, bedrooms: 4, bathrooms: 5,
-      rules: "Proibido som alto após as 22h. Não permitimos festas sem autorização prévia.",
-      images: [{ id: "v1", url: "/images/mock/exterior.png" }],
-      basePrice: 150000, cleaningFee: 25000,
-      services: [
-        { id: 's1', name: 'Aluguel de Jet Ski', description: 'Sea-Doo Spark por dia', price: 85000, unit: 'per_day' },
-        { id: 's2', name: 'Faxina Extra', description: 'Limpeza completa durante a estadia', price: 15000, unit: 'total' }
-      ]
-    }
-  }
-
   let property: any = null
   try {
     property = await db.query.properties.findFirst({
@@ -54,9 +41,11 @@ export default async function CheckoutPage({
         seasonalPricing: true,
       },
     })
-    if (!property) property = MOCK_PROPERTIES[slug] || MOCK_PROPERTIES['villa-ocean-view']
+    if (!property) {
+        property = MOCK_PROPERTIES.find(p => p.slug === slug) || MOCK_PROPERTIES[0]
+    }
   } catch(e) {
-    property = MOCK_PROPERTIES[slug] || MOCK_PROPERTIES['villa-ocean-view']
+    property = MOCK_PROPERTIES.find(p => p.slug === slug) || MOCK_PROPERTIES[0]
   }
 
   if (!property) notFound()
