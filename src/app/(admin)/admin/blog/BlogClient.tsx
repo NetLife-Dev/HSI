@@ -61,7 +61,7 @@ function slugify(text: string) {
     .replace(/\s+/g, '-')
 }
 
-export function BlogClient({ initialPosts }: BlogClientProps) {
+export function BlogClient({ initialPosts = [] }: BlogClientProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts)
   const [search, setSearch] = useState('')
   const [isFormOpen, setIsFormOpen] = useState(false)

@@ -17,7 +17,7 @@ export default async function BlogAdminPage() {
     }
   }
 
-  const serialized = posts.map(p => ({
+  const serialized = (posts || []).map(p => ({
     ...p,
     publishedAt: p.publishedAt instanceof Date ? p.publishedAt.toISOString() : p.publishedAt,
     createdAt: p.createdAt instanceof Date ? p.createdAt.toISOString() : p.createdAt,

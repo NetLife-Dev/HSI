@@ -239,7 +239,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <ChevronLeft size={14} /> Ver todos os artigos
             </Link>
             <a
-              href="https://wa.me/5562999944512"
+              href="https://wa.me/5562999946552"
               target="_blank"
               rel="noopener noreferrer"
               className="ml-auto px-6 py-3 rounded-2xl bg-accent text-black font-black uppercase tracking-widest text-sm hover:bg-white transition-colors"

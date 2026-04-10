@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Home, Mail, Phone, MapPin } from 'lucide-react'
 
 export function PublicFooter() {
-  const whatsappNumber = '5562999944512'
+  const whatsappNumber = '5562999946552'
   const whatsappUrl = `https://wa.me/${whatsappNumber}`
 
   return (

@@ -154,7 +154,7 @@ export default function PrivacidadePage() {
                 privacidade@hostsemimposto.com
               </a>{' '}
               ou WhatsApp{' '}
-              <a href="https://wa.me/5562999944512" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+              <a href="https://wa.me/5562999946552" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
                 (62) 99994-6552
               </a>.
             </p>

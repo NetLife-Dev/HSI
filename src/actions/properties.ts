@@ -315,7 +315,7 @@ export async function deleteProperty(propertyId: string, cascade: boolean = fals
       .where(and(eq(bookings.propertyId, propertyId), ne(bookings.status, 'canceled')))
       .limit(1)
 
-    if (linked.length > 0 && !cascade) {
+    if (linked && linked.length > 0 && !cascade) {
       return { success: false, hasBookings: true }
     }
 
