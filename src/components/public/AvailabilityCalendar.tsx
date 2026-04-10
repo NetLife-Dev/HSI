@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { DateRange } from 'react-day-picker'
 
 interface AvailabilityCalendarProps {
+  initialRange?: DateRange
   bookedDates?: Date[]
   onRangeSelect?: (range: DateRange | undefined) => void
   disabledDates?: Date[]
@@ -23,17 +24,25 @@ const MOCK_BOOKED_DATES = [
 ]
 
 export function AvailabilityCalendar({ 
+  initialRange,
   bookedDates = MOCK_BOOKED_DATES, 
   onRangeSelect, 
   disabledDates = [] 
 }: AvailabilityCalendarProps) {
-  const [range, setRange] = useState<DateRange | undefined>()
+  const [range, setRange] = useState<DateRange | undefined>(initialRange)
   const today = startOfToday()
 
   const handleSelect = (newRange: DateRange | undefined) => {
-    setRange(newRange)
+    // No react-day-picker v9, o primeiro clique define 'from' e 'to' como o mesmo dia.
+    // Para manter a UX clássica (onde o primeiro clique é só check-in), 
+    // ignoramos o 'to' se ele for igual ao 'from'.
+    const normalized = (newRange?.from && newRange?.to && isSameDay(newRange.from, newRange.to))
+      ? { from: newRange.from, to: undefined }
+      : newRange
+
+    setRange(normalized)
     if (onRangeSelect) {
-      onRangeSelect(newRange)
+      onRangeSelect(normalized)
     }
   }
 

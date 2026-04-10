@@ -127,7 +127,7 @@ export function PropertyBookingEngine({ property }: { property: any }) {
                       <DialogHeader>
                         <DialogTitle className="text-3xl font-black uppercase tracking-tighter text-center">Datas da Estadia</DialogTitle>
                       </DialogHeader>
-                      <AvailabilityCalendar onRangeSelect={(r) => {
+                      <AvailabilityCalendar initialRange={dateRange} onRangeSelect={(r) => {
                         setDateRange(r)
                         if (r?.from && r?.to && r.from.getTime() !== r.to.getTime()) {
                           setTimeout(() => setIsCalendarOpen(false), 800)
