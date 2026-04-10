@@ -34,7 +34,7 @@ export default async function PropertiesPage() {
   }
 
   // UAT Fallback: Mostrar mocks se o banco estiver vazio
-  const displayProperties = propertyList.length > 0 ? propertyList : MOCK_PROPERTIES
+  const displayProperties = (propertyList && propertyList.length > 0) ? propertyList : MOCK_PROPERTIES
 
   return (
     <div className="space-y-6">

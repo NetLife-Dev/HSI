@@ -38,7 +38,7 @@ export async function createNotification({
       where: eq(users.role, 'owner'),
     })
 
-    if (owners.length === 0) return
+    if (!owners || owners.length === 0) return
 
     const values = owners.map((owner) => ({
       userId: owner.id,

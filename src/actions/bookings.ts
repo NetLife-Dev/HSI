@@ -69,7 +69,7 @@ export async function calculateBookingPrice(
 
   for (const night of nightsInterval) {
     const nightStr = format(night, 'yyyy-MM-dd')
-    const seasonal = property.seasonalPricing.find(sp =>
+    const seasonal = (property.seasonalPricing || []).find(sp =>
       nightStr >= sp.startDate && nightStr <= sp.endDate
     )
     // Use seasonal price if available, otherwise fall back to property's base price
@@ -81,7 +81,7 @@ export async function calculateBookingPrice(
 
   // Apply long-stay discounts (best applicable tier wins)
   const discounts: { name: string; amount: number }[] = []
-  const applicableDiscount = property.longStayDiscounts
+  const applicableDiscount = (property.longStayDiscounts || [])
     .filter(d => nights >= d.minNights)
     .sort((a, b) => b.minNights - a.minNights)[0]
 

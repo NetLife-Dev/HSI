@@ -10,7 +10,7 @@ interface PropertyGalleryProps {
   images: any[]
 }
 
-export function PropertyGallery({ images }: PropertyGalleryProps) {
+export function PropertyGallery({ images = [] }: PropertyGalleryProps) {
   const [activeImage, setActiveImage] = useState<number | null>(null)
 
   if (images.length === 0) {

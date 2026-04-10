@@ -60,7 +60,7 @@ export default async function BlogPage() {
     // DB not ready — use seed posts only
   }
 
-  const posts = dbPosts.length > 0 ? dbPosts : SEED_POSTS
+  const posts = (dbPosts && dbPosts.length > 0) ? dbPosts : SEED_POSTS
 
   return (
     <div className="bg-[#0a0a0a] min-h-screen pt-32 pb-24 text-white">
