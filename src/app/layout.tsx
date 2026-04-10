@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Outfit, Lora, Geist_Mono } from 'next/font/google'
 import './globals.css'
+import { Toaster } from 'sonner'
 
 const fontSans = Outfit({
   variable: '--font-sans',
