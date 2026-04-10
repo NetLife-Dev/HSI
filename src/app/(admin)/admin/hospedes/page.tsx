@@ -5,7 +5,7 @@ import { Plus, Search, MoreVertical, Calendar, DollarSign, ArrowRight } from 'lu
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-type Status = 'lead' | 'negociacao' | 'proposta' | 'reserva' | 'finalizado'
+type Status = 'lead' | 'negociacao' | 'proposta' | 'reserva'
 
 interface GuestCard {
   id: string
@@ -14,7 +14,6 @@ interface GuestCard {
   dates: string
   value: number
   status: Status
-  avatar?: string
 }
 
 const MOCK_GUESTS: GuestCard[] = [
@@ -25,11 +24,11 @@ const MOCK_GUESTS: GuestCard[] = [
   { id: '5', name: 'Fernando Souza', property: 'Refúgio da Mata', dates: '01 - 04 Ago', value: 6600, status: 'reserva' },
 ]
 
-const COLUMNS: { id: Status; title: string; color: string }[] = [
-  { id: 'lead', title: 'Leads (Novos)', color: 'bg-slate-100/50' },
-  { id: 'negociacao', title: 'Em Negociação', color: 'bg-blue-50/50' },
-  { id: 'proposta', title: 'Proposta Enviada', color: 'bg-amber-50/50' },
-  { id: 'reserva', title: 'Reserva Confirmada', color: 'bg-emerald-50/50' },
+const COLUMNS: { id: Status; title: string }[] = [
+  { id: 'lead', title: 'Leads (Novos)' },
+  { id: 'negociacao', title: 'Em Negociação' },
+  { id: 'proposta', title: 'Proposta Enviada' },
+  { id: 'reserva', title: 'Reserva Confirmada' },
 ]
 
 export default function CRMPage() {
@@ -39,24 +38,19 @@ export default function CRMPage() {
   const handleDragStart = (e: React.DragEvent, id: string) => {
     setDraggedCardId(id)
     e.dataTransfer.effectAllowed = 'move'
-    // Hack to hide HTML5 ghost image partially or just let it be default
   }
 
   const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault() // Necessary to allow dropping
+    e.preventDefault()
     e.dataTransfer.dropEffect = 'move'
   }
 
   const handleDrop = (e: React.DragEvent, targetStatus: Status) => {
     e.preventDefault()
     if (!draggedCardId) return
-
-    setCards(prev => prev.map(card => {
-      if (card.id === draggedCardId) {
-        return { ...card, status: targetStatus }
-      }
-      return card
-    }))
+    setCards(prev => prev.map(card =>
+      card.id === draggedCardId ? { ...card, status: targetStatus } : card
+    ))
     setDraggedCardId(null)
   }
 
@@ -65,85 +59,88 @@ export default function CRMPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">CRM de Hóspedes</h1>
-          <p className="text-slate-500 font-medium">Gerencie seu funil de conversão e negociações em andamento.</p>
+          <h1 className="text-3xl font-black uppercase tracking-tighter text-white flex items-center gap-3">
+            CRM de Hóspedes
+          </h1>
+          <p className="text-white/50 font-medium">Gerencie seu funil de conversão e negociações em andamento.</p>
         </div>
         <div className="flex items-center gap-3 w-full md:w-auto">
-           <div className="relative flex-grow md:flex-grow-0">
-             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-             <Input placeholder="Buscar hóspede..." className="pl-9 h-10 w-full md:w-64 rounded-full border-slate-200" />
-           </div>
-           <Button className="rounded-full shadow-lg gap-2 h-10">
-             <Plus size={16} />
-             Novo Lead
-           </Button>
+          <div className="relative flex-grow md:flex-grow-0">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+            <Input
+              placeholder="Buscar hóspede..."
+              className="pl-9 h-10 w-full md:w-64 rounded-full bg-white/5 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-accent/30"
+            />
+          </div>
+          <Button className="rounded-full shadow-lg gap-2 h-10 bg-accent hover:bg-white text-black font-bold">
+            <Plus size={16} />
+            Novo Lead
+          </Button>
         </div>
       </div>
 
       {/* Kanban Board */}
       <div className="flex gap-6 overflow-x-auto pb-8 min-h-[600px] snap-x pt-4">
         {COLUMNS.map(column => (
-          <div 
-            key={column.id} 
-            className={`flex-none w-80 rounded-3xl p-4 border border-slate-200/60 shadow-sm snap-center ${column.color}`}
+          <div
+            key={column.id}
+            className="flex-none w-80 rounded-3xl p-4 bg-[#111] border border-accent/20 shadow-lg snap-center"
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, column.id)}
           >
             {/* Column Header */}
             <div className="flex items-center justify-between mb-6 px-2">
-              <h3 className="font-bold text-slate-800 text-sm uppercase tracking-widest">{column.title}</h3>
-              <span className="bg-white text-slate-500 text-xs font-bold px-2 py-1 rounded-full shadow-sm">
+              <h3 className="font-black text-white text-xs uppercase tracking-widest">{column.title}</h3>
+              <span className="bg-accent/10 text-accent text-xs font-black px-2 py-1 rounded-full border border-accent/20">
                 {cards.filter(c => c.status === column.id).length}
               </span>
             </div>
 
-            {/* Cards List */}
+            {/* Cards */}
             <div className="space-y-4">
               {cards.filter(c => c.status === column.id).map(card => (
-                <div 
+                <div
                   key={card.id}
                   draggable
                   onDragStart={(e) => handleDragStart(e, card.id)}
-                  className={`bg-white rounded-2xl p-5 shadow-sm border border-slate-100 cursor-grab active:cursor-grabbing hover:shadow-md hover:border-primary/20 transition-all ${draggedCardId === card.id ? 'opacity-50 scale-95' : 'opacity-100'}`}
+                  className={`bg-black rounded-2xl p-5 border border-accent/20 cursor-grab active:cursor-grabbing hover:border-accent/50 hover:shadow-accent/10 hover:shadow-lg transition-all ${draggedCardId === card.id ? 'opacity-50 scale-95' : 'opacity-100'}`}
                 >
                   <div className="flex justify-between items-start mb-3">
-                    <h4 className="font-bold text-slate-900 leading-tight">{card.name}</h4>
-                    <button className="text-slate-400 hover:text-slate-700">
+                    <h4 className="font-bold text-white leading-tight">{card.name}</h4>
+                    <button className="text-white/30 hover:text-accent transition-colors">
                       <MoreVertical size={16} />
                     </button>
                   </div>
 
                   <div className="space-y-2 mb-4">
-                    <div className="text-xs font-bold text-primary bg-primary/5 inline-flex px-2 py-1 rounded-lg">
+                    <div className="text-xs font-bold text-accent bg-accent/10 border border-accent/20 inline-flex px-2 py-1 rounded-lg">
                       {card.property}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-slate-500">
-                      <Calendar size={12} />
+                    <div className="flex items-center gap-2 text-xs text-white/40">
+                      <Calendar size={12} className="text-accent/60" />
                       {card.dates}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-slate-500 font-medium pt-1">
-                      <DollarSign size={12} className="text-emerald-500" />
+                    <div className="flex items-center gap-2 text-xs text-white/60 font-medium pt-1">
+                      <DollarSign size={12} className="text-emerald-400" />
                       {card.value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                     </div>
                   </div>
 
-                  {/* Actions depending on column */}
                   {column.id === 'proposta' && (
-                    <Button variant="outline" size="sm" className="w-full rounded-xl text-xs font-bold gap-2 text-emerald-600 border-emerald-200 bg-emerald-50 hover:bg-emerald-100 hover:text-emerald-700">
+                    <Button variant="outline" size="sm" className="w-full rounded-xl text-xs font-bold gap-2 text-emerald-400 border-emerald-400/20 bg-emerald-400/5 hover:bg-emerald-400/10 hover:text-emerald-300">
                       Converter em Reserva <ArrowRight size={14} />
                     </Button>
                   )}
                   {column.id === 'lead' && (
-                    <Button variant="ghost" size="sm" className="w-full rounded-xl text-xs font-bold text-slate-400 hover:text-primary hover:bg-primary/5">
+                    <Button variant="ghost" size="sm" className="w-full rounded-xl text-xs font-bold text-white/30 hover:text-accent hover:bg-accent/5">
                       Gerar Proposta PDF
                     </Button>
                   )}
                 </div>
               ))}
-              
-              {/* Drop Zone visual affordance when empty */}
+
               {cards.filter(c => c.status === column.id).length === 0 && (
-                <div className="border-2 border-dashed border-slate-200 rounded-2xl h-32 flex items-center justify-center text-slate-400 text-sm font-medium">
+                <div className="border-2 border-dashed border-accent/10 rounded-2xl h-32 flex items-center justify-center text-white/20 text-sm font-medium">
                   Solte o card aqui
                 </div>
               )}

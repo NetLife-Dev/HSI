@@ -7,6 +7,7 @@ import {
   Ticket,
   Sparkles,
   Settings,
+  BookOpen,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -24,5 +25,6 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Serviços', href: '/admin/servicos', icon: Sparkles },
   { label: 'Cupons', href: '/admin/cupons', icon: Ticket },
   { label: 'Financeiro', href: '/admin/financeiro', icon: DollarSign },
+  { label: 'Blog', href: '/admin/blog', icon: BookOpen },
   { label: 'Configurações', href: '/admin/configuracoes', icon: Settings },
 ]

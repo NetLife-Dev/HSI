@@ -8,6 +8,20 @@
       "when": 1775413358996,
       "tag": "0000_initial",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1775788554989,
+      "tag": "0001_lyrical_quicksilver",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1775900000000,
+      "tag": "0002_blog_posts",
+      "breakpoints": true
     }
   ]
 }

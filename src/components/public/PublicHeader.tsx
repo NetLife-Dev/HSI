@@ -48,8 +48,8 @@ export function PublicHeader() {
         <nav className="hidden md:flex items-center gap-8 text-sm font-black uppercase tracking-widest text-white/70">
           <Link href="/" className="hover:text-accent transition-colors">Home</Link>
           <Link href="/imoveis" className="hover:text-accent transition-colors">Santuários</Link>
+          <Link href="/blog" className="hover:text-accent transition-colors">Blog</Link>
           <Link href="/sobre" className="hover:text-accent transition-colors">Sobre Nós</Link>
-          <Link href="/contato" className="hover:text-accent transition-colors">Contato</Link>
         </nav>
 
         <div className="flex items-center gap-4">
@@ -86,8 +86,8 @@ export function PublicHeader() {
           {[
             { href: '/', label: 'Página Inicial' },
             { href: '/imoveis', label: 'Santuários' },
+            { href: '/blog', label: 'Blog' },
             { href: '/sobre', label: 'Sobre Nós' },
-            { href: '/contato', label: 'Contato' },
           ].map((item, i) => (
             <Link
               key={item.href}

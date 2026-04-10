@@ -390,6 +390,22 @@ export const staffPermissions = pgTable(
   }
 )
 
+// ─── Blog Posts ───────────────────────────────────────────────────────────────
+
+export const blogPosts = pgTable('blog_posts', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  title: text('title').notNull(),
+  slug: text('slug').unique().notNull(),
+  excerpt: text('excerpt'),
+  content: text('content').notNull(),
+  coverImageUrl: text('cover_image_url'),
+  authorName: text('author_name').notNull().default('HostSemImposto'),
+  status: text('status').notNull().default('draft'), // 'draft' | 'published'
+  publishedAt: timestamp('published_at', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+})
+
 // ─── Relations ────────────────────────────────────────────────────────────────
 
 export const usersRelations = relations(users, ({ many, one }) => ({

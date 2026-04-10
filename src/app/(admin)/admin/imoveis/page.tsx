@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
+import { DeletePropertyButton } from './DeletePropertyButton'
 import { Button } from '@/components/ui/button'
 import { db } from '@/db/index'
 import { properties } from '@/db/schema'
@@ -104,11 +105,14 @@ export default async function PropertiesPage() {
                       : 'N/A'}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" asChild>
-                      <Link href={`/admin/imoveis/${property.id}/editar`}>
-                        Editar
-                      </Link>
-                    </Button>
+                    <div className="flex items-center justify-end gap-1">
+                      <Button variant="ghost" size="sm" asChild>
+                        <Link href={`/admin/imoveis/${property.id}/editar`}>
+                          Editar
+                        </Link>
+                      </Button>
+                      <DeletePropertyButton propertyId={property.id} propertyName={property.name} />
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

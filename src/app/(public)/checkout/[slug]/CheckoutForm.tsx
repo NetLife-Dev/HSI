@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { createCheckoutSession } from '@/actions/stripe'
+import { createCheckoutSession } from '@/actions/bookings'
 import { toast } from 'sonner'
 import { ShieldCheck, Users } from 'lucide-react'
 
@@ -15,12 +15,12 @@ interface CheckoutFormProps {
   selectedServiceIds: string[]
 }
 
-export function CheckoutForm({ 
-  property, 
-  checkin, 
-  checkout, 
-  guests, 
-  selectedServiceIds 
+export function CheckoutForm({
+  property,
+  checkin,
+  checkout,
+  guests,
+  selectedServiceIds
 }: CheckoutFormProps) {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -41,17 +41,22 @@ export function CheckoutForm({
     try {
       const result = await createCheckoutSession({
         propertyId: property.id,
-        checkin,
-        checkout,
-        guests,
+        checkIn: checkin,
+        checkOut: checkout,
         guestName: formData.name,
         guestEmail: formData.email,
         guestWhatsapp: formData.phone,
+        guestCpf: formData.cpf,
+        guestCount: guests,
         selectedServiceIds,
-        couponCode: couponCode || undefined as string | undefined,
+        couponCode: couponCode || undefined,
       })
 
-      if (result.url) {
+      if ('error' in result && result.error) {
+        toast.error(result.error)
+        return
+      }
+      if ('url' in result && result.url) {
         window.location.href = result.url
       }
     } catch (error: any) {

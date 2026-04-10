@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { CheckoutForm } from './CheckoutForm'
+import { calculateBookingPrice } from '@/actions/bookings'
 
 export default async function CheckoutPage({
   params,
@@ -22,13 +23,12 @@ export default async function CheckoutPage({
   const { slug } = await params
   const { checkin, checkout, guests, services } = await searchParams
   const guestsCount = Number(guests) || 1
-  const selectedServiceIds = services?.split(',') ?? []
+  const selectedServiceIds = services?.split(',').filter(Boolean) ?? []
 
   const checkinDate = parseISO(checkin ?? '')
   const checkoutDate = parseISO(checkout ?? '')
   const nights = differenceInDays(checkoutDate, checkinDate)
 
-  // 1. Definição dos Mocks de "Operação Real"
   const MOCK_PROPERTIES: Record<string, any> = {
     'villa-ocean-view': {
       id: "mock1", name: "Villa Ocean View", slug: "villa-ocean-view",
@@ -61,14 +61,25 @@ export default async function CheckoutPage({
 
   if (!property) notFound()
 
-  // Calculate Base Price considering Seasonal Pricing
-  const basePricePerNight = property.basePrice || 85000
-  const totalNightsPrice = nights * basePricePerNight
-  const cleaningFee = property.cleaningFee || 15000
-  
+  // Use server-side calculateBookingPrice for consistency with what Stripe will charge
+  let priceBreakdown: Awaited<ReturnType<typeof calculateBookingPrice>> | null = null
+  const isRealProperty = property.id && !property.id.startsWith('mock')
+  if (isRealProperty && checkin && checkout) {
+    try {
+      priceBreakdown = await calculateBookingPrice(property.id, checkin, checkout)
+    } catch {
+      // Fallback to simple calculation if breakdown fails
+    }
+  }
+
+  const basePricePerNight = priceBreakdown ? priceBreakdown.pricePerNight : (property.basePrice || 85000)
+  const totalNightsPrice = priceBreakdown ? priceBreakdown.totalNightsPrice : nights * basePricePerNight
+  const cleaningFee = priceBreakdown ? priceBreakdown.cleaningFee : (property.cleaningFee || 15000)
+  const priceDiscounts = priceBreakdown?.discounts ?? []
+
   const selectedServicesList = (property.services || []).filter((s: any) => selectedServiceIds.includes(s.id))
   const servicesTotal = selectedServicesList.reduce((acc: number, s: any) => {
-    if (s.unit === 'per_day') return acc + (s.price * nights)
+    if (s.unit === 'per_day' || s.unit === 'per_night') return acc + (s.price * nights)
     if (s.unit === 'per_guest') return acc + (s.price * guestsCount)
     return acc + s.price
   }, 0)
@@ -126,9 +137,15 @@ export default async function CheckoutPage({
 
                 <div className="space-y-4 mb-8">
                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-white/40">{nights} {nights === 1 ? 'noite' : 'noites'}</span>
+                      <span className="text-white/40">{nights} {nights === 1 ? 'noite' : 'noites'} × {(basePricePerNight / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                       <span className="font-bold text-white">{(totalNightsPrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                    </div>
+                   {priceDiscounts.map((d, i) => (
+                     <div key={i} className="flex justify-between items-center text-sm">
+                       <span className="text-emerald-400/80">{d.name}</span>
+                       <span className="font-bold text-emerald-400">-{(d.amount / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                     </div>
+                   ))}
                    <div className="flex justify-between items-center text-sm">
                       <span className="text-white/40">Taxa de Limpeza</span>
                       <span className="font-bold text-white">{(cleaningFee / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
@@ -139,9 +156,9 @@ export default async function CheckoutPage({
                         <span className="text-[9px] uppercase font-bold tracking-widest text-accent/60">Serviços Adicionais</span>
                         {selectedServicesList.map((s: any) => (
                            <div key={s.id} className="flex justify-between items-center text-xs">
-                             <span className="text-white/30">{s.name} {s.unit === 'per_day' ? `(${nights}x)` : s.unit === 'per_guest' ? `(${guestsCount}x)` : ''}</span>
+                             <span className="text-white/30">{s.name} {s.unit === 'per_day' || s.unit === 'per_night' ? `(${nights}x)` : s.unit === 'per_guest' ? `(${guestsCount}x)` : ''}</span>
                              <span className="font-medium text-white/60">
-                               {((s.unit === 'per_day' ? s.price * nights : s.unit === 'per_guest' ? s.price * guestsCount : s.price) / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                               {(((s.unit === 'per_day' || s.unit === 'per_night') ? s.price * nights : s.unit === 'per_guest' ? s.price * guestsCount : s.price) / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                              </span>
                            </div>
                         ))}

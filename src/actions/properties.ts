@@ -330,3 +330,47 @@ export async function setPropertyCover(propertyId: string, imageId: string) {
     return { error: 'Falha ao definir imagem de capa.' }
   }
 }
+
+export async function deleteProperty(propertyId: string, cascade: boolean = false) {
+  const user = await requireManagement('properties', 'edit')
+  const { ip, ua } = await getClientContext()
+
+  try {
+    // Check for linked bookings
+    const { bookings } = await import('@/db/schema')
+    const { ne } = await import('drizzle-orm')
+    const linked = await db.select({ id: bookings.id }).from(bookings)
+      .where(and(eq(bookings.propertyId, propertyId), ne(bookings.status, 'canceled')))
+      .limit(1)
+
+    if (linked.length > 0 && !cascade) {
+      return { success: false, hasBookings: true }
+    }
+
+    await db.transaction(async (tx) => {
+      if (cascade) {
+        // Cancel all non-canceled bookings
+        await tx.update(bookings)
+          .set({ status: 'canceled', canceledAt: new Date(), updatedAt: new Date() })
+          .where(and(eq(bookings.propertyId, propertyId), ne(bookings.status, 'canceled')))
+      }
+      await tx.delete(properties).where(eq(properties.id, propertyId))
+    })
+
+    void logAction({
+      userId: user.id,
+      action: 'PROPERTY_DELETED',
+      entityType: 'property',
+      entityId: propertyId,
+      ipAddress: ip,
+      userAgent: ua ?? null,
+      metadata: { cascade },
+    })
+
+    revalidatePath('/admin/imoveis')
+    return { success: true }
+  } catch (err: any) {
+    console.error('[deleteProperty]', err)
+    return { success: false, error: err.message }
+  }
+}
