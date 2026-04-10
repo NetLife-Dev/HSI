@@ -137,34 +137,6 @@ export async function updateProperty(id: string, data: PropertySchema) {
   }
 }
 
-export async function deleteProperty(id: string) {
-  const user = await requireManagement('properties', 'edit')
-  const { ip, ua } = await getClientContext()
-
-  try {
-    const [property] = await db
-      .delete(properties)
-      .where(eq(properties.id, id))
-      .returning()
-
-    if (!property) return { error: 'Imóvel não encontrado.' }
-
-    void logAction({
-      userId: user.id,
-      action: 'PROPERTY_DELETED',
-      entityType: 'property',
-      entityId: id,
-      ipAddress: ip,
-      userAgent: ua ?? null,
-      metadata: { name: property.name, slug: property.slug },
-    })
-
-    revalidatePath('/admin/imoveis')
-    return { success: true }
-  } catch (err) {
-    return { error: 'Falha ao excluir imóvel.' }
-  }
-}
 
 export async function togglePropertyStatus(id: string, status: 'active' | 'inactive' | 'maintenance') {
   const user = await requireManagement('properties', 'edit')

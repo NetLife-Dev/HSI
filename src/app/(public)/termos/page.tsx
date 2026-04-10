@@ -147,7 +147,7 @@ export default function TermosPage() {
               </a>{' '}
               ou WhatsApp{' '}
               <a href="https://wa.me/5562999944512" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-                (62) 99994-4512
+                (62) 99994-6552
               </a>.
             </p>
           </section>

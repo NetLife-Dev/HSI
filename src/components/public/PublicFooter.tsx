@@ -55,7 +55,7 @@ export function PublicFooter() {
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
               >
-                (62) 99994-4512
+                (62) 99994-6552
               </a>
             </li>
             <li className="flex items-center gap-3">
