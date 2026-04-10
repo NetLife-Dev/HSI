@@ -287,7 +287,7 @@ export async function reorderPropertyImages(propertyId: string, imageIds: string
         await tx
           .update(propertyImages)
           .set({ order: i })
-          .where(and(eq(propertyImages.id, imageIds[i]), eq(propertyImages.propertyId, propertyId)))
+          .where(and(eq(propertyImages.id, imageIds[i]!), eq(propertyImages.propertyId, propertyId)))
       }
     })
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Menu, X, Smartphone } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -32,18 +32,16 @@ export function PublicHeader() {
       )}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center text-black shadow-lg shadow-accent/20 group-hover:bg-white transition-all">
-            <Home size={24} />
-          </div>
-          <div className="flex flex-col text-white">
-            <span className="font-black text-2xl tracking-tighter leading-none group-hover:text-accent transition-colors">
-              HostSemImposto
-            </span>
-            <span className="text-[9px] uppercase font-black tracking-[0.3em] text-white/50">
-              Reserva Direta
-            </span>
-          </div>
+        <Link href="/" className="flex items-center gap-1 group">
+          <span className="font-black text-2xl tracking-tighter leading-none text-white group-hover:text-white transition-colors">
+            Host
+          </span>
+          <span
+            className="text-2xl tracking-tighter leading-none text-accent italic"
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 600 }}
+          >
+            SI
+          </span>
         </Link>
 
         {/* Desktop Nav */}
@@ -70,44 +68,50 @@ export function PublicHeader() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-[#050505] border-b border-white/5 shadow-2xl px-6 py-8 flex flex-col gap-6 animate-in slide-in-from-top duration-300">
-          <Link 
-            href="/" 
-            className="text-2xl font-black uppercase tracking-tighter text-white hover:text-accent border-b border-white/5 pb-4"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Página Inicial
-          </Link>
-          <Link 
-            href="/imoveis" 
-            className="text-2xl font-black uppercase tracking-tighter text-white hover:text-accent border-b border-white/5 pb-4"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Nossos Santuários
-          </Link>
-          <Link 
-            href="/sobre" 
-            className="text-2xl font-black uppercase tracking-tighter text-white hover:text-accent border-b border-white/5 pb-4"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Quem Somos
-          </Link>
-          <Link 
-            href="/contato" 
-            className="text-2xl font-black uppercase tracking-tighter text-white hover:text-accent border-b border-white/5 pb-4"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Fale Conosco
-          </Link>
-          <Link href="/imoveis" className="w-full mt-4">
+      {/* Mobile Menu — fullscreen overlay */}
+      <div
+        className={cn(
+          'fixed inset-0 z-40 flex flex-col justify-center px-10 transition-all duration-500 md:hidden',
+          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        )}
+      >
+        {/* Backdrop */}
+        <div
+          className="absolute inset-0 bg-black/95 backdrop-blur-xl"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+
+        {/* Nav links */}
+        <nav className="relative z-10 flex flex-col gap-2">
+          {[
+            { href: '/', label: 'Página Inicial' },
+            { href: '/imoveis', label: 'Santuários' },
+            { href: '/sobre', label: 'Sobre Nós' },
+            { href: '/contato', label: 'Contato' },
+          ].map((item, i) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-5xl font-black uppercase tracking-tighter text-white/60 hover:text-white py-4 border-b border-white/5 transition-colors"
+              style={{
+                transitionDelay: mobileMenuOpen ? `${i * 60}ms` : '0ms',
+                transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-20px)',
+                opacity: mobileMenuOpen ? 1 : 0,
+                transition: `transform 400ms ease ${i * 60}ms, opacity 400ms ease ${i * 60}ms, color 200ms`,
+              }}
+            >
+              {item.label}
+            </Link>
+          ))}
+
+          <Link href="/imoveis" onClick={() => setMobileMenuOpen(false)} className="mt-10">
             <Button className="w-full rounded-2xl py-8 bg-accent text-black hover:bg-white text-xl font-black uppercase tracking-widest">
-              Ver Disponibilidade
+              Agendar Retiro
             </Button>
           </Link>
-        </div>
-      )}
+        </nav>
+      </div>
     </header>
   )
 }

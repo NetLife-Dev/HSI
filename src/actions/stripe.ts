@@ -2,10 +2,10 @@
 
 import { stripe } from '@/lib/stripe'
 import { db } from '@/db/index'
-import { properties, bookings, coupons } from '@/db/schema'
+import { properties, coupons } from '@/db/schema'
 import { eq } from 'drizzle-orm'
-import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
+import { bookingLimiter } from '@/lib/rate-limit'
 
 interface CheckoutParams {
   propertyId: string
@@ -22,7 +22,14 @@ interface CheckoutParams {
 
 export async function createCheckoutSession(params: CheckoutParams) {
   const { propertyId, checkin, checkout, guests, guestName, guestEmail, selectedServiceIds, couponCode } = params
-  
+
+  // Rate limit: 5 checkout attempts per IP per hour (prevents Stripe session spam)
+  const headersList = await headers()
+  const ip = headersList.get('x-client-ip') ?? headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '127.0.0.1'
+  if (!bookingLimiter.check(ip, 5, 60 * 60 * 1000)) {
+    throw new Error('Muitas tentativas de reserva. Tente novamente em 1 hora.')
+  }
+
   const property = await db.query.properties.findFirst({
     where: eq(properties.id, propertyId),
     with: {

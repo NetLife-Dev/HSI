@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/db/index'
 import { bookings, blockedDates } from '@/db/schema'
-import { eq, or } from 'drizzle-orm'
+import { and, eq, or } from 'drizzle-orm'
 import { format } from 'date-fns'
 
 export async function GET(
   request: Request,
-  { params }: { params: any }
+  { params }: { params: Promise<{ propertyId: string }> }
 ) {
   try {
     const { propertyId } = await params
@@ -14,11 +14,14 @@ export async function GET(
     let allEvents: any[] = []
 
     try {
-      // Tenta buscar no banco de dados
+      // Tenta buscar no banco de dados — CRITICAL: filter by propertyId to avoid cross-property data leak
       const propertyBookings = await db.query.bookings.findMany({
-        where: or(
-          eq(bookings.status, 'confirmed'),
-          eq(bookings.status, 'pending') // opcional exportar pendentes, mas comum para segurar a data
+        where: and(
+          eq(bookings.propertyId, propertyId),
+          or(
+            eq(bookings.status, 'confirmed'),
+            eq(bookings.status, 'pending')
+          )
         )
       })
 

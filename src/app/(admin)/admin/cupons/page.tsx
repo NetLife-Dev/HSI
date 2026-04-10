@@ -10,7 +10,7 @@ export default async function CouponsPage() {
   const coupons = couponsData.map(c => ({
     ...c,
     createdAt: c.createdAt instanceof Date ? c.createdAt.toISOString() : c.createdAt,
-    validUntil: c.validUntil instanceof Date ? c.validUntil.toISOString().split('T')[0] : c.validUntil,
+    validUntil: (c.validUntil as unknown) instanceof Date ? c.validUntil.toISOString().split('T')[0] : c.validUntil,
   }))
 
   return (

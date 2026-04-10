@@ -12,6 +12,8 @@ import { logAction } from '@/lib/audit'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { loginLimiter, magicLinkLimiter } from '@/lib/rate-limit'
+import { sendEmail } from '@/lib/resend'
+import { PasswordReset } from '@/emails/PasswordReset'
 
 const loginSchema = z.object({
   email: z.string().email('E-mail inválido'),
@@ -36,7 +38,7 @@ export async function loginWithCredentials(formData: FormData) {
   // Rate limit: 10 login attempts per IP per 15 minutes
   const headersList = await headers()
   const ip = headersList.get('x-client-ip') ?? headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '127.0.0.1'
-  const userAgent = headersList.get('user-agent') ?? undefined
+  const userAgent = headersList.get('user-agent') ?? null
   if (!loginLimiter.check(ip, 10, 15 * 60 * 1000)) {
     return { error: 'Muitas tentativas. Tente novamente em 15 minutos.' }
   }
@@ -119,17 +121,25 @@ export async function forgotPassword(formData: FormData) {
   const expires = new Date(Date.now() + 1000 * 60 * 60) // 1 hour
 
   // Reuse verificationTokens table with 'password-reset:' prefix on identifier
+  // Delete any existing reset token for this email before inserting a new one
+  await db
+    .delete(verificationTokens)
+    .where(eq(verificationTokens.identifier, `password-reset:${email}`))
+
   await db.insert(verificationTokens).values({
     identifier: `password-reset:${email}`,
     token,
     expires,
   })
 
-  // TODO Phase 1: Send email via Resend with reset URL: /reset-password?token={token}&email={email}
-  // For now, log the token (dev only — remove before production)
-  if (process.env.NODE_ENV === 'development') {
-    console.log('[forgotPassword] Reset token:', token, 'for', email)
-  }
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://hostsemimposto.com'
+  const resetUrl = `${appUrl}/reset-password?token=${token}&email=${encodeURIComponent(email)}`
+
+  await sendEmail({
+    to: email,
+    subject: 'Redefinição de senha — HostSemImposto',
+    react: PasswordReset({ resetUrl, email }),
+  })
 
   return { success: true }
 }

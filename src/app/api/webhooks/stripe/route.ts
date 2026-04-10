@@ -1,6 +1,6 @@
 import { stripe } from '@/lib/stripe'
 import { db } from '@/db'
-import { bookings, blockedDates, processedWebhookEvents, guests, financialTransactions } from '@/db/schema'
+import { bookings, blockedDates, processedWebhookEvents, guests, financialTransactions, properties } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
@@ -81,7 +81,7 @@ export async function POST(req: Request) {
 
           // 2. Financial Entry
           await db.insert(financialTransactions).values({
-            bookingId: booking.id,
+            bookingId: booking.id as string,
             type: 'income',
             amount: booking.totalPrice,
             category: 'booking_income',
@@ -107,7 +107,7 @@ export async function POST(req: Request) {
                  checkIn: booking.checkIn,
                  checkOut: booking.checkOut,
                  totalPrice: booking.totalPrice,
-                 bookingId: booking.id,
+                 bookingId: booking.id as string,
                })
              })
            } catch (emailErr) {

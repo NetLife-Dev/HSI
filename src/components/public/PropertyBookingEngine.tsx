@@ -207,7 +207,7 @@ export function PropertyBookingEngine({ property }: { property: any }) {
               }}
               className="w-full py-8 rounded-3xl text-xl font-black uppercase tracking-widest shadow-2xl shadow-accent/40 hover:scale-[1.02] active:scale-[0.98] transition-all bg-accent hover:bg-white text-black disabled:opacity-50"
             >
-              {nights === 0 ? 'Datas Indisponíveis' : 'Comprar Agora'}
+              {nights === 0 ? 'Selecionar Datas' : 'Garantir Estadia'}
             </Button>
 
             {nights > 0 && (

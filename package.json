@@ -76,9 +76,10 @@
     "prisma": "^7.6.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.4"
   },
   "overrides": {
-    "jsdom": "25.0.1"
+    "jsdom": "25.0.1",
+    "vite": "^8.0.5"
   }
 }

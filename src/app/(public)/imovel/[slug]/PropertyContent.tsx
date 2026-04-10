@@ -1,15 +1,16 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
-import { 
-  Users, 
-  BedDouble, 
-  Bath, 
+import {
+  Users,
+  BedDouble,
+  Bath,
   MapPin,
-  ChevronRight, 
+  ChevronRight,
   ChevronDown,
-  ShieldCheck, 
-  Star 
+  ShieldCheck,
+  Star
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PropertyBookingEngine } from '@/components/public/PropertyBookingEngine'
@@ -25,11 +26,14 @@ export function PropertyContent({ property }: { property: any }) {
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           {heroImage && (
-             <img 
-               src={heroImage} 
-               alt={property.name} 
-               className="w-full h-full object-cover opacity-80" 
-             />
+            <Image
+              src={heroImage}
+              alt={property.name}
+              fill
+              className="object-cover opacity-80"
+              sizes="100vw"
+              priority
+            />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/10" />
         </div>
@@ -39,7 +43,10 @@ export function PropertyContent({ property }: { property: any }) {
               <Star size={16} fill="currentColor" />
               <span>Exclusivo</span>
            </div>
-           <h1 className="text-6xl md:text-9xl font-black tracking-tighter text-white uppercase leading-[0.85] drop-shadow-2xl animate-cinematic-zoom">
+           <h1
+             className="text-6xl md:text-9xl tracking-tighter text-white uppercase leading-[0.85] drop-shadow-2xl animate-cinematic-zoom"
+             style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
+           >
              {property.name}
            </h1>
            <p className="mt-8 text-xl md:text-2xl text-white/80 font-medium max-w-3xl animate-slide-up" style={{ animationDelay: '0.4s' }}>
@@ -87,7 +94,13 @@ export function PropertyContent({ property }: { property: any }) {
               
               {/* Feature Image */}
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm group">
-                 <img src={images[1]?.url || '/images/mock/bedroom.png'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 grayscale hover:grayscale-0" alt="Interior" />
+                 <Image
+                   src={images[1]?.url || '/images/mock/bedroom.png'}
+                   fill
+                   className="object-cover group-hover:scale-105 transition-transform duration-1000 grayscale hover:grayscale-0"
+                   alt="Interior"
+                   sizes="(max-width: 768px) 100vw, 50vw"
+                 />
               </div>
            </div>
         </div>
@@ -98,14 +111,23 @@ export function PropertyContent({ property }: { property: any }) {
         images[2]?.url || '/images/mock/living.png',
         images[3]?.url || '/images/mock/outdoor.png'
       ].map((imgUrl: string, i: number) => (
-         <section key={i} className="relative h-[80vh] w-full border-t-[20px] border-black">
-            <img src={imgUrl} className="w-full h-full object-cover opacity-70" alt={`Highlight ${i+1}`} />
+         <section key={i} className="relative h-[80vh] w-full">
+            <Image
+              src={imgUrl}
+              fill
+              className="object-cover opacity-70"
+              alt={`Highlight ${i + 1}`}
+              sizes="100vw"
+            />
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent flex items-center">
                <div className="container mx-auto px-4 max-w-6xl">
-                  <h3 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-white max-w-2xl leading-[0.85]">
-                     {i === 0 ? "Viva o " : "Sinta a "}
+                  <h3
+                    className="text-5xl md:text-8xl uppercase tracking-tighter text-white max-w-2xl leading-[0.85]"
+                    style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
+                  >
+                     {i === 0 ? 'Viva o ' : 'Sinta a '}
                      <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30">
-                       {i === 0 ? "Momento." : "Exclusividade."}
+                       {i === 0 ? 'Momento.' : 'Exclusividade.'}
                      </span>
                   </h3>
                </div>

@@ -35,7 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: { label: 'Email', type: 'email' },
         password: { label: 'Senha', type: 'password' },
       },
-      async authorize(credentials) {
+      async authorize(credentials: Record<string, string> | undefined) {
         // MOCK BYPASS FOR UAT/UI TESTING — CHECK BEFORE ZOD PARSE
         if (credentials?.email && (credentials.email as string).toLowerCase() === 'admin@hsi.com') {
           return {

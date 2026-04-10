@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft, Star } from 'lucide-react'
@@ -11,20 +12,20 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { CheckoutForm } from './CheckoutForm'
 
-export default async function CheckoutPage({ 
+export default async function CheckoutPage({
   params,
-  searchParams 
-}: { 
-  params: any
-  searchParams: any 
+  searchParams
+}: {
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ checkin?: string; checkout?: string; guests?: string; services?: string }>
 }) {
   const { slug } = await params
   const { checkin, checkout, guests, services } = await searchParams
   const guestsCount = Number(guests) || 1
-  const selectedServiceIds = (services as string)?.split(',') || []
+  const selectedServiceIds = services?.split(',') ?? []
 
-  const checkinDate = parseISO(checkin as string)
-  const checkoutDate = parseISO(checkout as string)
+  const checkinDate = parseISO(checkin ?? '')
+  const checkoutDate = parseISO(checkout ?? '')
   const nights = differenceInDays(checkoutDate, checkinDate)
 
   // 1. Definição dos Mocks de "Operação Real"
@@ -75,7 +76,7 @@ export default async function CheckoutPage({
   const totalPrice = totalNightsPrice + cleaningFee + servicesTotal
 
   return (
-    <div className="bg-surface min-h-screen pt-32 pb-24 text-text-primary">
+    <div className="bg-[#0a0a0a] min-h-screen pt-32 pb-24 text-white">
       <div className="container mx-auto px-4 max-w-6xl">
         
         {/* Header */}
@@ -110,7 +111,7 @@ export default async function CheckoutPage({
                 <div className="flex gap-4 items-center mb-8 pb-8 border-b border-white/5 relative z-10">
                    {property.images?.[0] && (
                      <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 relative border-[1px] border-white/10">
-                       <img src={property.images[0].url} alt={property.name} className="w-full h-full object-cover" />
+                       <Image src={property.images[0].url} alt={property.name} fill className="object-cover" sizes="96px" />
                      </div>
                    )}
                    <div className="space-y-1">

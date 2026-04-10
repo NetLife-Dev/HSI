@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm'
 import { PropertyContent } from './PropertyContent'
 import { MOCK_PROPERTIES } from '@/lib/mock-data'
 
-export async function generateMetadata({ params }: any): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   let property: any = null
   try {
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   }
 }
 
-export default async function PropertyDetailsPage({ params }: any) {
+export default async function PropertyDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   let property: any = null
 

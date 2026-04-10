@@ -33,7 +33,7 @@ export default async function HomePage() {
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black">
       {/* Cinematic Hero Section */}
-      <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden border-b-[20px] border-[#0a0a0a]">
+      <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden pb-0">
         {/* Background Video Layer */}
         <div className="absolute inset-0 w-full h-full z-0">
            <video 
@@ -59,7 +59,10 @@ export default async function HomePage() {
               </div>
               <h1 className="text-6xl md:text-[8rem] font-black tracking-tighter uppercase leading-[0.85] text-white drop-shadow-2xl">
                 Sua <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
+                <span
+                  className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 not-italic"
+                  style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
+                >
                   Estadia.
                 </span>
               </h1>
@@ -79,7 +82,7 @@ export default async function HomePage() {
       </section>
 
       {/* The Exclusive Collection */}
-      <section id="colecao" className="py-32 bg-[#050505] relative z-20 border-b-[20px] border-[#0a0a0a]">
+      <section id="colecao" className="py-32 bg-[#050505] relative z-20 pb-0">
          <div className="container mx-auto px-4 max-w-7xl">
             <div className="flex flex-col gap-6 mb-20 text-center items-center">
                <div className="w-1 h-12 bg-accent rounded-full" />
@@ -100,7 +103,7 @@ export default async function HomePage() {
       </section>
 
       {/* Premium Concierge Services */}
-      <section className="py-32 bg-black relative z-20 border-b-[20px] border-[#0a0a0a]">
+      <section className="py-32 bg-black relative z-20 pb-0">
          <div className="container mx-auto px-4 max-w-7xl">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                <div className="space-y-8">
@@ -143,7 +146,7 @@ export default async function HomePage() {
       </section>
 
       {/* Promotional Seasons & Availability React Effects */}
-      <section className="py-32 bg-[#050505] relative z-20 border-b-[20px] border-[#0a0a0a]">
+      <section className="py-32 bg-[#050505] relative z-20 pb-0">
          <div className="container mx-auto px-4 max-w-7xl">
             <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-20">
                <div className="space-y-6">
@@ -164,8 +167,8 @@ export default async function HomePage() {
                   { title: "Réveillon VIP", date: "Dezembro", status: "Lista de Espera", color: "bg-amber-500" }
                ].map((season, i) => (
                   <div key={i} className="group relative bg-[#111] p-10 rounded-[2.5rem] border border-white/5 overflow-hidden hover:border-accent transition-all duration-500">
-                     <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-10 transition-opacity">
-                        <Sparkles size={120} className="text-accent" />
+                     <div className="absolute -bottom-8 -right-8 opacity-0 group-hover:opacity-[0.04] transition-opacity duration-700">
+                        <Sparkles size={180} className="text-accent blur-sm" />
                      </div>
                      <div className="space-y-6 relative z-10">
                         <div className="flex items-center justify-between">

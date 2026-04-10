@@ -120,7 +120,7 @@ export async function createCheckoutSession(data: z.infer<typeof checkoutSchema>
   const { propertyId, checkIn, checkOut, guestName, guestEmail, guestWhatsapp, guestCount } = parsed.data
   const headersList = await headers()
   const ip = headersList.get('x-client-ip') ?? headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '127.0.0.1'
-  const ua = headersList.get('user-agent') ?? undefined
+  const ua = headersList.get('user-agent') ?? null
 
   try {
     // 1. Availability check with FOR UPDATE to prevent race conditions
@@ -164,6 +164,8 @@ export async function createCheckoutSession(data: z.infer<typeof checkoutSchema>
       totalPrice: breakdown.totalPrice,
       status: 'awaiting_payment',
     }).returning()
+
+    if (!booking) throw new Error('Falha ao criar reserva')
 
     // 4. Temporarily block dates (optimistic hold)
     await db.insert(blockedDates).values({

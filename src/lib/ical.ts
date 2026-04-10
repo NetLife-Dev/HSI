@@ -34,6 +34,7 @@ export async function syncIcalFeed(feedId: string) {
 
   for (const k in data) {
     const event = data[k]
+    if (!event) continue
     if (event.type === 'VEVENT') {
       let start = event.start
       let end = event.end
