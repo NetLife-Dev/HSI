@@ -1,97 +1,125 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Play, ShieldCheck, Sparkles, Diamond } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { db } from '@/db/index'
-import { properties } from '@/db/schema'
-import { eq, and } from 'drizzle-orm'
+import { useEffect, useState, useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { db } from '@/db/index' // Note: This will need a Client Components check or be moved to a Server Component wrapper
 import { PropertyCard } from '@/components/public/PropertyCard'
 import { MOCK_PROPERTIES } from '@/lib/mock-data'
 
-export default async function HomePage() {
-  let featuredProperties: any[] = []
-  try {
-    featuredProperties = await db.query.properties.findMany({
-      where: and(eq(properties.status, 'active'), eq(properties.featured, true)),
-      with: {
-        images: {
-          where: eq(properties.featured, true),
-          limit: 1,
-        },
-      },
-      limit: 6,
-    })
-  } catch (error) {
-    console.log("Mock Mode Active for Featured Properties")
-  }
+export default function HomePage() {
+  const [featuredProperties, setFeaturedProperties] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
-  // Preenchendo com Mocks Luxuosos caso esteja vazio (modo UAT)
-  if (featuredProperties.length === 0) {
-    featuredProperties = MOCK_PROPERTIES.filter(p => p.featured)
-  }
+  // Fetch properties on client side since we need interactivity for the scroll effects
+  useEffect(() => {
+    async function getProperties() {
+      try {
+        const res = await fetch('/api/properties/featured')
+        const data = await res.json()
+        if (data.success && data.properties.length > 0) {
+          setFeaturedProperties(data.properties)
+        } else if (!data.success) {
+           // Only use mocks if the request/db failed, not if it's just empty
+           setFeaturedProperties(MOCK_PROPERTIES.filter(p => p.featured))
+        } else {
+           setFeaturedProperties([]) // It's empty because the user deleted them
+        }
+      } catch (error) {
+        setFeaturedProperties(MOCK_PROPERTIES.filter(p => p.featured))
+      } finally {
+        setLoading(false)
+      }
+    }
+    getProperties()
+  }, [])
+
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  })
+
+  // Hero Video transformations
+  const heroScale = useTransform(scrollYProgress, [0, 0.4], [1, 2])
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  
+  // AfterHero Video transformations
+  const afterHeroScale = useTransform(scrollYProgress, [0.4, 0.8], [0.8, 1])
+  const afterHeroOpacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 1])
+  const afterHeroContentOpacity = useTransform(scrollYProgress, [0.6, 0.9], [0, 1])
+  const afterHeroContentY = useTransform(scrollYProgress, [0.6, 0.9], [50, 0])
 
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
-      {/* 1. Primary Hero Section (Sticky) */}
-      <section className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden z-0">
-        <div className="absolute inset-0">
-          <video 
-            autoPlay 
-            muted 
-            loop 
-            playsInline 
-            className="w-full h-full object-cover opacity-80"
-          >
-            <source src="/images/hero-video.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20" />
-        </div>
-        
-        <div className="relative z-10 container mx-auto px-6 lg:px-12 w-full h-full flex flex-col justify-end pb-32">
-           <div className="space-y-6 lg:w-2/3">
-              <div className="flex items-center gap-3">
-                 <div className="w-12 h-1 bg-accent" />
-                 <span className="text-accent uppercase tracking-[0.4em] font-black text-xs">Exclusivo</span>
-              </div>
-              <h1 className="text-6xl md:text-[8rem] font-black tracking-tighter uppercase leading-[0.85] text-white drop-shadow-2xl">
-                Sua <br />
-                <span
-                  className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 not-italic"
-                  style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
-                >
-                  Estadia.
-                </span>
-              </h1>
-              <p className="text-xl md:text-2xl text-white/50 font-medium max-w-2xl leading-relaxed">
-                Um mapa de possibilidades ilimitadas. Onde o topo do luxo encontra a discrição absoluta.
-              </p>
-           </div>
-        </div>
-      </section>
-
-      {/* 2. Transition/AfterHero Section (Overlay / Slides over Hero) */}
-      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden z-10 shadow-[0_-50px_100px_rgba(0,0,0,1)]">
-         <div className="absolute inset-0 z-0">
-            <video 
-               autoPlay 
-               muted 
-               loop 
-               playsInline 
-               className="w-full h-full object-cover opacity-100"
+      {/* 1 & 2. CINEMATIC SCROLL ZOOM BRIDGE */}
+      <div ref={containerRef} className="relative h-[300vh] z-0">
+         <div className="sticky top-0 h-screen w-full overflow-hidden">
+            {/* Layer 1: Hero Video */}
+            <motion.div 
+               style={{ scale: heroScale, opacity: heroOpacity }}
+               className="absolute inset-0 z-10"
             >
-               <source src="/images/afterhero.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black" />
-         </div>
-         <div className="relative z-10 text-center space-y-4 px-6">
-            <h3 className="text-5xl md:text-[8rem] font-black uppercase tracking-tighter text-white drop-shadow-2xl">
-               O <span className="text-accent italic">Acesso.</span>
-            </h3>
-            <p className="text-accent uppercase tracking-[0.4em] font-black text-xs">A porta para o extraordinário está aberta.</p>
-         </div>
-      </section>
+               <video 
+                  autoPlay 
+                  muted 
+                  loop 
+                  playsInline 
+                  className="w-full h-full object-cover"
+               >
+                  <source src="/images/hero-video.mp4" type="video/mp4" />
+               </video>
+               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
+               
+               <div className="relative z-10 container mx-auto px-6 lg:px-12 w-full h-full flex flex-col justify-end pb-32">
+                  <div className="space-y-6 lg:w-2/3">
+                     <div className="flex items-center gap-3">
+                        <div className="w-12 h-1 bg-accent" />
+                        <span className="text-accent uppercase tracking-[0.4em] font-black text-xs">Exclusivo</span>
+                     </div>
+                     <h1 className="text-6xl md:text-[8rem] font-black tracking-tighter uppercase leading-[0.85] text-white drop-shadow-2xl">
+                        Sua <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 not-italic">
+                           Estadia.
+                        </span>
+                     </h1>
+                  </div>
+               </div>
+            </motion.div>
 
-      {/* The Exclusive Collection (Continues the flow) */}
+            {/* Layer 2: AfterHero Video */}
+            <motion.div 
+               style={{ scale: afterHeroScale, opacity: afterHeroOpacity }}
+               className="absolute inset-0 z-0"
+            >
+               <video 
+                  autoPlay 
+                  muted 
+                  loop 
+                  playsInline 
+                  className="w-full h-full object-cover"
+               >
+                  <source src="/images/afterhero.mp4" type="video/mp4" />
+               </video>
+               <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black" />
+               
+               <motion.div 
+                  style={{ opacity: afterHeroContentOpacity, y: afterHeroContentY }}
+                  className="relative z-10 h-full flex flex-col items-center justify-center text-center space-y-4 px-6"
+               >
+                  <h3 className="text-5xl md:text-[8rem] font-black uppercase tracking-tighter text-white drop-shadow-2xl">
+                     O <span className="text-accent italic">Acesso.</span>
+                  </h3>
+                  <p className="text-accent uppercase tracking-[0.4em] font-black text-xs">A porta para o extraordinário está aberta.</p>
+               </motion.div>
+            </motion.div>
+         </div>
+      </div>
+
+      {/* The Exclusive Collection */}
       <section id="colecao" className="py-32 bg-[#050505] relative z-20 pb-0 shadow-[0_-50px_100px_rgba(0,0,0,1)]">
          <div className="container mx-auto px-4 max-w-7xl">
             <div className="flex flex-col gap-6 mb-20 text-center items-center">
@@ -100,7 +128,7 @@ export default async function HomePage() {
                   O <span className="text-accent">Portfólio.</span>
                </h2>
                <p className="text-white/50 font-medium tracking-widest uppercase text-xs">
-                  Sem intermediários. Sem regras ocultas.
+                  {featuredProperties.length > 0 ? 'Sem intermediários. Sem regras ocultas.' : 'Nenhum imóvel disponível no momento.'}
                </p>
             </div>
 
