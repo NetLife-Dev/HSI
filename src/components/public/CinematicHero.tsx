@@ -12,24 +12,24 @@ export function CinematicHero() {
     offset: ["start start", "end start"]
   })
 
-  // Transição de opacidade entre os vídeos:
-  // 0 -> 0.3: Hero Video (fade out)
-  // 0.3 -> 0.6: AfterHero Video (fade in)
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0])
-  const afterHeroOpacity = useTransform(scrollYProgress, [0.3, 0.7], [0, 1])
-  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.2])
+  // Intensified transitions for a more dramatic GTA VI feel
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.5])
   
-  const textY = useTransform(scrollYProgress, [0, 0.5], [0, -100])
-  const textOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  const afterHeroOpacity = useTransform(scrollYProgress, [0.15, 0.5], [0, 1])
+  const afterHeroScale = useTransform(scrollYProgress, [0.15, 1], [0.8, 1.2])
+  
+  const textY = useTransform(scrollYProgress, [0, 0.3], [0, -150])
+  const textOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0])
 
   return (
-    <section ref={containerRef} className="relative h-[200vh] bg-black">
+    <section ref={containerRef} className="relative h-[250vh] bg-black">
       {/* Sticky Video Container */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Initial Hero Video */}
+        {/* Initial Hero Video (Fade out + Zoom in) */}
         <motion.div 
           style={{ opacity: heroOpacity, scale: heroScale }}
-          className="absolute inset-0 w-full h-full z-0"
+          className="absolute inset-0 w-full h-full z-10"
         >
           <video 
             autoPlay 
@@ -42,9 +42,9 @@ export function CinematicHero() {
           </video>
         </motion.div>
 
-        {/* After Hero Video (Plays on scroll) */}
+        {/* After Hero Video (Zoom in effect as it appears) */}
         <motion.div 
-          style={{ opacity: afterHeroOpacity }}
+          style={{ opacity: afterHeroOpacity, scale: afterHeroScale }}
           className="absolute inset-0 w-full h-full z-0"
         >
           <video 
@@ -52,20 +52,20 @@ export function CinematicHero() {
             muted 
             loop 
             playsInline 
-            className="w-full h-full object-cover opacity-80"
+            className="w-full h-full object-cover opacity-90"
           >
             <source src="/images/afterhero.mp4" type="video/mp4" />
           </video>
         </motion.div>
 
         {/* Cinematic Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
-        <div className="absolute inset-0 bg-black/20 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20 z-20" />
+        <div className="absolute inset-0 bg-black/10 z-20" />
 
         {/* Hero Content */}
         <motion.div 
           style={{ y: textY, opacity: textOpacity }}
-          className="relative container mx-auto px-6 lg:px-12 z-20 w-full h-full flex flex-col justify-end pb-32"
+          className="relative container mx-auto px-6 lg:px-12 z-30 w-full h-full flex flex-col justify-end pb-32"
         >
            <div className="space-y-6 lg:w-2/3">
               <div className="flex items-center gap-3">
