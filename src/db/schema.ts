@@ -440,3 +440,19 @@ export const guestsRelations = relations(guests, ({ many }) => ({
   crmLeads: many(crmLeads),
   proposals: many(proposals),
 }))
+
+export const propertyImagesRelations = relations(propertyImages, ({ one }) => ({
+  property: one(properties, { fields: [propertyImages.propertyId], references: [properties.id] }),
+}))
+
+export const seasonalPricingRelations = relations(seasonalPricing, ({ one }) => ({
+  property: one(properties, { fields: [seasonalPricing.propertyId], references: [properties.id] }),
+}))
+
+export const propertyServicesRelations = relations(propertyServices, ({ one }) => ({
+  property: one(properties, { fields: [propertyServices.propertyId], references: [properties.id] }),
+}))
+
+export const longStayDiscountsRelations = relations(longStayDiscounts, ({ one }) => ({
+  property: one(properties, { fields: [longStayDiscounts.propertyId], references: [properties.id] }),
+}))
