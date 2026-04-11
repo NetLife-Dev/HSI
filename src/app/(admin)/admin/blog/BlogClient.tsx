@@ -49,6 +49,7 @@ const EMPTY_FORM = {
   content: '',
   authorName: 'HostSemImposto',
   status: 'draft' as 'draft' | 'published',
+  coverImageUrl: '',
 }
 
 function slugify(text: string) {
@@ -80,7 +81,6 @@ export function BlogClient({ initialPosts = [] }: BlogClientProps) {
     setForm(EMPTY_FORM)
     setIsFormOpen(true)
   }
-
   const openEdit = (post: Post) => {
     setEditingPost(post)
     setForm({
@@ -90,6 +90,7 @@ export function BlogClient({ initialPosts = [] }: BlogClientProps) {
       content: post.content,
       authorName: post.authorName,
       status: post.status as 'draft' | 'published',
+      coverImageUrl: (post as any).coverImageUrl || '',
     })
     setIsFormOpen(true)
   }
@@ -116,7 +117,10 @@ export function BlogClient({ initialPosts = [] }: BlogClientProps) {
           setPosts(prev => prev.map(p => p.id === editingPost.id ? { ...p, ...form } as Post : p))
           toast.success('Post atualizado!')
         } else {
-          const res = await createBlogPost(form)
+          const res = await createBlogPost({
+            ...form,
+            coverImageUrl: form.coverImageUrl || 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=1000'
+          })
           if (!res.success) { toast.error('Erro ao criar post'); return }
           setPosts(prev => [res.post as Post, ...prev])
           toast.success('Post criado!')
@@ -211,8 +215,8 @@ export function BlogClient({ initialPosts = [] }: BlogClientProps) {
       {/* Form Dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="bg-zinc-900 border-white/10 text-white rounded-[2rem] max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-black uppercase tracking-tighter">
+          <DialogHeader className="pb-4">
+            <DialogTitle className="text-2xl font-black uppercase tracking-tight leading-tight">
               {editingPost ? 'Editar Post' : 'Novo Post'}
             </DialogTitle>
           </DialogHeader>
@@ -233,6 +237,15 @@ export function BlogClient({ initialPosts = [] }: BlogClientProps) {
                 value={form.slug}
                 onChange={e => setForm(f => ({ ...f, slug: e.target.value }))}
                 className="bg-white/5 border-white/10 rounded-xl h-12 font-mono text-sm"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">URL da Imagem de Capa</label>
+              <Input
+                placeholder="https://exemplo.com/imagem.jpg"
+                value={form.coverImageUrl}
+                onChange={e => setForm(f => ({ ...f, coverImageUrl: e.target.value }))}
+                className="bg-white/5 border-white/10 rounded-xl h-12"
               />
             </div>
             <div className="space-y-2">

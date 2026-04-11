@@ -13,10 +13,12 @@ import {
   Star
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
 import { PropertyBookingEngine } from '@/components/public/PropertyBookingEngine'
 import { Badge } from '@/components/ui/badge'
 
 export function PropertyContent({ property }: { property: any }) {
+  if (!property) return null
   const images = property.images || []
   const heroImage = images[0]?.url || '/images/mock/exterior.png'
   

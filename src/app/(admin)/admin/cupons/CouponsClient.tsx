@@ -76,8 +76,8 @@ export function CouponsClient({ initialCoupons = [] }: { initialCoupons: any[] }
           </Button>
         </DialogTrigger>
         <DialogContent className="bg-zinc-900 border-white/10 text-white rounded-[2rem] max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-black uppercase tracking-tighter">Criar Novo Cupom</DialogTitle>
+          <DialogHeader className="pb-4">
+            <DialogTitle className="text-2xl font-black uppercase tracking-tight leading-tight">Criar Novo Cupom</DialogTitle>
             <DialogDescription className="text-white/50">Configure o código e o valor do desconto.</DialogDescription>
           </DialogHeader>
           <div className="space-y-6 py-4">
