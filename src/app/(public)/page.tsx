@@ -112,29 +112,26 @@ export default async function HomePage() {
          </div>
       </section>
 
-      {/* Individual Experience / Immersion Section */}
-      <section className="relative h-[80vh] min-h-[600px] overflow-hidden flex items-center justify-center bg-black">
+      {/* Individual Experience / Immersion Section (Optimized for performance) */}
+      <section className="relative h-[60vh] min-h-[500px] overflow-hidden flex items-center justify-center bg-black">
          <div className="absolute inset-0 z-0 opacity-40">
-            <video 
-               autoPlay 
-               muted 
-               loop 
-               playsInline 
-               className="w-full h-full object-cover scale-105"
-            >
-               <source src="/images/individual.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+            <Image 
+               src="/images/mock/bedroom.png"
+               alt="Luxury Interior"
+               fill
+               className="object-cover scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
          </div>
          
          <div className="relative z-10 container mx-auto px-6 text-center space-y-8">
             <div className="flex flex-col items-center gap-4">
-                <span className="text-accent uppercase tracking-[0.5em] font-black text-xs">Imersão Total</span>
+                <span className="text-accent uppercase tracking-[0.5em] font-black text-[10px]">Imersão Total</span>
                 <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] text-white">
                    Entre no seu<br /><span className="text-accent underline decoration-white/10 decoration-8 underline-offset-8 italic">Próprio Mundo.</span>
                 </h2>
-                <p className="text-xl text-white/40 max-w-2xl font-medium tracking-tight">
-                   A experiência individual de cada propriedade é desenhada para ser sentida, não apenas vista. Cada detalhe, uma nova descoberta.
+                <p className="text-lg text-white/40 max-w-2xl font-medium tracking-tight">
+                   A experiência individual de cada propriedade é desenhada para ser sentida. Cada detalhe, uma descoberta.
                 </p>
             </div>
          </div>
