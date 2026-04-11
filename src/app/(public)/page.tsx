@@ -43,38 +43,45 @@ export default function HomePage() {
     offset: ["start start", "end end"]
   })
 
-  // Hero Video transformations
-  const heroScale = useTransform(scrollYProgress, [0, 0.4], [1, 2])
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  // Hero Video & Content transformations
+  const heroScale = useTransform(scrollYProgress, [0, 0.45], [1, 15]) // Massive zoom into center
+  const heroOpacity = useTransform(scrollYProgress, [0.4, 0.55], [1, 0])
+  const heroTextScale = useTransform(scrollYProgress, [0, 0.45], [1, 20]) // Zoom into text
+  const heroTextOpacity = useTransform(scrollYProgress, [0.35, 0.48], [1, 0])
   
-  // AfterHero Video transformations
-  const afterHeroScale = useTransform(scrollYProgress, [0.4, 0.8], [0.8, 1])
-  const afterHeroOpacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 1])
-  const afterHeroContentOpacity = useTransform(scrollYProgress, [0.6, 0.9], [0, 1])
-  const afterHeroContentY = useTransform(scrollYProgress, [0.6, 0.9], [50, 0])
+  // AfterHero Video transformations (Portal entry)
+  const afterHeroScale = useTransform(scrollYProgress, [0.3, 0.6], [0.6, 1])
+  const afterHeroOpacity = useTransform(scrollYProgress, [0.4, 0.55], [0, 1])
+  
+  // Content inside AfterHero (Stays longer)
+  const afterHeroContentOpacity = useTransform(scrollYProgress, [0.65, 0.75, 0.85, 0.95], [0, 1, 1, 0])
+  const afterHeroContentY = useTransform(scrollYProgress, [0.65, 0.75, 0.85, 0.95], [40, 0, 0, -40])
 
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
-      {/* 1 & 2. CINEMATIC SCROLL ZOOM BRIDGE */}
-      <div ref={containerRef} className="relative h-[300vh] z-0">
+      {/* 1 & 2. CINEMATIC SCROLL ZOOM BRIDGE (IMPROVED PORTAL EFFECT) */}
+      <div ref={containerRef} className="relative h-[600vh] z-0">
          <div className="sticky top-0 h-screen w-full overflow-hidden">
-            {/* Layer 1: Hero Video */}
+            {/* Layer 1: Hero Video + Lettering Portal */}
             <motion.div 
                style={{ scale: heroScale, opacity: heroOpacity }}
-               className="absolute inset-0 z-10"
+               className="absolute inset-0 z-10 flex items-center justify-center"
             >
                <video 
                   autoPlay 
                   muted 
                   loop 
                   playsInline 
-                  className="w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover"
                >
                   <source src="/images/hero-video.mp4" type="video/mp4" />
                </video>
                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
                
-               <div className="relative z-10 container mx-auto px-6 lg:px-12 w-full h-full flex flex-col justify-end pb-32">
+               <motion.div 
+                  style={{ scale: heroTextScale, opacity: heroTextOpacity }}
+                  className="relative z-10 container mx-auto px-6 lg:px-12 w-full h-full flex flex-col justify-end pb-32"
+               >
                   <div className="space-y-6 lg:w-2/3">
                      <div className="flex items-center gap-3">
                         <div className="w-12 h-1 bg-accent" />
@@ -87,10 +94,10 @@ export default function HomePage() {
                         </span>
                      </h1>
                   </div>
-               </div>
+               </motion.div>
             </motion.div>
 
-            {/* Layer 2: AfterHero Video */}
+            {/* Layer 2: AfterHero Video (The "Destination") */}
             <motion.div 
                style={{ scale: afterHeroScale, opacity: afterHeroOpacity }}
                className="absolute inset-0 z-0"

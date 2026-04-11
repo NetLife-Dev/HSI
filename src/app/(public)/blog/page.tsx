@@ -9,58 +9,15 @@ export const metadata: Metadata = {
   description: 'Dicas, novidades e análises sobre aluguel por temporada, legislação tributária e como maximizar seus resultados como anfitrião.',
 }
 
-const SEED_POSTS = [
-  {
-    id: 'seed-1',
-    slug: 'lc-214-2025-o-que-e-impacto-no-aluguel-temporada',
-    title: 'LC 214/2025: O que é e como impacta o aluguel por temporada no Brasil',
-    excerpt: 'A Lei Complementar 214/2025, parte da Reforma Tributária brasileira, traz mudanças significativas para quem aluga imóveis pelo Airbnb e outras plataformas. Entenda o que muda e como se preparar.',
-    authorName: 'Equipe HostSemImposto',
-    publishedAt: new Date('2026-03-15'),
-    coverImageUrl: null,
-    status: 'published',
-  },
-  {
-    id: 'seed-2',
-    slug: 'anfitrioes-airbnb-reforma-tributaria-guia-completo',
-    title: 'Anfitriões do Airbnb e a Reforma Tributária: Guia Completo para 2026',
-    excerpt: 'Com a chegada da CBS e do IBS, a tributação sobre aluguéis de temporada muda de patamar. Veja como a LC 214/2025 afeta sua operação e o que fazer para pagar menos imposto legalmente.',
-    authorName: 'Equipe HostSemImposto',
-    publishedAt: new Date('2026-03-22'),
-    coverImageUrl: null,
-    status: 'published',
-  },
-  {
-    id: 'seed-3',
-    slug: 'como-regularizar-reduzir-impostos-anfitriao-temporada',
-    title: 'Como se regularizar e reduzir impostos como anfitrião de temporada em 2026',
-    excerpt: 'Existem formas legais de reduzir a carga tributária sobre sua renda de aluguel por temporada. Descubra as estratégias mais eficientes sob a nova legislação e por que a pessoa jurídica pode ser sua melhor aliada.',
-    authorName: 'Equipe HostSemImposto',
-    publishedAt: new Date('2026-03-29'),
-    coverImageUrl: null,
-    status: 'published',
-  },
-  {
-    id: 'seed-4',
-    slug: 'host-sem-imposto-solucao-anfitrioes-lc-214-2025',
-    title: 'Host Sem Imposto: A solução para anfitriões na era da LC 214/2025',
-    excerpt: 'Por que anfitriões inteligentes estão migrando para plataformas próprias? Entenda como o modelo da HostSemImposto reduz custos, aumenta controle e mantém você dentro da lei na era da nova Reforma Tributária.',
-    authorName: 'Equipe HostSemImposto',
-    publishedAt: new Date('2026-04-05'),
-    coverImageUrl: null,
-    status: 'published',
-  },
-]
-
 export default async function BlogPage() {
   let dbPosts: any[] = []
   try {
     dbPosts = await getBlogPosts('published')
   } catch {
-    // DB not ready — use seed posts only
+    // DB error
   }
 
-  const posts = (dbPosts && dbPosts.length > 0) ? dbPosts : SEED_POSTS
+  const posts = dbPosts || []
 
   return (
     <div className="bg-[#0a0a0a] min-h-screen pt-32 pb-24 text-white">

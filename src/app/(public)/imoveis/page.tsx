@@ -24,8 +24,7 @@ export default async function CatalogPage() {
     console.log("Mock Mode Active for Catalog (Database Error)")
   }
 
-  // UAT Fallback: Se o banco estiver vazio, mostramos os mocks luxuosos
-  const displayProperties = (allProperties && allProperties.length > 0) ? allProperties : MOCK_PROPERTIES
+  const displayProperties = allProperties || []
 
   return (
     <div className="bg-[#050505] min-h-screen pt-32 pb-24 text-white selection:bg-accent selection:text-black">

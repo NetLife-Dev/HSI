@@ -29,23 +29,12 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
   const { slug } = await params
   let property: any = null
 
-  const mockProperty = MOCK_PROPERTIES.find(p => p.slug === slug) || MOCK_PROPERTIES[0]
-
-  try {
-    property = await db.query.properties.findFirst({
-      where: eq(properties.slug, slug),
-      with: {
-        images: {
-          orderBy: (images: any, { asc }: any) => [asc(images.order)],
-        },
-      },
-    })
-    
     if (!property) {
-      property = mockProperty
+      notFound()
     }
   } catch(e) {
-    property = mockProperty
+    console.error(e)
+    notFound()
   }
 
   if (!property) {
