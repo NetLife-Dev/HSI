@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight, Play, ShieldCheck, Sparkles, Diamond } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { db } from '@/db/index'
+import { CinematicHero } from '@/components/public/CinematicHero'
 import { properties } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { PropertyCard } from '@/components/public/PropertyCard'
@@ -32,54 +33,8 @@ export default async function HomePage() {
 
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black">
-      {/* Cinematic Hero Section */}
-      <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden pb-0">
-        {/* Background Video Layer */}
-        <div className="absolute inset-0 w-full h-full z-0">
-           <video 
-              autoPlay 
-              muted 
-              loop 
-              playsInline 
-              preload="auto"
-              className="w-full h-full object-cover opacity-80"
-           >
-              <source src="/images/hero-video.mp4" type="video/mp4" />
-           </video>
-           {/* Cinematic Gradient Overlays */}
-           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
-           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent opacity-90" />
-        </div>
-
-        <div className="relative container mx-auto px-6 lg:px-12 z-10 w-full h-full flex flex-col justify-end pb-32">
-           <div className="space-y-6 lg:w-2/3 animate-slide-up">
-              <div className="flex items-center gap-3">
-                 <div className="w-12 h-1 bg-accent" />
-                 <span className="text-accent uppercase tracking-[0.4em] font-black text-xs">Exclusivo</span>
-              </div>
-              <h1 className="text-6xl md:text-[8rem] font-black tracking-tighter uppercase leading-[0.85] text-white drop-shadow-2xl">
-                Sua <br />
-                <span
-                  className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 not-italic"
-                  style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
-                >
-                  Estadia.
-                </span>
-              </h1>
-              <p className="text-xl md:text-2xl text-white/50 font-medium max-w-2xl leading-relaxed">
-                Um mapa de possibilidades ilimitadas. Onde o topo do luxo encontra a discrição absoluta.
-              </p>
-              
-              <div className="pt-8 flex flex-col sm:flex-row gap-6">
-                <Link href="#colecao">
-                   <Button className="w-full sm:w-auto h-16 px-12 text-lg uppercase tracking-widest font-black bg-accent text-black hover:bg-white hover:scale-105 transition-all shadow-2xl shadow-accent/20">
-                      Explorar Mapa
-                   </Button>
-                </Link>
-              </div>
-           </div>
-        </div>
-      </section>
+      {/* Cinematic Hero Section (Dual Video Scroll) */}
+      <CinematicHero />
 
       {/* The Exclusive Collection */}
       <section id="colecao" className="py-32 bg-[#050505] relative z-20 pb-0">
@@ -98,6 +53,34 @@ export default async function HomePage() {
                {featuredProperties.map((property) => (
                   <PropertyCard key={property.id} property={property} />
                ))}
+            </div>
+         </div>
+      </section>
+
+      {/* Individual Experience / Immersion Section */}
+      <section className="relative h-[80vh] min-h-[600px] overflow-hidden flex items-center justify-center bg-black">
+         <div className="absolute inset-0 z-0 opacity-40">
+            <video 
+               autoPlay 
+               muted 
+               loop 
+               playsInline 
+               className="w-full h-full object-cover scale-105"
+            >
+               <source src="/images/individual.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+         </div>
+         
+         <div className="relative z-10 container mx-auto px-6 text-center space-y-8">
+            <div className="flex flex-col items-center gap-4">
+                <span className="text-accent uppercase tracking-[0.5em] font-black text-xs">Imersão Total</span>
+                <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] text-white">
+                   Entre no seu<br /><span className="text-accent underline decoration-white/10 decoration-8 underline-offset-8 italic">Próprio Mundo.</span>
+                </h2>
+                <p className="text-xl text-white/40 max-w-2xl font-medium tracking-tight">
+                   A experiência individual de cada propriedade é desenhada para ser sentida, não apenas vista. Cada detalhe, uma nova descoberta.
+                </p>
             </div>
          </div>
       </section>
@@ -132,14 +115,17 @@ export default async function HomePage() {
                   </div>
                </div>
                
-               <div className="relative aspect-square w-full rounded-[3rem] overflow-hidden group">
-                  <Image 
-                     src="/images/mock/bedroom.png" 
-                     className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[2s]" 
-                     alt="Premium Service" 
-                     fill
-                  />
-                  <div className="absolute inset-0 bg-accent/20 mix-blend-overlay" />
+               <div className="relative aspect-square w-full rounded-[3rem] overflow-hidden group shadow-2xl shadow-accent/10 border border-white/5">
+                  <video 
+                     autoPlay 
+                     muted 
+                     loop 
+                     playsInline 
+                     className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-[2s]"
+                  >
+                     <source src="/images/individual.mp4" type="video/mp4" />
+                  </video>
+                  <div className="absolute inset-0 bg-accent/20 mix-blend-overlay pointer-events-none" />
                </div>
             </div>
          </div>

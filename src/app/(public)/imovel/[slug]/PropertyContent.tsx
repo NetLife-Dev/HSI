@@ -24,37 +24,58 @@ export function PropertyContent({ property }: { property: any }) {
     <div className="bg-black mix-blend-normal overflow-hidden select-none text-white">
       {/* 1. HERO SECTION (100vh) */}
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        {/* Background Layer: Property Image */}
         <div className="absolute inset-0 z-0">
           {heroImage && (
             <Image
               src={heroImage}
               alt={property.name}
               fill
-              className="object-cover opacity-80"
+              className="object-cover opacity-60 grayscale scale-105"
               sizes="100vw"
               priority
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/10" />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+
+        {/* Immersion Layer: individual.mp4 behind lettering */}
+        <div className="absolute inset-0 z-10 overflow-hidden">
+           <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline 
+              className="w-full h-full object-cover opacity-50 mix-blend-screen scale-110"
+           >
+              <source src="/images/individual.mp4" type="video/mp4" />
+           </video>
+           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/80" />
         </div>
         
-        <div className="relative z-10 container mx-auto px-4 flex flex-col items-center justify-end h-full pb-24 text-center">
+        <div className="relative z-20 container mx-auto px-4 flex flex-col items-center justify-end h-full pb-24 text-center">
            <div className="flex items-center gap-1 text-accent font-bold text-sm tracking-[0.3em] uppercase mb-6 animate-slide-up">
               <Star size={16} fill="currentColor" />
               <span>Exclusivo</span>
            </div>
-           <h1
-             className="text-6xl md:text-9xl tracking-tighter text-white uppercase leading-[0.85] drop-shadow-2xl animate-cinematic-zoom"
-             style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
-           >
-             {property.name}
-           </h1>
-           <p className="mt-8 text-xl md:text-2xl text-white/80 font-medium max-w-3xl animate-slide-up" style={{ animationDelay: '0.4s' }}>
-             {property.locationAddress}
+           
+           <div className="relative group">
+              <h1
+                className="text-6xl md:text-9xl tracking-tighter text-white uppercase leading-[0.85] drop-shadow-2xl animate-cinematic-zoom relative z-10"
+                style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
+              >
+                {property.name}
+              </h1>
+              {/* Subtle neon glow for the lettering */}
+              <div className="absolute inset-0 blur-3xl bg-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+           </div>
+
+           <p className="mt-8 text-xl md:text-2xl text-white/50 font-medium max-w-3xl animate-slide-up" style={{ animationDelay: '0.4s' }}>
+              {property.locationAddress}
            </p>
 
            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-              <ChevronDown size={32} className="text-white/50" />
+              <ChevronDown size={32} className="text-white/30" />
            </div>
         </div>
       </section>
