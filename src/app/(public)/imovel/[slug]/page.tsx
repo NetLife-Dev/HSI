@@ -29,15 +29,21 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
   const { slug } = await params
   let property: any = null
 
+  try {
+    property = await db.query.properties.findFirst({
+      where: eq(properties.slug, slug),
+      with: {
+        images: {
+          orderBy: (images: any, { asc }: any) => [asc(images.order)],
+        },
+      },
+    })
+    
     if (!property) {
       notFound()
     }
   } catch(e) {
     console.error(e)
-    notFound()
-  }
-
-  if (!property) {
     notFound()
   }
 
