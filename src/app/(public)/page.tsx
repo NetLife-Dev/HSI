@@ -33,8 +33,72 @@ export default async function HomePage() {
 
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black">
-      {/* Cinematic Hero Section (Dual Video Scroll) */}
-      <CinematicHero />
+      {/* 1. Primary Hero Section */}
+      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            className="w-full h-full object-cover opacity-80"
+          >
+            <source src="/images/hero-video.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20" />
+        </div>
+        
+        <div className="relative z-10 container mx-auto px-6 lg:px-12 w-full h-full flex flex-col justify-end pb-32">
+           <div className="space-y-6 lg:w-2/3">
+              <div className="flex items-center gap-3">
+                 <div className="w-12 h-1 bg-accent" />
+                 <span className="text-accent uppercase tracking-[0.4em] font-black text-xs">Exclusivo</span>
+              </div>
+              <h1 className="text-6xl md:text-[8rem] font-black tracking-tighter uppercase leading-[0.85] text-white drop-shadow-2xl">
+                Sua <br />
+                <span
+                  className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 not-italic"
+                  style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
+                >
+                  Estadia.
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/50 font-medium max-w-2xl leading-relaxed">
+                Um mapa de possibilidades ilimitadas. Onde o topo do luxo encontra a discrição absoluta.
+              </p>
+              
+              <div className="pt-8 flex flex-col sm:flex-row gap-6">
+                <Link href="#colecao">
+                   <Button className="w-full sm:w-auto h-16 px-12 text-lg uppercase tracking-widest font-black bg-accent text-black hover:bg-white hover:scale-105 transition-all shadow-2xl shadow-accent/20">
+                      Explorar Mapa
+                   </Button>
+                </Link>
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* 2. Transition/AfterHero Section */}
+      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+         <div className="absolute inset-0 z-0">
+            <video 
+               autoPlay 
+               muted 
+               loop 
+               playsInline 
+               className="w-full h-full object-cover opacity-90 scale-110"
+            >
+               <source src="/images/afterhero.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black/80" />
+         </div>
+         <div className="relative z-10 text-center space-y-4 px-6">
+            <h3 className="text-5xl md:text-8xl font-black uppercase tracking-[0.5em] text-white animate-pulse">
+               EXPANSÃO
+            </h3>
+            <p className="text-accent uppercase tracking-widest font-bold">O próximo nível do luxo começou.</p>
+         </div>
+      </section>
 
       {/* The Exclusive Collection */}
       <section id="colecao" className="py-32 bg-[#050505] relative z-20 pb-0">

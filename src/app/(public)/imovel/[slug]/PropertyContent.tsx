@@ -127,36 +127,53 @@ export function PropertyContent({ property }: { property: any }) {
         </div>
       </section>
 
-      {/* 3. CINEMATIC FULL BLEED IMAGES WITH OVERLAYS */}
+      {/* 4. CINEMATIC FULL BLEED IMAGES WITH OVERLAYS (GTA ROLL EFFECT) */}
       {[
-        images[2]?.url || '/images/mock/living.png',
-        images[3]?.url || '/images/mock/outdoor.png'
-      ].map((imgUrl: string, i: number) => (
-         <section key={i} className="relative h-[80vh] w-full">
-            <Image
-              src={imgUrl}
-              fill
-              className="object-cover opacity-70"
-              alt={`Highlight ${i + 1}`}
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent flex items-center">
+        { url: images[2]?.url || '/images/mock/living.png', text: 'Viva o Momento.' },
+        { url: images[3]?.url || '/images/mock/outdoor.png', text: 'Sinta a Exclusividade.' }
+      ].map((item, i) => (
+         <section key={i} className="relative h-[90vh] w-full overflow-hidden">
+            <motion.div 
+               initial={{ scale: 1.2, y: 100 }}
+               whileInView={{ scale: 1, y: 0 }}
+               transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] }}
+               viewport={{ once: false, amount: 0.2 }}
+               className="absolute inset-0 z-0"
+            >
+               <Image
+                 src={item.url}
+                 fill
+                 className="object-cover opacity-70"
+                 alt={`Highlight ${i + 1}`}
+                 sizes="100vw"
+               />
+            </motion.div>
+            
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent flex items-center z-10">
                <div className="container mx-auto px-4 max-w-6xl">
-                  <h3
-                    className="text-5xl md:text-8xl uppercase tracking-tighter text-white max-w-2xl leading-[0.85]"
-                    style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
+                  <motion.div
+                     initial={{ x: -100, opacity: 0 }}
+                     whileInView={{ x: 0, opacity: 1 }}
+                     transition={{ duration: 1, delay: 0.3 }}
+                     viewport={{ once: false }}
                   >
-                     {i === 0 ? 'Viva o ' : 'Sinta a '}
-                     <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30">
-                       {i === 0 ? 'Momento.' : 'Exclusividade.'}
-                     </span>
-                  </h3>
+                     <h3
+                        className="text-5xl md:text-8xl uppercase tracking-tighter text-white max-w-2xl leading-[0.85]"
+                        style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
+                     >
+                        {item.text.split('.')[0]}.
+                        <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30">
+                           {item.text.split('.')[1] || ''}
+                        </span>
+                     </h3>
+                  </motion.div>
                </div>
             </div>
          </section>
       ))}
 
-      {/* 4. BOOKING ENGINE INTEGRATION */}
+      {/* 5. BOOKING ENGINE INTEGRATION */}
       <section className="py-32 bg-[#0a0a0a] border-t-[20px] border-black" id="booking">
          <div className="container mx-auto px-4 max-w-5xl">
             <div className="text-center mb-16 space-y-4">
