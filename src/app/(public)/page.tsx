@@ -3,8 +3,10 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { ArrowRight, Calendar, MapPin, Star, Shield, Zap, Heart, Search } from 'lucide-react'
+import { ArrowRight, MapPin, Star, Calendar } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { BookingCalendarSection } from '@/components/public/BookingCalendarSection'
+import { ServicesPremiumSection } from '@/components/public/ServicesPremiumSection'
 
 // Featured Properties Collection
 const FeaturedProperties = () => {
@@ -14,7 +16,6 @@ const FeaturedProperties = () => {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        // Corrected API URL
         const res = await fetch('/api/properties/featured')
         const data = await res.json()
         if (data.success) {
@@ -95,7 +96,6 @@ const FeaturedProperties = () => {
 const HomePage = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   
-  // Use scroll for the portal effect on "Estadia"
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
@@ -114,34 +114,23 @@ const HomePage = () => {
   const desktopZoomRange = [0, 0.4]
   const mobileZoomRange = [0, 0.15]
   
-  // 1. SCALES
   const estadiaScale = useTransform(scrollYProgress, isMobile ? mobileZoomRange : desktopZoomRange, [1, isMobile ? 1.1 : 2.5])
   const videoScale = useTransform(scrollYProgress, isMobile ? mobileZoomRange : desktopZoomRange, [1, isMobile ? 1 : 1.3])
   
-  // 2. OPACITIES
   const suaOpacity = useTransform(scrollYProgress, [0, isMobile ? 0.05 : 0.1], [1, 0])
   const estadiaOpacity = useTransform(scrollYProgress, isMobile ? [0, 0.1] : [0.3, 0.4], [1, 0])
   
-  // 3. Y-AXIS MOTION (DIFFERENT DIRECTIONS)
-  // Mobile goes UP, Desktop goes DOWN for Estadia
   const suaY = useTransform(scrollYProgress, [0, 0.1], [0, isMobile ? -40 : 0])
   const estadiaY = useTransform(scrollYProgress, isMobile ? [0, 0.1] : [0, 0.4], [0, isMobile ? -60 : 150])
 
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
       
-      {/* 1. CINEMATIC HERO SECTION (SCROLL ZOOM PORTAL) */}
+      {/* 1. CINEMATIC HERO SECTION */}
       <div ref={containerRef} className={cn("relative", isMobile ? "h-[120vh]" : "h-[300vh]")}>
         <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-          {/* Background Video */}
           <motion.div style={{ scale: videoScale }} className="absolute inset-0 z-0 will-change-transform">
-            <video 
-              autoPlay 
-              muted 
-              loop 
-              playsInline 
-              className="w-full h-full object-cover opacity-80"
-            >
+            <video autoPlay muted loop playsInline className="w-full h-full object-cover opacity-80">
               <source src="/images/hero-video.mp4" type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/10 to-black" />
@@ -161,26 +150,12 @@ const HomePage = () => {
                      <span className="text-accent uppercase tracking-[1em] font-black text-[8px]">Exclusivo</span>
                      <div className="w-5 h-px bg-accent/30" />
                   </div>
-                  
-                  {/* "Sua" - Balanced */}
-                  <span className="text-white text-xl md:text-2xl font-black uppercase tracking-widest block">
-                     Sua
-                  </span>
+                  <span className="text-white text-xl md:text-2xl font-black uppercase tracking-widest block">Sua</span>
                </motion.div>
 
-               {/* "Estadia" - The Portal Zoom */}
-               <motion.div 
-                  style={{ 
-                    scale: estadiaScale, 
-                    opacity: estadiaOpacity,
-                    y: estadiaY
-                  }}
-                  className="will-change-transform"
-               >
+               <motion.div style={{ scale: estadiaScale, opacity: estadiaOpacity, y: estadiaY }} className="will-change-transform">
                   <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-                     <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 italic">
-                        Estadia.
-                     </span>
+                     <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 italic">Estadia.</span>
                   </h1>
                </motion.div>
             </motion.div>
@@ -200,16 +175,9 @@ const HomePage = () => {
       {/* 2. AFTERHERO DISCOVERY SECTION */}
       <section className="relative h-screen w-full overflow-hidden flex items-center justify-center border-t border-white/5">
         <div className="absolute inset-0 z-0">
-          <video 
-            autoPlay 
-            muted 
-            loop 
-            playsInline 
-            className="w-full h-full object-cover"
-          >
+          <video autoPlay muted loop playsInline className="w-full h-full object-cover">
             <source src="/images/afterhero.mp4" type="video/mp4" />
           </video>
-          {/* Enhanced Vignette overlay for readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-black via-black/40 to-black" />
           <div className="absolute inset-0 bg-black/20" /> 
         </div>
@@ -238,18 +206,15 @@ const HomePage = () => {
             className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16"
           >
             <div className="space-y-4 border-l-4 border-accent pl-8">
-              <h2 id="nossos-santuarios" className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight">
+              <h2 id="nossos-santuarios" className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight text-white">
                 Nossos <br /> <span className="text-accent italic">Santuários</span>
               </h2>
-              <p className="text-gray-400 font-medium tracking-wide max-w-md">
+              <p className="text-white/40 font-medium tracking-wide max-w-md">
                 Uma curadoria exclusiva de refúgios onde o luxo encontra a paz absoluta.
               </p>
             </div>
             
-            <Link 
-              href="/imoveis" 
-              className="text-xs font-black uppercase tracking-widest text-accent hover:text-white transition-colors flex items-center gap-2 group"
-            >
+            <Link href="/imoveis" className="text-xs font-black uppercase tracking-widest text-accent hover:text-white transition-colors flex items-center gap-2 group">
               Ver Catálogo Completo
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
@@ -259,22 +224,42 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* 4. NEW: BOOKING CALENDAR SECTION */}
+      <BookingCalendarSection />
+
+      {/* 5. NEW: SERVICES PREMIUM SECTION */}
+      <ServicesPremiumSection />
+
       {/* Footer CTA */}
-      <section className="relative py-32 overflow-hidden bg-zinc-950">
-        <div className="container mx-auto px-6 text-center relative z-10">
+      <section className="relative py-48 overflow-hidden bg-black">
+        <div className="absolute inset-0 z-0 text-white">
+           <img 
+              src="/images/living.png" 
+              className="w-full h-full object-cover opacity-30 grayscale saturate-50"
+              alt="Living room"
+           />
+           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/80" />
+        </div>
+
+        <div className="container mx-auto px-6 text-center relative z-10 max-w-4xl text-white">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="space-y-8"
+            className="space-y-12"
           >
-            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">Pronto para o Próximo <br /><span className="text-accent">Capítulo?</span></h2>
-            <Link 
-              href="/imoveis"
-              className="inline-flex items-center gap-4 bg-white text-black px-12 py-5 font-black uppercase tracking-widest hover:bg-accent transition-all duration-500 hover:scale-105 group"
-            >
-              Explorar Todos
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+            <div className="space-y-4">
+               <span className="text-accent uppercase tracking-[1em] font-black text-[10px]">Lifestyle</span>
+               <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none text-white">Pronto para o <br />Próximo <span className="text-accent italic">Capítulo?</span></h2>
+            </div>
+            
+            <p className="text-white/40 text-lg font-medium leading-relaxed">
+               Deixe as taxas de plataforma para trás. Entre no mundo das reservas diretas e descubra um novo padrão de hospitalidade.
+            </p>
+
+            <Link href="/imoveis" className="inline-flex items-center gap-6 bg-white text-black px-16 py-6 font-black uppercase tracking-[0.2em] text-sm hover:bg-accent transition-all duration-500 hover:scale-105 group rounded-full shadow-2xl shadow-accent/20">
+              Explorar Todos os Santuários
+              <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
             </Link>
           </motion.div>
         </div>
