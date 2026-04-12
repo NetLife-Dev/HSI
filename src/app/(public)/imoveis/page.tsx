@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { MOCK_PROPERTIES } from '@/lib/mock-data'
 
+export const dynamic = 'force-dynamic'
+
 export default async function CatalogPage() {
   let allProperties: any[] = []
   try {

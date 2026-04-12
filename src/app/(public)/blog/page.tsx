@@ -3,6 +3,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Calendar, User, ArrowRight } from 'lucide-react'
 import { getBlogPosts } from '@/actions/blog'
+import { cn } from '@/lib/utils'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Blog da Hospedagem — HostSemImposto',
