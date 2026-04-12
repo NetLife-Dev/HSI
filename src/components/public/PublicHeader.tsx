@@ -82,7 +82,7 @@ export function PublicHeader() {
         />
 
         {/* Nav links */}
-        <nav className="relative z-10 flex flex-col gap-2">
+        <nav className="relative z-10 flex flex-col gap-1 max-w-xs mx-auto w-full">
           {[
             { href: '/', label: 'Página Inicial' },
             { href: '/imoveis', label: 'Santuários' },
@@ -93,20 +93,20 @@ export function PublicHeader() {
               key={item.href}
               href={item.href}
               onClick={() => setMobileMenuOpen(false)}
-              className="text-5xl font-black uppercase tracking-tighter text-white/60 hover:text-white py-4 border-b border-white/5 transition-colors"
+              className="text-3xl font-black uppercase tracking-tighter text-white/60 hover:text-white py-3 border-b border-white/5 transition-colors"
               style={{
-                transitionDelay: mobileMenuOpen ? `${i * 60}ms` : '0ms',
-                transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-20px)',
+                transitionDelay: mobileMenuOpen ? `${i * 50}ms` : '0ms',
+                transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-10px)',
                 opacity: mobileMenuOpen ? 1 : 0,
-                transition: `transform 400ms ease ${i * 60}ms, opacity 400ms ease ${i * 60}ms, color 200ms`,
+                transition: `transform 400ms ease ${i * 50}ms, opacity 400ms ease ${i * 50}ms, color 200ms`,
               }}
             >
               {item.label}
             </Link>
           ))}
 
-          <Link href="/imoveis" onClick={() => setMobileMenuOpen(false)} className="mt-10">
-            <Button className="w-full rounded-2xl py-8 bg-accent text-black hover:bg-white text-xl font-black uppercase tracking-widest">
+          <Link href="/imoveis" onClick={() => setMobileMenuOpen(false)} className="mt-8">
+            <Button className="w-full rounded-2xl h-14 bg-accent text-black hover:bg-white text-base font-black uppercase tracking-widest shadow-lg shadow-accent/20">
               Agendar Retiro
             </Button>
           </Link>
