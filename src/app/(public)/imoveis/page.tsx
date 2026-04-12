@@ -50,24 +50,24 @@ export default async function CatalogPage() {
               </div>
            </div>
 
-           <div className="bg-[#111] p-3 rounded-[2.5rem] border border-white/10 shadow-2xl flex flex-col lg:flex-row items-center gap-4">
-              <div className="flex-grow w-full flex items-center px-6 gap-4 border-b lg:border-b-0 lg:border-r border-white/10">
-                 <Search size={24} className="text-accent" />
+           <div className="bg-[#111] p-2 sm:p-3 rounded-3xl sm:rounded-[2.5rem] border border-white/10 shadow-2xl flex flex-col lg:flex-row items-center gap-2 sm:gap-4 overflow-hidden">
+              <div className="flex-grow w-full flex items-center px-4 sm:px-6 gap-3 sm:gap-4 border-b lg:border-b-0 lg:border-r border-white/10 py-1 lg:py-0">
+                 <Search size={22} className="text-accent shrink-0" />
                  <Input 
-                   placeholder="Buscar por santuário ou região..." 
-                   className="border-0 bg-transparent focus-visible:ring-0 text-lg font-bold text-white placeholder:text-white/30 h-14 px-0"
+                   placeholder="Buscar santuário..." 
+                   className="border-0 bg-transparent focus-visible:ring-0 text-base sm:text-lg font-bold text-white placeholder:text-white/30 h-12 sm:h-14 px-0 w-full"
                  />
               </div>
-               <div className="flex flex-wrap items-center gap-2 px-6 w-full lg:w-auto pb-4 lg:pb-0">
-                  <Button variant="ghost" className="rounded-2xl gap-2 font-bold text-white/50 hover:text-white hover:bg-white/5 py-4 px-4 uppercase tracking-[0.1em] text-[10px] flex-1 sm:flex-none">
+               <div className="flex items-center gap-1 sm:gap-2 px-3 sm:px-6 w-full lg:w-auto py-2 lg:py-0 overflow-x-auto no-scrollbar">
+                  <Button variant="ghost" className="rounded-xl sm:rounded-2xl gap-2 font-bold text-white/50 hover:text-white hover:bg-white/5 py-3 sm:py-4 px-3 sm:px-4 uppercase tracking-[0.1em] text-[10px] shrink-0">
                      <SlidersHorizontal size={14} />
                      Filtros
                   </Button>
-                  <Button variant="ghost" className="rounded-2xl gap-2 font-bold text-white/50 hover:text-white hover:bg-white/5 py-4 px-4 uppercase tracking-[0.1em] text-[10px] flex-1 sm:flex-none">
+                  <Button variant="ghost" className="rounded-xl sm:rounded-2xl gap-2 font-bold text-white/50 hover:text-white hover:bg-white/5 py-3 sm:py-4 px-3 sm:px-4 uppercase tracking-[0.1em] text-[10px] shrink-0">
                      <ArrowDownWideNarrow size={14} />
                      Ordenar
                   </Button>
-                  <Button className="rounded-2xl px-6 h-10 shadow-lg shadow-accent/10 hover:scale-[1.02] transition-transform text-[10px] uppercase font-black tracking-widest bg-accent text-black flex-1 sm:flex-none">
+                  <Button className="ml-auto sm:ml-0 rounded-xl sm:rounded-2xl px-5 sm:px-6 h-9 sm:h-10 shadow-lg shadow-accent/10 hover:scale-[1.02] transition-transform text-[10px] uppercase font-black tracking-widest bg-accent text-black shrink-0">
                      Pesquisar
                   </Button>
                </div>

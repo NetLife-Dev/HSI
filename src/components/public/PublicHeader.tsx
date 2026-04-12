@@ -22,68 +22,79 @@ export function PublicHeader() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+  }, [mobileMenuOpen])
+
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [pathname])
+
   return (
-    <header
-      className={cn(
-        'fixed top-0 w-full z-50 transition-all duration-300 border-b select-none',
-        isScrolled || !isHome
-          ? 'bg-black/80 backdrop-blur-md border-white/10 py-3'
-          : 'bg-transparent border-transparent py-6'
-      )}
-    >
-      <div className="container mx-auto px-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-1 group">
-          <span className="font-black text-2xl tracking-tighter leading-none text-white group-hover:text-white transition-colors">
-            Host
-          </span>
-          <span
-            className="text-2xl tracking-tighter leading-none text-accent italic"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 600 }}
-          >
-            SI
-          </span>
-        </Link>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-black uppercase tracking-widest text-white/70">
-          <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-          <Link href="/imoveis" className="hover:text-accent transition-colors">Santuários</Link>
-          <Link href="/blog" className="hover:text-accent transition-colors">Blog</Link>
-          <Link href="/sobre" className="hover:text-accent transition-colors">Sobre Nós</Link>
-        </nav>
-
-        <div className="flex items-center gap-4">
-          <Link href="/imoveis">
-            <Button size="sm" className="hidden sm:flex rounded-full px-8 py-5 bg-accent text-black hover:bg-white hover:scale-105 font-black uppercase tracking-[0.2em] shadow-xl hover:shadow-accent/40 transition-all">
-              Agendar Retiro
-            </Button>
-          </Link>
-          
-          <button 
-            className="md:hidden p-2 text-white hover:text-accent transition-colors"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu — fullscreen overlay */}
-      <div
+    <>
+      <header
         className={cn(
-          'fixed inset-0 z-[100] flex flex-col justify-center px-10 transition-all duration-500 md:hidden',
-          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          'fixed top-0 w-full z-50 transition-all duration-300 border-b select-none',
+          isScrolled || !isHome
+            ? 'bg-black/80 backdrop-blur-md border-white/10 py-3'
+            : 'bg-transparent border-transparent py-6'
         )}
       >
-        {/* Backdrop for mobile menu */}
-        <div
-          className="absolute inset-0 bg-black/98 backdrop-blur-2xl"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-        
+        <div className="container mx-auto px-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-1 group">
+            <span className="font-black text-2xl tracking-tighter leading-none text-white group-hover:text-white transition-colors">
+              Host
+            </span>
+            <span
+              className="text-2xl tracking-tighter leading-none text-accent italic"
+              style={{ fontFamily: 'var(--font-display)', fontWeight: 600 }}
+            >
+              SI
+            </span>
+          </Link>
+
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-8 text-sm font-black uppercase tracking-widest text-white/70">
+            <Link href="/" className="hover:text-accent transition-colors">Home</Link>
+            <Link href="/imoveis" className="hover:text-accent transition-colors">Santuários</Link>
+            <Link href="/blog" className="hover:text-accent transition-colors">Blog</Link>
+            <Link href="/sobre" className="hover:text-accent transition-colors">Sobre Nós</Link>
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <Link href="/imoveis">
+              <Button size="sm" className="hidden sm:flex rounded-full px-8 py-5 bg-accent text-black hover:bg-white hover:scale-105 font-black uppercase tracking-[0.2em] shadow-xl hover:shadow-accent/40 transition-all">
+                Agendar Retiro
+              </Button>
+            </Link>
+            
+            <button 
+              className="md:hidden p-2 text-white hover:text-accent transition-colors relative z-[110]"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <div className="relative w-8 h-8 flex items-center justify-center">
+                 <Menu className={cn("absolute transition-all duration-300", mobileMenuOpen ? "opacity-0 rotate-90 scale-50" : "opacity-100 rotate-0 scale-100")} size={28} />
+                 <X className={cn("absolute transition-all duration-300", mobileMenuOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-90 scale-50")} size={28} />
+              </div>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Menu — separate fixed overlay with higher z-index */}
+      <div
+        className={cn(
+          'fixed inset-0 z-[100] flex flex-col justify-center px-10 transition-all duration-500 md:hidden bg-[#050505]',
+          mobileMenuOpen ? 'translate-y-0 opacity-100 pointer-events-auto visible' : '-translate-y-full opacity-0 pointer-events-none invisible'
+        )}
+      >
         {/* Close Button Inside Menu */}
         <button 
-          className="absolute top-6 right-6 p-2 text-white/50 hover:text-accent transition-colors z-20"
+          className="absolute top-6 right-6 p-2 text-white/50 hover:text-accent transition-colors z-[110]"
           onClick={() => setMobileMenuOpen(false)}
         >
           <X size={32} />
@@ -121,12 +132,12 @@ export function PublicHeader() {
           ))}
 
           <Link href="/imoveis" onClick={() => setMobileMenuOpen(false)} className="mt-12">
-            <Button className="w-full rounded-2xl h-16 bg-accent text-black hover:bg-white text-lg font-black uppercase tracking-widest shadow-xl shadow-accent/20 border-0">
+            <Button className="w-full rounded-2xl h-16 bg-accent text-black hover:bg-white text-xl font-black uppercase tracking-widest shadow-xl shadow-accent/20 border-0">
               Reservar Agora
             </Button>
           </Link>
         </nav>
       </div>
-    </header>
+    </>
   )
 }
