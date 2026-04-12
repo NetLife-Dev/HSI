@@ -28,12 +28,12 @@ export default async function CouponsPage() {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-black uppercase tracking-tighter text-white flex items-center gap-3">
-            <Ticket className="text-accent" />
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-white flex flex-wrap items-center gap-2 md:gap-3">
+            <Ticket className="text-accent shrink-0" />
             Cupons <span className="text-white/40 font-medium">De Desconto</span>
           </h1>
-          <p className="text-white/50 font-medium">Gerencie promoções compatíveis com o checkout Stripe.</p>
+          <p className="text-white/50 font-medium text-sm">Gerencie promoções compatíveis com o checkout Stripe.</p>
         </div>
 
         <CouponsClient initialCoupons={coupons} />

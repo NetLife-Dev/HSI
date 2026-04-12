@@ -132,16 +132,16 @@ export const properties = pgTable('properties', {
 })
 
 export const propertiesRelations = relations(properties, ({ one, many }) => ({
-  owner: one(users, { fields: [properties.ownerId], references: [users.id] }),
-  images: many(propertyImages),
-  seasonalPricing: many(seasonalPricing),
-  longStayDiscounts: many(longStayDiscounts),
-  blockedDates: many(blockedDates),
-  bookings: many(bookings),
-  icalFeeds: many(icalFeeds),
-  crmLeads: many(crmLeads),
-  proposals: many(proposals),
-  services: many(propertyServices),
+  owner: one(users, { fields: [properties.ownerId], references: [users.id], relationName: 'property_owner' }),
+  images: many(propertyImages, { relationName: 'property_images' }),
+  seasonalPricing: many(seasonalPricing, { relationName: 'property_seasonal_pricing' }),
+  longStayDiscounts: many(longStayDiscounts, { relationName: 'property_long_stay_discounts' }),
+  blockedDates: many(blockedDates, { relationName: 'property_blocked_dates' }),
+  bookings: many(bookings, { relationName: 'property_bookings' }),
+  icalFeeds: many(icalFeeds, { relationName: 'property_ical_feeds' }),
+  crmLeads: many(crmLeads, { relationName: 'property_crm_leads' }),
+  proposals: many(proposals, { relationName: 'property_proposals' }),
+  services: many(propertyServices, { relationName: 'property_services' }),
 }))
 
 export const propertyImages = pgTable('property_images', {
@@ -158,7 +158,7 @@ export const propertyImages = pgTable('property_images', {
 })
 
 export const propertyImagesRelations = relations(propertyImages, ({ one }) => ({
-  property: one(properties, { fields: [propertyImages.propertyId], references: [properties.id] }),
+  property: one(properties, { fields: [propertyImages.propertyId], references: [properties.id], relationName: 'property_images' }),
 }))
 
 export const seasonalPricing = pgTable('seasonal_pricing', {
@@ -173,7 +173,7 @@ export const seasonalPricing = pgTable('seasonal_pricing', {
 })
 
 export const seasonalPricingRelations = relations(seasonalPricing, ({ one }) => ({
-  property: one(properties, { fields: [seasonalPricing.propertyId], references: [properties.id] }),
+  property: one(properties, { fields: [seasonalPricing.propertyId], references: [properties.id], relationName: 'property_seasonal_pricing' }),
 }))
 
 export const longStayDiscounts = pgTable(
@@ -191,7 +191,7 @@ export const longStayDiscounts = pgTable(
 )
 
 export const longStayDiscountsRelations = relations(longStayDiscounts, ({ one }) => ({
-  property: one(properties, { fields: [longStayDiscounts.propertyId], references: [properties.id] }),
+  property: one(properties, { fields: [longStayDiscounts.propertyId], references: [properties.id], relationName: 'property_long_stay_discounts' }),
 }))
 
 export const blockedDates = pgTable('blocked_dates', {
@@ -207,7 +207,7 @@ export const blockedDates = pgTable('blocked_dates', {
 })
 
 export const blockedDatesRelations = relations(blockedDates, ({ one }) => ({
-  property: one(properties, { fields: [blockedDates.propertyId], references: [properties.id] }),
+  property: one(properties, { fields: [blockedDates.propertyId], references: [properties.id], relationName: 'property_blocked_dates' }),
 }))
 
 // ─── Guests ──────────────────────────────────────────────────────────────────

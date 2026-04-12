@@ -101,7 +101,7 @@ const HomePage = () => {
   })
 
   // Smooth cinematic zoom into "Estadia"
-  const estadiaScale = useTransform(scrollYProgress, [0, 0.4], [1, 10])
+  const estadiaScale = useTransform(scrollYProgress, [0, 0.4], [1, 3])
   const estadiaOpacity = useTransform(scrollYProgress, [0.3, 0.4], [1, 0])
   const videoScale = useTransform(scrollYProgress, [0, 0.4], [1, 1.2])
 
@@ -141,18 +141,18 @@ const HomePage = () => {
                
                {/* "Sua" - Static/Fading */}
                <motion.span 
-                  style={{ opacity: useTransform(scrollYProgress, [0, 0.15], [1, 0]) }}
-                  className="text-white text-3xl md:text-5xl font-black uppercase tracking-tighter block mb-[-0.5rem]"
+                  style={{ opacity: useTransform(scrollYProgress, [0, 0.1], [1, 0]) }}
+                  className="text-white text-2xl md:text-4xl font-black uppercase tracking-tighter block mb-[-0.25rem]"
                >
                   Sua
                </motion.span>
 
-               {/* "Estadia" - The Portal Zoom */}
+               {/* "Estadia" - The Portal Zoom (Limited to 3x) */}
                <motion.div 
                   style={{ scale: estadiaScale, opacity: estadiaOpacity }}
                   className="will-change-transform"
                >
-                  <h1 className="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-none text-white drop-shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                  <h1 className="text-6xl md:text-8xl font-black tracking-tighter uppercase leading-none text-white drop-shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
                      <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 italic">
                         Estadia.
                      </span>
