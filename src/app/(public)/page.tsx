@@ -44,60 +44,63 @@ export default function HomePage() {
   })
 
   // Hero Video & Content transformations
-  const heroScale = useTransform(scrollYProgress, [0, 0.45], [1, 15]) // Massive zoom into center
-  const heroOpacity = useTransform(scrollYProgress, [0.4, 0.55], [1, 0])
-  const heroTextScale = useTransform(scrollYProgress, [0, 0.45], [1, 20]) // Zoom into text
-  const heroTextOpacity = useTransform(scrollYProgress, [0.35, 0.48], [1, 0])
+  const heroScale = useTransform(scrollYProgress, [0, 0.45], [1, 25]) // Even more aggressive zoom
+  const heroOpacity = useTransform(scrollYProgress, [0.4, 0.5], [1, 0])
+  const heroTextScale = useTransform(scrollYProgress, [0, 0.45], [1, 35]) // Massive lettering zoom
+  const heroTextOpacity = useTransform(scrollYProgress, [0.38, 0.48], [1, 0]) // Sync with zoom pivot
   
-  // AfterHero Video transformations (Portal entry)
-  const afterHeroScale = useTransform(scrollYProgress, [0.3, 0.6], [0.6, 1])
-  const afterHeroOpacity = useTransform(scrollYProgress, [0.4, 0.55], [0, 1])
+  // AfterHero Video transformations (The discovery)
+  const afterHeroScale = useTransform(scrollYProgress, [0.25, 0.55], [0.6, 1])
+  const afterHeroOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1])
   
-  // Content inside AfterHero (Stays longer)
-  const afterHeroContentOpacity = useTransform(scrollYProgress, [0.65, 0.75, 0.85, 0.95], [0, 1, 1, 0])
-  const afterHeroContentY = useTransform(scrollYProgress, [0.65, 0.75, 0.85, 0.95], [40, 0, 0, -40])
+  // AfterHero Content (STAYS MUCH LONGER)
+  // Visible from 0.55 to 0.95 (40% of the 600vh scroll = 2.4 full screens)
+  const afterHeroContentOpacity = useTransform(scrollYProgress, [0.55, 0.65, 0.85, 0.95], [0, 1, 1, 0])
+  const afterHeroContentY = useTransform(scrollYProgress, [0.55, 0.65, 0.85, 0.95], [60, 0, 0, -60])
 
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
-      {/* 1 & 2. CINEMATIC SCROLL ZOOM BRIDGE (IMPROVED PORTAL EFFECT) */}
+      {/* 1 & 2. CINEMATIC SCROLL ZOOM BRIDGE (PORTAL EFFECT FIXED) */}
       <div ref={containerRef} className="relative h-[600vh] z-0">
          <div className="sticky top-0 h-screen w-full overflow-hidden">
-            {/* Layer 1: Hero Video + Lettering Portal */}
+            {/* Layer 1: Hero Video (Centered Portal) */}
             <motion.div 
                style={{ scale: heroScale, opacity: heroOpacity }}
-               className="absolute inset-0 z-10 flex items-center justify-center"
+               className="absolute inset-0 z-10 overflow-hidden"
             >
                <video 
                   autoPlay 
                   muted 
                   loop 
                   playsInline 
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="w-full h-full object-cover"
                >
                   <source src="/images/hero-video.mp4" type="video/mp4" />
                </video>
-               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
-               
-               <motion.div 
-                  style={{ scale: heroTextScale, opacity: heroTextOpacity }}
-                  className="relative z-10 container mx-auto px-6 lg:px-12 w-full h-full flex flex-col justify-end pb-32"
-               >
-                  <div className="space-y-6 lg:w-2/3">
-                     <div className="flex items-center gap-3">
-                        <div className="w-12 h-1 bg-accent" />
-                        <span className="text-accent uppercase tracking-[0.4em] font-black text-xs">Exclusivo</span>
-                     </div>
-                     <h1 className="text-6xl md:text-[8rem] font-black tracking-tighter uppercase leading-[0.85] text-white drop-shadow-2xl">
-                        Sua <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 not-italic">
-                           Estadia.
-                        </span>
-                     </h1>
-                  </div>
-               </motion.div>
+               <div className="absolute inset-0 bg-black/30" />
             </motion.div>
 
-            {/* Layer 2: AfterHero Video (The "Destination") */}
+            {/* Layer 1.1: Hero Text (Centered for the Zoom Into 'A') */}
+            <motion.div 
+               style={{ scale: heroTextScale, opacity: heroTextOpacity }}
+               className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4"
+            >
+               <div className="space-y-4">
+                  <div className="flex items-center justify-center gap-3 mb-2">
+                     <div className="w-8 h-0.5 bg-accent" />
+                     <span className="text-accent uppercase tracking-[0.5em] font-black text-[10px]">Exclusivo</span>
+                     <div className="w-8 h-0.5 bg-accent" />
+                  </div>
+                  <h1 className="text-7xl md:text-[10rem] font-black tracking-tighter uppercase leading-[0.8] text-white drop-shadow-[0_10px_50px_rgba(0,0,0,0.5)]">
+                     Sua <br />
+                     <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30 not-italic">
+                        Estadia.
+                     </span>
+                  </h1>
+               </div>
+            </motion.div>
+
+            {/* Layer 2: AfterHero Video (Discovery Phase) */}
             <motion.div 
                style={{ scale: afterHeroScale, opacity: afterHeroOpacity }}
                className="absolute inset-0 z-0"
@@ -111,13 +114,13 @@ export default function HomePage() {
                >
                   <source src="/images/afterhero.mp4" type="video/mp4" />
                </video>
-               <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black" />
+               <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
                
                <motion.div 
                   style={{ opacity: afterHeroContentOpacity, y: afterHeroContentY }}
                   className="relative z-10 h-full flex flex-col items-center justify-center text-center space-y-4 px-6"
                >
-                  <h3 className="text-5xl md:text-[8rem] font-black uppercase tracking-tighter text-white drop-shadow-2xl">
+                  <h3 className="text-6xl md:text-[8rem] font-black uppercase tracking-tighter text-white drop-shadow-2xl">
                      O <span className="text-accent italic">Acesso.</span>
                   </h3>
                   <p className="text-accent uppercase tracking-[0.4em] font-black text-xs">A porta para o extraordinário está aberta.</p>
