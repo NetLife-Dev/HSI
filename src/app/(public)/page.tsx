@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowRight, Calendar, MapPin, Star, Shield, Zap, Heart, Search } from 'lucide-react'
 
-// Featured Properties Mock (Should fetch from DB in Phase 2)
+// Featured Properties Collection
 const FeaturedProperties = () => {
   const [properties, setProperties] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -13,9 +13,12 @@ const FeaturedProperties = () => {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const res = await fetch('/api/properties?featured=true')
+        // Corrected API URL
+        const res = await fetch('/api/properties/featured')
         const data = await res.json()
-        setProperties(data)
+        if (data.success) {
+          setProperties(data.properties)
+        }
       } catch (err) {
         console.error('Error fetching featured properties:', err)
       } finally {
@@ -30,6 +33,12 @@ const FeaturedProperties = () => {
       {[1, 2, 3].map((i) => (
         <div key={i} className="aspect-[4/5] bg-zinc-900 animate-pulse rounded-2xl" />
       ))}
+    </div>
+  )
+
+  if (!properties || properties.length === 0) return (
+    <div className="text-center py-20 bg-zinc-900/50 rounded-3xl border border-white/5">
+      <p className="text-gray-500 font-medium">Nenhum imóvel disponível no momento.</p>
     </div>
   )
 
@@ -83,64 +92,72 @@ const FeaturedProperties = () => {
 }
 
 const HomePage = () => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  
+  // Use scroll for the portal effect on "Estadia"
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  })
+
+  // Smooth cinematic zoom into "Estadia"
+  const estadiaScale = useTransform(scrollYProgress, [0, 0.4], [1, 10])
+  const estadiaOpacity = useTransform(scrollYProgress, [0.3, 0.4], [1, 0])
+  const videoScale = useTransform(scrollYProgress, [0, 0.4], [1, 1.2])
+
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
       
-      {/* 1. CINEMATIC HERO SECTION */}
-      <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
-        {/* Background Video */}
-        <div className="absolute inset-0 z-0">
-          <video 
-            autoPlay 
-            muted 
-            loop 
-            playsInline 
-            className="w-full h-full object-cover opacity-80"
-          >
-            <source src="/images/hero-video.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black" />
-        </div>
-
-        {/* Hero Content */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="relative z-10 text-center px-4"
-        >
-          <div className="space-y-4">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="flex items-center justify-center gap-3 mb-2"
+      {/* 1. CINEMATIC HERO SECTION (SCROLL ZOOM PORTAL) */}
+      <div ref={containerRef} className="relative h-[250vh]">
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+          {/* Background Video */}
+          <motion.div style={{ scale: videoScale }} className="absolute inset-0 z-0 will-change-transform">
+            <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline 
+              className="w-full h-full object-cover opacity-80"
             >
-              <div className="w-8 h-px bg-accent/50" />
-              <span className="text-accent uppercase tracking-[1em] font-black text-[10px]">Exclusivo</span>
-              <div className="w-8 h-px bg-accent/50" />
-            </motion.div>
-            <h1 className="text-6xl md:text-[10rem] font-black tracking-tighter uppercase leading-[0.8] text-white drop-shadow-[0_10px_50px_rgba(0,0,0,0.5)]">
-              Sua <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30 italic">
-                Estadia.
-              </span>
-            </h1>
-          </div>
-          
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 1 }}
-            className="absolute bottom-[-10vh] left-1/2 -translate-x-1/2"
-          >
-            <div className="w-px h-24 bg-gradient-to-b from-accent to-transparent" />
+              <source src="/images/hero-video.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/10 to-black" />
           </motion.div>
-        </motion.div>
-      </section>
+
+          {/* Centered Portal Text */}
+          <motion.div 
+            style={{ scale: estadiaScale, opacity: estadiaOpacity }}
+            className="relative z-10 text-center px-4 will-change-transform pointer-events-none"
+          >
+            <div className="space-y-4">
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <div className="w-8 h-px bg-accent/50" />
+                <span className="text-accent uppercase tracking-[1em] font-black text-[10px]">Exclusivo</span>
+                <div className="w-8 h-px bg-accent/50" />
+              </div>
+              <h1 className="text-6xl md:text-[10rem] font-black tracking-tighter uppercase leading-[0.8] text-white drop-shadow-[0_10px_50px_rgba(0,0,0,0.5)]">
+                Sua <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30 italic">
+                  Estadia.
+                </span>
+              </h1>
+            </div>
+          </motion.div>
+
+          {/* Scroll Indicator */}
+          <motion.div 
+            style={{ opacity: useTransform(scrollYProgress, [0, 0.1], [1, 0]) }}
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
+          >
+            <span className="text-[10px] uppercase tracking-[0.4em] font-black text-accent/60">Scroll para explorar</span>
+            <div className="w-px h-12 bg-gradient-to-b from-accent to-transparent" />
+          </motion.div>
+        </div>
+      </div>
 
       {/* 2. AFTERHERO DISCOVERY SECTION */}
-      <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+      <section className="relative h-screen w-full overflow-hidden flex items-center justify-center border-t border-white/5">
         <div className="absolute inset-0 z-0">
           <video 
             autoPlay 
@@ -155,10 +172,10 @@ const HomePage = () => {
         </div>
 
         <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
           className="relative z-10 text-center space-y-4 px-6"
         >
           <h3 className="text-6xl md:text-[8rem] font-black uppercase tracking-tighter text-white drop-shadow-2xl">
@@ -178,34 +195,37 @@ const HomePage = () => {
             className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16"
           >
             <div className="space-y-4 border-l-4 border-accent pl-8">
-              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight">
+              <h2 id="nossos-santuarios" className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight">
                 Nossos <br /> <span className="text-accent italic">Santuários</span>
               </h2>
               <p className="text-gray-400 font-medium tracking-wide max-w-md">
                 Uma curadoria exclusiva de refúgios onde o luxo encontra a paz absoluta.
               </p>
             </div>
+            
+            <Link 
+              href="/imoveis" 
+              className="text-xs font-black uppercase tracking-widest text-accent hover:text-white transition-colors flex items-center gap-2 group"
+            >
+              Ver Catálogo Completo
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </motion.div>
 
           <FeaturedProperties />
         </div>
       </section>
 
-      {/* CTA / Footer Promo */}
+      {/* Footer CTA */}
       <section className="relative py-32 overflow-hidden bg-zinc-950">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-accent/20 via-transparent to-transparent" />
-        </div>
-        
         <div className="container mx-auto px-6 text-center relative z-10">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="space-y-8"
           >
             <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">Pronto para o Próximo <br /><span className="text-accent">Capítulo?</span></h2>
-            <p className="text-gray-400 max-w-2xl mx-auto font-medium">Garanta sua reserva nos destinos mais cobiçados do país com o suporte personalizado que você merece.</p>
             <Link 
               href="/imoveis"
               className="inline-flex items-center gap-4 bg-white text-black px-12 py-5 font-black uppercase tracking-widest hover:bg-accent transition-all duration-500 hover:scale-105 group"

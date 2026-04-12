@@ -38,7 +38,7 @@ export const proposalStatusEnum = pgEnum('proposal_status', ['sent', 'accepted',
 export const transactionTypeEnum = pgEnum('transaction_type', ['income', 'expense'])
 export const permissionLevelEnum = pgEnum('permission_level', ['view', 'edit', 'none'])
 
-// ─── Auth Tables (NextAuth v5 / @auth/drizzle-adapter required schema) ──────
+// ─── Auth Tables ──────
 
 export const users = pgTable('users', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -46,11 +46,19 @@ export const users = pgTable('users', {
   email: text('email').unique().notNull(),
   emailVerified: timestamp('email_verified', { withTimezone: true, mode: 'date' }),
   image: text('image'),
-  // Custom columns — nullable or default so adapter inserts work without these fields
   passwordHash: text('password_hash'),
   role: userRoleEnum('role').default('owner'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 })
+
+export const usersRelations = relations(users, ({ many, one }) => ({
+  accounts: many(accounts),
+  sessions: many(sessions),
+  properties: many(properties),
+  auditLogs: many(auditLog),
+  notifications: many(notifications),
+  staffPermissions: one(staffPermissions),
+}))
 
 export const accounts = pgTable(
   'accounts',
@@ -60,12 +68,10 @@ export const accounts = pgTable(
       .references(() => users.id, { onDelete: 'cascade' }),
     type: text('type').notNull(),
     provider: text('provider').notNull(),
-    // providerAccountId uses camelCase accessor — adapter matches by column name 'provider_account_id'
     providerAccountId: text('provider_account_id').notNull(),
-    // OAuth token fields: accessors must match @auth/drizzle-adapter DefaultPostgresAccountsTable expectations
     refresh_token: text('refresh_token'),
     access_token: text('access_token'),
-    expires_at: integer('expires_at'), // integer (Unix timestamp seconds) — required by @auth/drizzle-adapter type
+    expires_at: integer('expires_at'),
     token_type: text('token_type'),
     scope: text('scope'),
     id_token: text('id_token'),
@@ -101,7 +107,7 @@ export const verificationTokens = pgTable(
 export const properties = pgTable('properties', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
-  description: text('description'), // rich text HTML (DOMPurify-sanitized before save)
+  description: text('description'),
   slug: text('slug').unique().notNull(),
   locationAddress: text('location_address'),
   locationLat: text('location_lat'),
@@ -115,8 +121,8 @@ export const properties = pgTable('properties', {
   videoUrl: text('video_url'),
   status: propertyStatusEnum('status').default('active').notNull(),
   featured: boolean('featured').default(false).notNull(),
-  cleaningFee: integer('cleaning_fee').notNull().default(0), // centavos
-  basePrice: integer('base_price').notNull().default(0), // centavos
+  cleaningFee: integer('cleaning_fee').notNull().default(0),
+  basePrice: integer('base_price').notNull().default(0),
   minNights: integer('min_nights').default(1).notNull(),
   ownerId: uuid('owner_id')
     .notNull()
@@ -125,18 +131,35 @@ export const properties = pgTable('properties', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 })
 
+export const propertiesRelations = relations(properties, ({ one, many }) => ({
+  owner: one(users, { fields: [properties.ownerId], references: [users.id] }),
+  images: many(propertyImages),
+  seasonalPricing: many(seasonalPricing),
+  longStayDiscounts: many(longStayDiscounts),
+  blockedDates: many(blockedDates),
+  bookings: many(bookings),
+  icalFeeds: many(icalFeeds),
+  crmLeads: many(crmLeads),
+  proposals: many(proposals),
+  services: many(propertyServices),
+}))
+
 export const propertyImages = pgTable('property_images', {
   id: uuid('id').defaultRandom().primaryKey(),
   propertyId: uuid('property_id')
     .notNull()
     .references(() => properties.id, { onDelete: 'cascade' }),
   url: text('url').notNull(),
-  publicId: text('public_id').notNull(), // Cloudinary public ID for deletion
+  publicId: text('public_id').notNull(),
   order: integer('order').notNull().default(0),
-  room: text('room'), // e.g. 'sala', 'quarto', 'cozinha', 'área_externa'
+  room: text('room'),
   isCover: boolean('is_cover').default(false).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 })
+
+export const propertyImagesRelations = relations(propertyImages, ({ one }) => ({
+  property: one(properties, { fields: [propertyImages.propertyId], references: [properties.id] }),
+}))
 
 export const seasonalPricing = pgTable('seasonal_pricing', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -146,8 +169,12 @@ export const seasonalPricing = pgTable('seasonal_pricing', {
   name: text('name').notNull(),
   startDate: date('start_date').notNull(),
   endDate: date('end_date').notNull(),
-  pricePerNight: integer('price_per_night').notNull(), // centavos
+  pricePerNight: integer('price_per_night').notNull(),
 })
+
+export const seasonalPricingRelations = relations(seasonalPricing, ({ one }) => ({
+  property: one(properties, { fields: [seasonalPricing.propertyId], references: [properties.id] }),
+}))
 
 export const longStayDiscounts = pgTable(
   'long_stay_discounts',
@@ -163,6 +190,10 @@ export const longStayDiscounts = pgTable(
   })
 )
 
+export const longStayDiscountsRelations = relations(longStayDiscounts, ({ one }) => ({
+  property: one(properties, { fields: [longStayDiscounts.propertyId], references: [properties.id] }),
+}))
+
 export const blockedDates = pgTable('blocked_dates', {
   id: uuid('id').defaultRandom().primaryKey(),
   propertyId: uuid('property_id')
@@ -170,10 +201,14 @@ export const blockedDates = pgTable('blocked_dates', {
     .references(() => properties.id, { onDelete: 'cascade' }),
   startDate: date('start_date').notNull(),
   endDate: date('end_date').notNull(),
-  source: text('source').notNull().default('manual'), // 'manual', 'booking', 'ical:{feed_id}'
-  icalUid: text('ical_uid'), // dedup key for iCal imports
+  source: text('source').notNull().default('manual'),
+  icalUid: text('ical_uid'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 })
+
+export const blockedDatesRelations = relations(blockedDates, ({ one }) => ({
+  property: one(properties, { fields: [blockedDates.propertyId], references: [properties.id] }),
+}))
 
 // ─── Guests ──────────────────────────────────────────────────────────────────
 
@@ -190,6 +225,12 @@ export const guests = pgTable('guests', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 })
 
+export const guestsRelations = relations(guests, ({ many }) => ({
+  bookings: many(bookings),
+  crmLeads: many(crmLeads),
+  proposals: many(proposals),
+}))
+
 // ─── Bookings ─────────────────────────────────────────────────────────────────
 
 export const bookings = pgTable('bookings', {
@@ -197,8 +238,7 @@ export const bookings = pgTable('bookings', {
   propertyId: uuid('property_id')
     .notNull()
     .references(() => properties.id),
-  guestId: uuid('guest_id').references(() => guests.id), // nullable — guest may not be in CRM
-  // Denormalized guest info (captured at booking time, immutable)
+  guestId: uuid('guest_id').references(() => guests.id),
   guestName: text('guest_name').notNull(),
   guestEmail: text('guest_email').notNull(),
   guestWhatsapp: text('guest_whatsapp'),
@@ -207,23 +247,27 @@ export const bookings = pgTable('bookings', {
   checkOut: date('check_out').notNull(),
   status: bookingStatusEnum('status').default('pending').notNull(),
   nights: integer('nights').notNull(),
-  pricePerNight: integer('price_per_night').notNull(), // centavos, server-calculated
-  totalPrice: integer('total_price').notNull(), // centavos, includes cleaning fee
-  cleaningFee: integer('cleaning_fee').notNull(), // centavos
-  // Stripe
+  pricePerNight: integer('price_per_night').notNull(),
+  totalPrice: integer('total_price').notNull(),
+  cleaningFee: integer('cleaning_fee').notNull(),
   stripeSessionId: text('stripe_session_id'),
   stripePaymentIntentId: text('stripe_payment_intent_id'),
   stripeProductId: text('stripe_product_id'),
   stripePriceId: text('stripe_price_id'),
   couponId: uuid('coupon_id').references(() => coupons.id),
-  selectedServices: jsonb('selected_services').default([]), // array of { id: string, name: string, price: number, unit: string }
-  // Lifecycle timestamps
+  selectedServices: jsonb('selected_services').default([]),
   canceledAt: timestamp('canceled_at', { withTimezone: true }),
   checkInAt: timestamp('check_in_at', { withTimezone: true }),
   checkOutAt: timestamp('check_out_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 })
+
+export const bookingsRelations = relations(bookings, ({ one }) => ({
+  property: one(properties, { fields: [bookings.propertyId], references: [properties.id] }),
+  guest: one(guests, { fields: [bookings.guestId], references: [guests.id] }),
+  coupon: one(coupons, { fields: [bookings.couponId], references: [coupons.id] }),
+}))
 
 export const processedWebhookEvents = pgTable('processed_webhook_events', {
   stripeEventId: text('stripe_event_id').primaryKey(),
@@ -235,8 +279,8 @@ export const processedWebhookEvents = pgTable('processed_webhook_events', {
 export const coupons = pgTable('coupons', {
   id: uuid('id').defaultRandom().primaryKey(),
   code: text('code').unique().notNull(),
-  discountPercent: integer('discount_percent'), // null if amount
-  discountAmount: integer('discount_amount'), // centavos
+  discountPercent: integer('discount_percent'),
+  discountAmount: integer('discount_amount'),
   maxUses: integer('max_uses'),
   usedCount: integer('used_count').default(0).notNull(),
   validUntil: date('valid_until'),
@@ -252,11 +296,15 @@ export const propertyServices = pgTable('property_services', {
     .references(() => properties.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
   description: text('description'),
-  price: integer('price').notNull(), // centavos
-  unit: text('unit').default('total').notNull(), // 'total', 'per_night', 'per_guest'
-  icon: text('icon'), // lucide icon name
+  price: integer('price').notNull(),
+  unit: text('unit').default('total').notNull(),
+  icon: text('icon'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 })
+
+export const propertyServicesRelations = relations(propertyServices, ({ one }) => ({
+  property: one(properties, { fields: [propertyServices.propertyId], references: [properties.id] }),
+}))
 
 // ─── Financial ────────────────────────────────────────────────────────────────
 
@@ -264,8 +312,8 @@ export const financialTransactions = pgTable('financial_transactions', {
   id: uuid('id').defaultRandom().primaryKey(),
   bookingId: uuid('booking_id').references(() => bookings.id),
   type: transactionTypeEnum('type').notNull(),
-  amount: integer('amount').notNull(), // centavos, always positive
-  category: text('category').notNull(), // 'booking_income', 'cleaning', 'maintenance', 'commission', 'other'
+  amount: integer('amount').notNull(),
+  category: text('category').notNull(),
   description: text('description'),
   date: date('date').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
@@ -280,12 +328,17 @@ export const proposals = pgTable('proposals', {
     .notNull()
     .references(() => properties.id),
   status: proposalStatusEnum('status').default('sent').notNull(),
-  totalAmount: integer('total_amount').notNull(), // centavos
+  totalAmount: integer('total_amount').notNull(),
   validUntil: date('valid_until').notNull(),
   pdfUrl: text('pdf_url'),
   sentAt: timestamp('sent_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 })
+
+export const proposalsRelations = relations(proposals, ({ one }) => ({
+  guest: one(guests, { fields: [proposals.guestId], references: [guests.id] }),
+  property: one(properties, { fields: [proposals.propertyId], references: [properties.id] }),
+}))
 
 // ─── iCal Feeds ───────────────────────────────────────────────────────────────
 
@@ -295,10 +348,14 @@ export const icalFeeds = pgTable('ical_feeds', {
     .notNull()
     .references(() => properties.id, { onDelete: 'cascade' }),
   url: text('url').notNull(),
-  name: text('name').notNull(), // e.g. 'Airbnb', 'Booking.com'
+  name: text('name').notNull(),
   lastSyncedAt: timestamp('last_synced_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 })
+
+export const icalFeedsRelations = relations(icalFeeds, ({ one }) => ({
+  property: one(properties, { fields: [icalFeeds.propertyId], references: [properties.id] }),
+}))
 
 // ─── CRM ──────────────────────────────────────────────────────────────────────
 
@@ -310,11 +367,16 @@ export const crmLeads = pgTable('crm_leads', {
   notes: text('notes'),
   estimatedCheckIn: date('estimated_check_in'),
   estimatedCheckOut: date('estimated_check_out'),
-  estimatedAmount: integer('estimated_amount'), // centavos
-  position: integer('position').default(0).notNull(), // order within status column
+  estimatedAmount: integer('estimated_amount'),
+  position: integer('position').default(0).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 })
+
+export const crmLeadsRelations = relations(crmLeads, ({ one }) => ({
+  guest: one(guests, { fields: [crmLeads.guestId], references: [guests.id] }),
+  property: one(properties, { fields: [crmLeads.propertyId], references: [properties.id] }),
+}))
 
 // ─── Audit Log ────────────────────────────────────────────────────────────────
 
@@ -323,8 +385,8 @@ export const auditLog = pgTable(
   {
     id: bigserial('id', { mode: 'number' }).primaryKey(),
     userId: uuid('user_id').references(() => users.id, { onDelete: 'set null' }),
-    action: text('action').notNull(), // e.g. 'LOGIN_SUCCESS', 'BOOKING_CREATED', 'PROPERTY_UPDATED'
-    entityType: text('entity_type'), // e.g. 'booking', 'property', 'user'
+    action: text('action').notNull(),
+    entityType: text('entity_type'),
     entityId: text('entity_id'),
     metadata: jsonb('metadata'),
     ipAddress: text('ip_address'),
@@ -344,7 +406,7 @@ export const notifications = pgTable('notifications', {
   userId: uuid('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  type: text('type').notNull(), // 'new_booking', 'payment_confirmed', 'checkin_today', 'checkout_pending'
+  type: text('type').notNull(),
   title: text('title').notNull(),
   message: text('message').notNull(),
   read: boolean('read').default(false).notNull(),
@@ -356,7 +418,7 @@ export const notifications = pgTable('notifications', {
 // ─── Instance Settings ────────────────────────────────────────────────────────
 
 export const instanceSettings = pgTable('instance_settings', {
-  id: integer('id').primaryKey().default(1), // singleton row — always id=1
+  id: integer('id').primaryKey().default(1),
   businessName: text('business_name'),
   logoUrl: text('logo_url'),
   faviconUrl: text('favicon_url'),
@@ -364,11 +426,9 @@ export const instanceSettings = pgTable('instance_settings', {
   whatsapp: text('whatsapp'),
   instagram: text('instagram'),
   cancellationPolicy: text('cancellation_policy'),
-  // Stripe keys (stored encrypted in Phase 5; plaintext in Phase 1 is acceptable — Phase 5 adds encryption)
   stripeSkKey: text('stripe_sk_key'),
   stripePkKey: text('stripe_pk_key'),
   stripeWebhookSecret: text('stripe_webhook_secret'),
-  // Resend
   resendApiKey: text('resend_api_key'),
   resendFromEmail: text('resend_from_email'),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
@@ -390,6 +450,10 @@ export const staffPermissions = pgTable(
   }
 )
 
+export const staffPermissionsRelations = relations(staffPermissions, ({ one }) => ({
+  user: one(users, { fields: [staffPermissions.userId], references: [users.id] }),
+}))
+
 // ─── Blog Posts ───────────────────────────────────────────────────────────────
 
 export const blogPosts = pgTable('blog_posts', {
@@ -400,59 +464,8 @@ export const blogPosts = pgTable('blog_posts', {
   content: text('content').notNull(),
   coverImageUrl: text('cover_image_url'),
   authorName: text('author_name').notNull().default('HostSemImposto'),
-  status: text('status').notNull().default('draft'), // 'draft' | 'published'
+  status: text('status').notNull().default('draft'),
   publishedAt: timestamp('published_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 })
-
-// ─── Relations ────────────────────────────────────────────────────────────────
-
-export const usersRelations = relations(users, ({ many, one }) => ({
-  accounts: many(accounts),
-  sessions: many(sessions),
-  properties: many(properties),
-  auditLogs: many(auditLog),
-  notifications: many(notifications),
-  staffPermissions: one(staffPermissions),
-}))
-
-export const propertiesRelations = relations(properties, ({ one, many }) => ({
-  owner: one(users, { fields: [properties.ownerId], references: [users.id] }),
-  images: many(propertyImages),
-  seasonalPricing: many(seasonalPricing),
-  longStayDiscounts: many(longStayDiscounts),
-  blockedDates: many(blockedDates),
-  bookings: many(bookings),
-  icalFeeds: many(icalFeeds),
-  crmLeads: many(crmLeads),
-  proposals: many(proposals),
-  services: many(propertyServices),
-}))
-
-export const bookingsRelations = relations(bookings, ({ one }) => ({
-  property: one(properties, { fields: [bookings.propertyId], references: [properties.id] }),
-  guest: one(guests, { fields: [bookings.guestId], references: [guests.id] }),
-}))
-
-export const guestsRelations = relations(guests, ({ many }) => ({
-  bookings: many(bookings),
-  crmLeads: many(crmLeads),
-  proposals: many(proposals),
-}))
-
-export const propertyImagesRelations = relations(propertyImages, ({ one }) => ({
-  property: one(properties, { fields: [propertyImages.propertyId], references: [properties.id] }),
-}))
-
-export const seasonalPricingRelations = relations(seasonalPricing, ({ one }) => ({
-  property: one(properties, { fields: [seasonalPricing.propertyId], references: [properties.id] }),
-}))
-
-export const propertyServicesRelations = relations(propertyServices, ({ one }) => ({
-  property: one(properties, { fields: [propertyServices.propertyId], references: [properties.id] }),
-}))
-
-export const longStayDiscountsRelations = relations(longStayDiscounts, ({ one }) => ({
-  property: one(properties, { fields: [longStayDiscounts.propertyId], references: [properties.id] }),
-}))
