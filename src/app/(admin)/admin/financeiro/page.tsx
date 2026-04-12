@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { DollarSign, ArrowUpRight, ArrowDownRight, TrendingUp, Filter, Download, Plus } from 'lucide-react'
+import { DollarSign, ArrowUpRight, ArrowDownRight, TrendingUp, ListFilter, Download, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const MOCK_TRANSACTIONS = [
@@ -98,7 +98,7 @@ export default function FinanceiroPage() {
         <div className="flex items-center justify-between p-6 md:px-8 border-b border-white/5">
           <h3 className="font-black text-lg text-white uppercase tracking-tight">Histórico de Transações</h3>
           <Button variant="ghost" className="rounded-full gap-2 text-white/40 font-bold hover:text-accent hover:bg-accent/5">
-            <Filter size={16} /> Filtros
+            <ListFilter size={16} /> Filtros
           </Button>
         </div>
 
