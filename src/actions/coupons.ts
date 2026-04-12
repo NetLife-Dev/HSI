@@ -55,11 +55,25 @@ export async function createCoupon(data: CouponInput) {
 
 export async function deleteCoupon(id: string) {
   try {
-    // We don't necessarily delete on Stripe to keep logs, but we can deactivate in DB
-    await db.update(coupons).set({ isActive: false }).where(eq(coupons.id, id))
+    // 1. Get stripeCouponId first
+    const [coupon] = await db.select().from(coupons).where(eq(coupons.id, id))
+    
+    // 2. Delete from Stripe if exists
+    if (coupon?.stripeCouponId) {
+       try {
+          await stripe.coupons.del(coupon.stripeCouponId)
+       } catch (stripeErr: any) {
+          console.error("Error deleting coupon from Stripe (expected if already gone):", stripeErr.message)
+       }
+    }
+
+    // 3. Delete from DB
+    await db.delete(coupons).where(eq(coupons.id, id))
+    
     revalidatePath('/admin/cupons')
     return { success: true }
   } catch (error: any) {
+    console.error('Error deleting coupon:', error)
     return { success: false, error: error.message }
   }
 }

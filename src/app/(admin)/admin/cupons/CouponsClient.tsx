@@ -24,7 +24,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { createCoupon } from '@/actions/coupons'
+import { createCoupon, deleteCoupon } from '@/actions/coupons'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
@@ -59,6 +59,19 @@ export function CouponsClient({ initialCoupons = [] }: { initialCoupons: any[] }
         setFormData({ code: '', discountPercent: '', discountAmount: '', maxUses: '', validUntil: '' })
       } else {
         toast.error('Erro: ' + result.error)
+      }
+    })
+  }
+
+  const handleDelete = (id: string) => {
+    if (!confirm('Tem certeza que deseja excluir permanentemente este cupom tanto aqui quanto no Stripe?')) return
+    
+    startTransition(async () => {
+      const result = await deleteCoupon(id)
+      if (result.success) {
+        toast.success('Cupom excluído com sucesso!')
+      } else {
+        toast.error('Erro ao excluir: ' + result.error)
       }
     })
   }
@@ -170,7 +183,7 @@ export function CouponsClient({ initialCoupons = [] }: { initialCoupons: any[] }
                   <TableHead className="text-white/40 font-black uppercase text-[10px] tracking-widest">Desconto</TableHead>
                   <TableHead className="text-white/40 font-black uppercase text-[10px] tracking-widest">Uso</TableHead>
                   <TableHead className="text-white/40 font-black uppercase text-[10px] tracking-widest">Expiração</TableHead>
-                  <TableHead className="text-white/40 font-black uppercase text-[10px] tracking-widest text-right">Status</TableHead>
+                  <TableHead className="text-white/40 font-black uppercase text-[10px] tracking-widest text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -201,9 +214,20 @@ export function CouponsClient({ initialCoupons = [] }: { initialCoupons: any[] }
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                       <Badge variant={coupon.isActive ? 'default' : 'secondary'} className={cn("rounded-lg text-[9px] font-black uppercase tracking-widest", coupon.isActive ? 'bg-accent/20 text-accent border-accent/20' : 'bg-white/5 text-white/20 border-white/10')}>
-                         {coupon.isActive ? 'Ativo' : 'Inativo'}
-                       </Badge>
+                       <div className="flex items-center justify-end gap-3">
+                          <Badge variant={coupon.isActive ? 'default' : 'secondary'} className={cn("rounded-lg text-[9px] font-black uppercase tracking-widest", coupon.isActive ? 'bg-accent/20 text-accent border-accent/20' : 'bg-white/5 text-white/20 border-white/10')}>
+                            {coupon.isActive ? 'Ativo' : 'Inativo'}
+                          </Badge>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => handleDelete(coupon.id)}
+                            disabled={isPending}
+                            className="h-8 w-8 rounded-lg text-white/20 hover:text-destructive hover:bg-destructive/10 transition-all opacity-0 group-hover:opacity-100"
+                          >
+                            <Trash2 size={14} />
+                          </Button>
+                       </div>
                     </TableCell>
                   </TableRow>
                 ))}
