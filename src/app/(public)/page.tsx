@@ -43,30 +43,29 @@ export default function HomePage() {
     offset: ["start start", "end end"]
   })
 
-  // Hero Video & Content transformations
-  const heroScale = useTransform(scrollYProgress, [0, 0.45], [1, 25]) // Even more aggressive zoom
+  // Optimised transformations for performance (Reduced scale overhead)
+  const heroScale = useTransform(scrollYProgress, [0, 0.4], [1, 2]) 
   const heroOpacity = useTransform(scrollYProgress, [0.4, 0.5], [1, 0])
-  const heroTextScale = useTransform(scrollYProgress, [0, 0.45], [1, 35]) // Massive lettering zoom
-  const heroTextOpacity = useTransform(scrollYProgress, [0.38, 0.48], [1, 0]) // Sync with zoom pivot
+  const heroTextScale = useTransform(scrollYProgress, [0, 0.4], [1.1, 4]) 
+  const heroTextOpacity = useTransform(scrollYProgress, [0.35, 0.45], [1, 0]) 
   
-  // AfterHero Video transformations (The discovery)
-  const afterHeroScale = useTransform(scrollYProgress, [0.25, 0.55], [0.6, 1])
-  const afterHeroOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1])
+  // AfterHero Video transformations
+  const afterHeroScale = useTransform(scrollYProgress, [0.2, 0.5], [0.85, 1])
+  const afterHeroOpacity = useTransform(scrollYProgress, [0.35, 0.45], [0, 1])
   
-  // AfterHero Content (STAYS MUCH LONGER)
-  // Visible from 0.55 to 0.95 (40% of the 600vh scroll = 2.4 full screens)
-  const afterHeroContentOpacity = useTransform(scrollYProgress, [0.55, 0.65, 0.85, 0.95], [0, 1, 1, 0])
-  const afterHeroContentY = useTransform(scrollYProgress, [0.55, 0.65, 0.85, 0.95], [60, 0, 0, -60])
+  // AfterHero Content (Balanced duration)
+  const afterHeroContentOpacity = useTransform(scrollYProgress, [0.45, 0.55, 0.85, 0.95], [0, 1, 1, 0])
+  const afterHeroContentY = useTransform(scrollYProgress, [0.45, 0.55, 0.85, 0.95], [30, 0, 0, -30])
 
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
-      {/* 1 & 2. CINEMATIC SCROLL ZOOM BRIDGE (PORTAL EFFECT FIXED) */}
-      <div ref={containerRef} className="relative h-[600vh] z-0">
+      {/* 1 & 2. CINEMATIC SCROLL ZOOM BRIDGE (OPTIMIZED FOR PERFORMANCE) */}
+      <div ref={containerRef} className="relative h-[400vh] z-0">
          <div className="sticky top-0 h-screen w-full overflow-hidden">
-            {/* Layer 1: Hero Video (Centered Portal) */}
+            {/* Layer 1: Hero Video (Hardware Accelerated) */}
             <motion.div 
                style={{ scale: heroScale, opacity: heroOpacity }}
-               className="absolute inset-0 z-10 overflow-hidden"
+               className="absolute inset-0 z-10 overflow-hidden will-change-transform"
             >
                <video 
                   autoPlay 
@@ -77,23 +76,23 @@ export default function HomePage() {
                >
                   <source src="/images/hero-video.mp4" type="video/mp4" />
                </video>
-               <div className="absolute inset-0 bg-black/30" />
+               <div className="absolute inset-0 bg-black/20" />
             </motion.div>
 
-            {/* Layer 1.1: Hero Text (Centered for the Zoom Into 'A') */}
+            {/* Layer 1.1: Hero Text (Optimised Size) */}
             <motion.div 
                style={{ scale: heroTextScale, opacity: heroTextOpacity }}
-               className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4"
+               className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 will-change-transform pointer-events-none"
             >
                <div className="space-y-4">
                   <div className="flex items-center justify-center gap-3 mb-2">
-                     <div className="w-8 h-0.5 bg-accent" />
-                     <span className="text-accent uppercase tracking-[0.5em] font-black text-[10px]">Exclusivo</span>
-                     <div className="w-8 h-0.5 bg-accent" />
+                     <div className="w-8 h-px bg-accent opacity-50" />
+                     <span className="text-accent uppercase tracking-[0.6em] font-black text-[9px]">Exclusivo</span>
+                     <div className="w-8 h-px bg-accent opacity-50" />
                   </div>
-                  <h1 className="text-7xl md:text-[10rem] font-black tracking-tighter uppercase leading-[0.8] text-white drop-shadow-[0_10px_50px_rgba(0,0,0,0.5)]">
+                  <h1 className="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-[0.85] text-white drop-shadow-2xl">
                      Sua <br />
-                     <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30 not-italic">
+                     <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 not-italic">
                         Estadia.
                      </span>
                   </h1>
@@ -103,7 +102,7 @@ export default function HomePage() {
             {/* Layer 2: AfterHero Video (Discovery Phase) */}
             <motion.div 
                style={{ scale: afterHeroScale, opacity: afterHeroOpacity }}
-               className="absolute inset-0 z-0"
+               className="absolute inset-0 z-0 will-change-transform"
             >
                <video 
                   autoPlay 
@@ -118,9 +117,9 @@ export default function HomePage() {
                
                <motion.div 
                   style={{ opacity: afterHeroContentOpacity, y: afterHeroContentY }}
-                  className="relative z-10 h-full flex flex-col items-center justify-center text-center space-y-4 px-6"
+                  className="relative z-10 h-full flex flex-col items-center justify-center text-center space-y-4 px-6 will-change-transform"
                >
-                  <h3 className="text-6xl md:text-[8rem] font-black uppercase tracking-tighter text-white drop-shadow-2xl">
+                  <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white drop-shadow-2xl">
                      O <span className="text-accent italic">Acesso.</span>
                   </h3>
                   <p className="text-accent uppercase tracking-[0.4em] font-black text-xs">A porta para o extraordinário está aberta.</p>
