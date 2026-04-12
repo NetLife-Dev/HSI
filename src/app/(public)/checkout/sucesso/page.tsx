@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { CheckCircle2, ArrowRight } from 'lucide-react'
+import { CheckCircle, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default async function CheckoutSuccessPage({
@@ -19,7 +19,7 @@ export default async function CheckoutSuccessPage({
         <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-[80px] rounded-full pointer-events-none" />
 
         <div className="w-24 h-24 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto shadow-inner hover:scale-110 transition-transform duration-700 relative z-10">
-          <CheckCircle2 size={48} className="animate-in zoom-in duration-500 delay-300" />
+          <CheckCircle size={48} className="animate-in zoom-in duration-500 delay-300" />
         </div>
 
         <div className="space-y-6 relative z-10">

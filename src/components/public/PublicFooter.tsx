@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Home, Mail, Phone, MapPin, Instagram, Youtube, Facebook, ArrowUpRight } from 'lucide-react'
+import { Home, Mail, Phone, MapPin, Camera, Video, Users, ArrowUpRight } from 'lucide-react'
 
 export function PublicFooter() {
   const whatsappNumber = '5562999946552'
@@ -24,9 +24,9 @@ export function PublicFooter() {
             </p>
 
             <div className="flex items-center gap-6">
-               <a href="#" className="p-3 bg-white/5 border border-white/10 rounded-2xl text-white/40 hover:text-accent hover:border-accent/30 transition-all"><Instagram size={20} /></a>
-               <a href="#" className="p-3 bg-white/5 border border-white/10 rounded-2xl text-white/40 hover:text-accent hover:border-accent/30 transition-all"><Youtube size={20} /></a>
-               <a href="#" className="p-3 bg-white/5 border border-white/10 rounded-2xl text-white/40 hover:text-accent hover:border-accent/30 transition-all"><Facebook size={20} /></a>
+               <a href="#" className="p-3 bg-white/5 border border-white/10 rounded-2xl text-white/40 hover:text-accent hover:border-accent/30 transition-all"><Camera size={20} /></a>
+               <a href="#" className="p-3 bg-white/5 border border-white/10 rounded-2xl text-white/40 hover:text-accent hover:border-accent/30 transition-all"><Video size={20} /></a>
+               <a href="#" className="p-3 bg-white/5 border border-white/10 rounded-2xl text-white/40 hover:text-accent hover:border-accent/30 transition-all"><Users size={20} /></a>
             </div>
           </div>
 
