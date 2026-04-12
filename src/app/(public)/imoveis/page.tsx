@@ -35,7 +35,7 @@ export default async function CatalogPage() {
       <div className="container mx-auto px-4 max-w-7xl space-y-12">
         {/* Header & Filter Bar */}
         <div className="space-y-12">
-           <div className="flex flex-col md:flex-row justify-between items-end gap-6">
+           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
               <div className="space-y-4">
                  <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white uppercase leading-[0.85]">O seu<br/><span className="text-accent">Retiro.</span></h1>
                  <p className="text-white/60 font-medium tracking-wide">Explore nossa seleção exclusiva com {displayProperties.length} santuários isolados.</p>

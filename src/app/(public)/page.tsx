@@ -114,6 +114,9 @@ const HomePage = () => {
   const estadiaOpacity = useTransform(scrollYProgress, [0.3, 0.4], [1, isMobile ? 1 : 0])
   const videoScale = useTransform(scrollYProgress, [0, 0.4], [1, isMobile ? 1 : 1.2])
 
+  // Fade "Sua" faster on mobile to avoid long scroll lag
+  const suaOpacity = useTransform(scrollYProgress, [0, isMobile ? 0.05 : 0.1], [1, 0])
+
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
       
@@ -150,7 +153,7 @@ const HomePage = () => {
                
                {/* "Sua" - Balanced */}
                <motion.span 
-                  style={{ opacity: useTransform(scrollYProgress, [0, 0.1], [1, 0]) }}
+                  style={{ opacity: suaOpacity }}
                   className="text-white text-xl md:text-2xl font-black uppercase tracking-widest block"
                >
                   Sua
