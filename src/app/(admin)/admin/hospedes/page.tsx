@@ -1,9 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { Plus, Search, MoreVertical, Calendar, DollarSign, ArrowRight } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Plus, Search, MoreVertical, Calendar, DollarSign, ArrowRight, FileDown, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import { ProposalPDF } from '@/components/admin/hospedes/ProposalPDF'
+import { convertLeadToReservation } from '@/actions/crm'
+import { toast } from 'sonner'
 
 type Status = 'lead' | 'negociacao' | 'proposta' | 'reserva'
 
@@ -34,6 +38,12 @@ const COLUMNS: { id: Status; title: string }[] = [
 export default function CRMPage() {
   const [cards, setCards] = useState<GuestCard[]>(MOCK_GUESTS)
   const [draggedCardId, setDraggedCardId] = useState<string | null>(null)
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Avoid Hydration issues with PDF renderer
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const handleDragStart = (e: React.DragEvent, id: string) => {
     setDraggedCardId(id)
@@ -52,6 +62,25 @@ export default function CRMPage() {
       card.id === draggedCardId ? { ...card, status: targetStatus } : card
     ))
     setDraggedCardId(null)
+  }
+
+  const handleConvertToReservation = async (card: GuestCard) => {
+    const res = await convertLeadToReservation(card.id, {
+      guestName: card.name,
+      property: card.property,
+      value: card.value,
+      checkIn: '2026-04-12',
+      checkOut: '2026-04-15'
+    })
+
+    if (res.success) {
+      setCards(prev => prev.map(c => c.id === card.id ? { ...c, status: 'reserva' } : c))
+      toast.success(`${card.name} convertido em reserva e adicionado ao financeiro!`, {
+        icon: <CheckCircle2 className="text-emerald-400" />
+      })
+    } else {
+      toast.error('Erro ao converter reserva: ' + res.error)
+    }
   }
 
   return (
@@ -80,7 +109,7 @@ export default function CRMPage() {
       </div>
 
       {/* Kanban Board */}
-      <div className="flex gap-6 overflow-x-auto pb-8 min-h-[600px] snap-x pt-4">
+      <div className="flex gap-6 overflow-x-auto pb-8 min-h-[600px] snap-x pt-4 custom-scrollbar">
         {COLUMNS.map(column => (
           <div
             key={column.id}
@@ -126,16 +155,43 @@ export default function CRMPage() {
                     </div>
                   </div>
 
-                  {column.id === 'proposta' && (
-                    <Button variant="outline" size="sm" className="w-full rounded-xl text-xs font-bold gap-2 text-emerald-400 border-emerald-400/20 bg-emerald-400/5 hover:bg-emerald-400/10 hover:text-emerald-300">
-                      Converter em Reserva <ArrowRight size={14} />
-                    </Button>
-                  )}
-                  {column.id === 'lead' && (
-                    <Button variant="ghost" size="sm" className="w-full rounded-xl text-xs font-bold text-white/30 hover:text-accent hover:bg-accent/5">
-                      Gerar Proposta PDF
-                    </Button>
-                  )}
+                  <div className="space-y-2">
+                    {column.id === 'proposta' && (
+                      <Button 
+                        onClick={() => handleConvertToReservation(card)}
+                        variant="outline" 
+                        size="sm" 
+                        className="w-full rounded-xl text-xs font-bold gap-2 text-emerald-400 border-emerald-400/20 bg-emerald-400/5 hover:bg-emerald-400/10 hover:text-emerald-300 transition-all active:scale-95"
+                      >
+                        Converter em Reserva <ArrowRight size={14} />
+                      </Button>
+                    )}
+                    
+                    {column.id === 'lead' && isMounted && (
+                      <PDFDownloadLink
+                        document={<ProposalPDF guestName={card.name} propertyName={card.property} dates={card.dates} totalValue={card.value} />}
+                        fileName={`Proposta_${card.name.replace(' ', '_')}.pdf`}
+                      >
+                        {({ loading }) => (
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="w-full rounded-xl text-xs font-bold text-white/50 hover:text-accent hover:bg-accent/5 gap-2"
+                          >
+                            <FileDown size={14} />
+                            {loading ? 'Preparando...' : 'Gerar Proposta PDF'}
+                          </Button>
+                        )}
+                      </PDFDownloadLink>
+                    )}
+
+                    {column.id === 'reserva' && (
+                       <div className="flex items-center justify-center gap-2 py-2 text-emerald-400/60 text-[10px] font-black uppercase tracking-widest">
+                          <CheckCircle2 size={12} />
+                          Finalizado
+                       </div>
+                    )}
+                  </div>
                 </div>
               ))}
 

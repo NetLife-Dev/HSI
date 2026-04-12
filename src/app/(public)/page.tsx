@@ -100,10 +100,19 @@ const HomePage = () => {
     offset: ["start start", "end end"]
   })
 
-  // Smooth cinematic zoom into "Estadia"
-  const estadiaScale = useTransform(scrollYProgress, [0, 0.4], [1, 2.2])
-  const estadiaOpacity = useTransform(scrollYProgress, [0.3, 0.4], [1, 0])
-  const videoScale = useTransform(scrollYProgress, [0, 0.4], [1, 1.2])
+  const [isMobile, setIsMobile] = useState(false)
+  
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Smooth cinematic zoom into "Estadia" — Disabled on mobile
+  const estadiaScale = useTransform(scrollYProgress, [0, 0.4], [1, isMobile ? 1 : 2.2])
+  const estadiaOpacity = useTransform(scrollYProgress, [0.3, 0.4], [1, isMobile ? 1 : 0])
+  const videoScale = useTransform(scrollYProgress, [0, 0.4], [1, isMobile ? 1 : 1.2])
 
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">

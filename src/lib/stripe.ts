@@ -8,7 +8,7 @@ if (!stripeSecretKey && process.env.NODE_ENV === 'production') {
 
 export const stripe = stripeSecretKey 
   ? new Stripe(stripeSecretKey, {
-      apiVersion: '2025-01-27-acacia' as any,
+      apiVersion: '2024-12-18.acacia' as any,
       typescript: true,
     })
   : (null as any) // Stub para evitar erro de inicialização síncrona
