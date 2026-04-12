@@ -2,7 +2,7 @@
 
 import { signOut } from 'next-auth/react'
 import { type Session } from 'next-auth'
-import { Bell, LogOut, User } from 'lucide-react'
+import { Bell, LogOut, User, Menu } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -17,18 +17,30 @@ import { ThemeToggle } from './ThemeToggle'
 
 interface HeaderProps {
   session: Session
+  onMenuClick?: () => void
 }
 
-export function Header({ session }: HeaderProps) {
+export function Header({ session, onMenuClick }: HeaderProps) {
   // Phase 1: Notification count is always 0 (shell only — wired in Phase 5)
   const unreadCount = 0
 
   return (
-    <header className="h-20 bg-black flex items-center justify-between px-8 shrink-0 border-b border-white/5">
-      {/* Left: page title placeholder (each page will provide its own via a context or Portal in later phases) */}
-      <div className="text-sm font-black uppercase tracking-widest text-white/50">
-        Painel de Gestão
+    <header className="h-20 bg-black flex items-center justify-between px-4 md:px-8 shrink-0 border-b border-white/5">
+      {/* Left: Mobile Menu Toggle & Title */}
+      <div className="flex items-center gap-4">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={onMenuClick}
+          className="md:hidden text-white hover:bg-white/5"
+        >
+          <Menu size={24} />
+        </Button>
+        <div className="text-sm font-black uppercase tracking-widest text-white/50 hidden sm:block">
+          Painel de Gestão
+        </div>
       </div>
+
 
       {/* Right: actions */}
       <div className="flex items-center gap-6">

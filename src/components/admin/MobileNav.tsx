@@ -2,13 +2,18 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { Menu } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { NAV_ITEMS } from './nav-items'
 
-// Show only first 5 items in mobile nav (exclude Settings to save space)
-const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5)
+// Show only first 4 items in mobile nav, then a Menu button
+const MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 4)
 
-export function MobileNav() {
+interface MobileNavProps {
+  onMenuClick?: () => void
+}
+
+export function MobileNav({ onMenuClick }: MobileNavProps) {
   const pathname = usePathname()
 
   return (
@@ -23,7 +28,7 @@ export function MobileNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                'flex-1 flex flex-col items-center justify-center gap-1.5 transition-all duration-300',
+                'flex-1 flex flex-col items-center justify-center gap-1.5 transition-all duration-300 px-1',
                 isActive
                   ? 'text-accent scale-110 font-bold'
                   : 'text-white/40 hover:text-white'
@@ -33,14 +38,26 @@ export function MobileNav() {
                 "p-2 rounded-xl transition-all",
                 isActive ? "bg-accent/10 border border-accent/20" : ""
               )}>
-                <Icon size={20} />
+                <Icon size={18} />
               </div>
-              <span className="text-[9px] font-black uppercase tracking-widest">{item.label}</span>
+              <span className="text-[8px] font-black uppercase tracking-widest truncate w-full text-center">{item.label}</span>
             </Link>
           )
         })}
+        
+        {/* Menu Toggle */}
+        <button
+          onClick={onMenuClick}
+          className="flex-1 flex flex-col items-center justify-center gap-1.5 transition-all duration-300 text-white/40 hover:text-white px-1"
+        >
+          <div className="p-2 rounded-xl">
+            <Menu size={18} />
+          </div>
+          <span className="text-[8px] font-black uppercase tracking-widest">Menu</span>
+        </button>
       </div>
     </nav>
   )
 }
+
 
