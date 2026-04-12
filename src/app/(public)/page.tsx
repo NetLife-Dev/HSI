@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowRight, Calendar, MapPin, Star, Shield, Zap, Heart, Search } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 // Featured Properties Collection
 const FeaturedProperties = () => {
