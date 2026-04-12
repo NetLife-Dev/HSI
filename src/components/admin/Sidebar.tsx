@@ -147,5 +147,6 @@ export function Sidebar({ session, mobileOpen, onClose }: SidebarProps) {
         )}
       </div>
     </aside>
+    </>
   )
 }
