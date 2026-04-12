@@ -71,7 +71,7 @@ export const ServicesPremiumSection = () => {
             transition={{ delay: 0.2 }}
             className="text-white/40 font-medium max-w-2xl mx-auto"
           >
-            Elevamos sua experiência com curadoria de serviços premium, desenhados para satisfazer os gostos mais exigentes.
+            A plataforma oferece cadastro de serviços premium desenhados para satisfazer os hóspedes mais exigentes.
           </motion.p>
         </div>
 

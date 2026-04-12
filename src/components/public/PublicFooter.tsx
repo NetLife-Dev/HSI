@@ -52,7 +52,7 @@ export function PublicFooter() {
 
           {/* Contact Details */}
           <div className="md:col-span-3 space-y-10">
-            <div className="p-8 bg-white/5 rounded-[2.5rem] border border-white/10 space-y-6">
+            <div className="p-8 bg-black border border-white/5 rounded-[2.5rem] space-y-6">
                <h4 className="font-black text-[10px] uppercase tracking-[0.4em] text-white/50">Atendimento Direto</h4>
                <ul className="space-y-6">
                   <li className="group">
@@ -94,11 +94,6 @@ export function PublicFooter() {
                  Dev by <span className="italic text-white">NetLife-Dev</span> <ArrowUpRight size={12} className="text-accent" />
               </div>
            </div>
-        </div>
-
-        {/* Watermark */}
-        <div className="absolute -bottom-24 left-1/2 -translate-x-1/2 opacity-[0.02] select-none pointer-events-none whitespace-nowrap">
-           <span className="text-[25rem] font-black uppercase leading-none tracking-tighter">HOSTSI</span>
         </div>
       </div>
     </footer>

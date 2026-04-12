@@ -111,23 +111,23 @@ const HomePage = () => {
   }, [])
 
   // Ranges for transformations
-  const desktopZoomRange = [0, 0.4]
+  const desktopZoomRange = [0, 0.25]
   const mobileZoomRange = [0, 0.15]
   
   const estadiaScale = useTransform(scrollYProgress, isMobile ? mobileZoomRange : desktopZoomRange, [1, isMobile ? 1.1 : 2.5])
   const videoScale = useTransform(scrollYProgress, isMobile ? mobileZoomRange : desktopZoomRange, [1, isMobile ? 1 : 1.3])
   
-  const suaOpacity = useTransform(scrollYProgress, [0, isMobile ? 0.05 : 0.1], [1, 0])
-  const estadiaOpacity = useTransform(scrollYProgress, isMobile ? [0, 0.1] : [0.3, 0.4], [1, 0])
+  const suaOpacity = useTransform(scrollYProgress, [0, isMobile ? 0.05 : 0.08], [1, 0])
+  const estadiaOpacity = useTransform(scrollYProgress, isMobile ? [0, 0.1] : [0.15, 0.25], [1, 0])
   
-  const suaY = useTransform(scrollYProgress, [0, 0.1], [0, isMobile ? -40 : 0])
-  const estadiaY = useTransform(scrollYProgress, isMobile ? [0, 0.1] : [0, 0.4], [0, isMobile ? -60 : 150])
+  const suaY = useTransform(scrollYProgress, [0, 0.08], [0, isMobile ? -40 : -20])
+  const estadiaY = useTransform(scrollYProgress, isMobile ? [0, 0.1] : [0, 0.25], [0, isMobile ? -60 : 150])
 
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
       
       {/* 1. CINEMATIC HERO SECTION */}
-      <div ref={containerRef} className={cn("relative", isMobile ? "h-[120vh]" : "h-[300vh]")}>
+      <div ref={containerRef} className={cn("relative", isMobile ? "h-[120vh]" : "h-[200vh]")}>
         <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
           <motion.div style={{ scale: videoScale }} className="absolute inset-0 z-0 will-change-transform">
             <video autoPlay muted loop playsInline className="w-full h-full object-cover opacity-80">
@@ -234,7 +234,7 @@ const HomePage = () => {
       <section className="relative py-48 overflow-hidden bg-black">
         <div className="absolute inset-0 z-0 text-white">
            <img 
-              src="/images/living.png" 
+              src="/images/next-chapter.png" 
               className="w-full h-full object-cover opacity-30 grayscale saturate-50"
               alt="Living room"
            />
