@@ -1,5 +1,6 @@
 import { db } from '@/db'
-import { properties } from '@/db/schema'
+import { properties, propertyImages } from '@/db/schema'
+
 import { eq, and } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
 

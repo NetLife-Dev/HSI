@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { db } from '@/db/index'
-import { properties } from '@/db/schema'
+import { properties, propertyImages } from '@/db/schema'
+
 import { eq } from 'drizzle-orm'
 import { PropertyContent } from './PropertyContent'
 import { MOCK_PROPERTIES } from '@/lib/mock-data'

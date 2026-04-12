@@ -248,6 +248,35 @@ export function PropertyBookingEngine({ property }: { property: any }) {
           </Button>
         </div>
       </aside>
+
+      {/* Mobile Floating Action Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[60] p-4 bg-black/60 backdrop-blur-xl border-t border-white/10 animate-in slide-in-from-bottom-full duration-500">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-col">
+            <span className="text-[10px] uppercase font-black text-white/40 tracking-widest">Total</span>
+            <p className="text-xl font-black text-accent tracking-tighter">
+              {totalPrice > 0 
+                ? (totalPrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                : (basePrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + '/noite'
+              }
+            </p>
+          </div>
+          <Button 
+            onClick={() => {
+              if (nights === 0) {
+                setIsCalendarOpen(true)
+              } else if (dateRange?.from && dateRange?.to) {
+                const servicesQuery = selectedServiceIds.length > 0 ? `&services=${selectedServiceIds.join(',')}` : ''
+                router.push(`/checkout/${property.slug}?checkin=${format(dateRange.from, 'yyyy-MM-dd')}&checkout=${format(dateRange.to, 'yyyy-MM-dd')}&guests=${guests}${servicesQuery}`)
+              }
+            }}
+            className="flex-1 rounded-2xl py-6 bg-accent text-black font-black uppercase tracking-widest shadow-lg shadow-accent/20"
+          >
+            {nights === 0 ? 'Datas' : 'Reservar'}
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }
+

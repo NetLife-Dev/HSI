@@ -55,15 +55,15 @@ export function PropertyContent({ property }: { property: any }) {
            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/80" />
         </div>
         
-        <div className="relative z-20 container mx-auto px-4 flex flex-col items-center justify-end h-full pb-24 text-center">
+        <div className="relative z-20 container mx-auto px-6 flex flex-col items-center justify-end h-full pb-24 text-center">
            <div className="flex items-center gap-1 text-accent font-bold text-sm tracking-[0.3em] uppercase mb-6 animate-slide-up">
               <Star size={16} fill="currentColor" />
               <span>Exclusivo</span>
            </div>
            
-           <div className="relative group">
+           <div className="relative group max-w-full">
               <h1
-                className="text-6xl md:text-9xl tracking-tighter text-white uppercase leading-[0.85] drop-shadow-2xl animate-cinematic-zoom relative z-10"
+                className="text-5xl sm:text-7xl md:text-9xl tracking-tighter text-white uppercase leading-[0.85] drop-shadow-2xl animate-cinematic-zoom relative z-10 break-words"
                 style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
               >
                 {property.name}
@@ -72,21 +72,22 @@ export function PropertyContent({ property }: { property: any }) {
               <div className="absolute inset-0 blur-3xl bg-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
            </div>
 
-           <p className="mt-8 text-xl md:text-2xl text-white/50 font-medium max-w-3xl animate-slide-up" style={{ animationDelay: '0.4s' }}>
+           <p className="mt-8 text-lg md:text-2xl text-white/50 font-medium max-w-3xl animate-slide-up" style={{ animationDelay: '0.4s' }}>
               {property.locationAddress}
            </p>
 
-           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-              <ChevronDown size={32} className="text-white/30" />
+           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center gap-2">
+              <span className="text-[8px] uppercase tracking-[0.4em] font-black text-white/20">Deslize</span>
+              <ChevronDown size={24} className="text-white/30" />
            </div>
         </div>
       </section>
 
       {/* 2. THE STORY / OVERVIEW BLOCK */}
-      <section className="py-32 bg-black relative">
-        <div className="container mx-auto px-4 max-w-6xl">
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-              <div className="space-y-8">
+      <section className="py-24 md:py-32 bg-black relative">
+        <div className="container mx-auto px-6 max-w-6xl">
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center">
+              <div className="space-y-8 order-2 lg:order-1">
                  <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-white leading-none">
                     O Refúgio<br/><span className="text-accent">Perfeito.</span>
                  </h2>
@@ -96,19 +97,19 @@ export function PropertyContent({ property }: { property: any }) {
                  <div className="flex flex-col gap-6 pt-8 border-t border-white/10">
                     <div className="flex items-center gap-4">
                        <MapPin size={24} className="text-accent" />
-                       <span className="text-xl font-bold uppercase tracking-widest">{property.locationAddress}</span>
+                       <span className="text-lg md:text-xl font-bold uppercase tracking-widest">{property.locationAddress}</span>
                     </div>
-                    <div className="grid grid-cols-3 gap-8">
+                    <div className="grid grid-cols-3 gap-4 md:gap-8">
                       <div>
-                        <div className="text-3xl font-black">{property.maxGuests}</div>
+                        <div className="text-2xl md:text-3xl font-black">{property.maxGuests}</div>
                         <div className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold">Hóspedes</div>
                       </div>
                       <div>
-                        <div className="text-3xl font-black">{property.bedrooms}</div>
+                        <div className="text-2xl md:text-3xl font-black">{property.bedrooms}</div>
                          <div className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold">Quartos</div>
                       </div>
                       <div>
-                        <div className="text-3xl font-black">{property.bathrooms}</div>
+                        <div className="text-2xl md:text-3xl font-black">{property.bathrooms}</div>
                          <div className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold">Banhos</div>
                       </div>
                     </div>
@@ -116,7 +117,8 @@ export function PropertyContent({ property }: { property: any }) {
               </div>
               
               {/* Feature Image */}
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm group">
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl md:rounded-sm group order-1 lg:order-2">
+
                  <Image
                    src={images[1]?.url || '/images/mock/bedroom.png'}
                    fill
@@ -160,7 +162,7 @@ export function PropertyContent({ property }: { property: any }) {
                      viewport={{ once: false }}
                   >
                      <h3
-                        className="text-5xl md:text-8xl uppercase tracking-tighter text-white max-w-2xl leading-[0.85]"
+                        className="text-4xl sm:text-6xl md:text-8xl uppercase tracking-tighter text-white max-w-2xl leading-[0.85]"
                         style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic' }}
                      >
                         {item.text.split('.')[0]}.

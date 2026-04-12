@@ -1,6 +1,7 @@
 import { Search, MapPin, SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
 import { db } from '@/db/index'
-import { properties } from '@/db/schema'
+import { properties, propertyImages } from '@/db/schema'
+
 import { eq, and } from 'drizzle-orm'
 import { PropertyCard } from '@/components/public/PropertyCard'
 import { Button } from '@/components/ui/button'
@@ -73,16 +74,19 @@ export default async function CatalogPage() {
 
         {/* Property Grid */}
         {displayProperties.length === 0 ? (
-          <div className="bg-white rounded-[3rem] p-24 text-center border-2 border-dashed border-slate-100 italic text-slate-300">
-            Estamos preparando novas surpresas para você. Volte em breve!
+          <div className="bg-white/5 rounded-[3rem] p-12 md:p-24 text-center border border-white/10 backdrop-blur-sm">
+            <p className="text-accent uppercase tracking-[0.3em] font-black text-xs mb-4">Em Breve</p>
+            <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white mb-6">Novos Santuários<br />Sendo Curados.</h3>
+            <p className="text-white/40 font-medium italic">Estamos preparando novas surpresas para você. Volte em breve!</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
             {displayProperties.map((property) => (
               <PropertyCard key={property.id} property={property} />
             ))}
           </div>
         )}
+
       </div>
     </div>
   )
