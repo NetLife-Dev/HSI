@@ -58,19 +58,19 @@ export default async function CatalogPage() {
                    className="border-0 bg-transparent focus-visible:ring-0 text-lg font-bold text-white placeholder:text-white/30 h-14 px-0"
                  />
               </div>
-              <div className="flex items-center gap-3 px-6 w-full lg:w-auto">
-                 <Button variant="ghost" className="rounded-2xl gap-3 font-bold text-white/50 hover:text-white hover:bg-white/5 py-6 px-6 uppercase tracking-widest text-xs">
-                    <SlidersHorizontal size={18} />
-                    Filtros
-                 </Button>
-                 <Button variant="ghost" className="rounded-2xl gap-2 font-bold text-slate-500 hover:text-primary">
-                    <ArrowDownWideNarrow size={16} />
-                    Ordenar
-                 </Button>
-                 <Button className="rounded-2xl px-8 h-12 shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
-                    Pesquisar
-                 </Button>
-              </div>
+               <div className="flex flex-wrap items-center gap-2 px-6 w-full lg:w-auto pb-4 lg:pb-0">
+                  <Button variant="ghost" className="rounded-2xl gap-2 font-bold text-white/50 hover:text-white hover:bg-white/5 py-4 px-4 uppercase tracking-[0.1em] text-[10px] flex-1 sm:flex-none">
+                     <SlidersHorizontal size={14} />
+                     Filtros
+                  </Button>
+                  <Button variant="ghost" className="rounded-2xl gap-2 font-bold text-white/50 hover:text-white hover:bg-white/5 py-4 px-4 uppercase tracking-[0.1em] text-[10px] flex-1 sm:flex-none">
+                     <ArrowDownWideNarrow size={14} />
+                     Ordenar
+                  </Button>
+                  <Button className="rounded-2xl px-6 h-10 shadow-lg shadow-accent/10 hover:scale-[1.02] transition-transform text-[10px] uppercase font-black tracking-widest bg-accent text-black flex-1 sm:flex-none">
+                     Pesquisar
+                  </Button>
+               </div>
            </div>
         </div>
 

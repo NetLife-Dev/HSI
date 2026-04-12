@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import { DateRange } from 'react-day-picker'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { calculateBookingPrice } from '@/actions/bookings'
 
 export const BookingCalendarSection = () => {
   const router = useRouter()
@@ -20,6 +21,8 @@ export const BookingCalendarSection = () => {
     from: undefined,
     to: undefined,
   })
+  const [dynamicPrice, setDynamicPrice] = useState<number | null>(null)
+  const [isCalculating, setIsCalculating] = useState(false)
 
   useEffect(() => {
     const fetchProps = async () => {
@@ -38,6 +41,25 @@ export const BookingCalendarSection = () => {
     }
     fetchProps()
   }, [])
+
+  useEffect(() => {
+    const fetchDynamicPrice = async () => {
+      if (date?.from && date?.to && activeTab) {
+        setIsCalculating(true)
+        try {
+          const res = await calculateBookingPrice(activeTab, date.from, date.to)
+          setDynamicPrice(res.pricePerNight)
+        } catch (err) {
+          console.error("Error calculating dynamic price:", err)
+        } finally {
+          setIsCalculating(false)
+        }
+      } else {
+        setDynamicPrice(null)
+      }
+    }
+    fetchDynamicPrice()
+  }, [date, activeTab])
 
   const activeProp = properties.find(p => p.id === activeTab)
 
@@ -131,12 +153,18 @@ export const BookingCalendarSection = () => {
                        <span className="flex items-center gap-1.5"><Users size={12} className="text-accent" /> {activeProp?.maxGuests} Hóspedes</span>
                     </div>
                   </div>
-                  <div className="bg-accent/10 border border-accent/20 rounded-2xl px-6 py-4 flex flex-col items-end">
-                     <span className="text-accent text-2xl font-black tracking-tighter leading-none">
-                        {activeProp ? (activeProp.basePrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '---'}
+                  <div className="bg-accent/10 border border-accent/20 rounded-2xl px-6 py-4 flex flex-col items-end transition-all">
+                     <span className={cn("text-accent text-2xl font-black tracking-tighter leading-none transition-opacity", isCalculating && "opacity-50")}>
+                        {dynamicPrice 
+                          ? (dynamicPrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                          : activeProp 
+                            ? (activeProp.basePrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) 
+                            : '---'
+                        }
                      </span>
-                     <span className="text-[8rem] opacity-0 absolute">...</span> {/* Spacer */}
-                     <span className="text-[8px] uppercase tracking-widest font-black text-white/30 mt-1">por noite</span>
+                     <span className="text-[8px] uppercase tracking-widest font-black text-white/30 mt-1">
+                        {dynamicPrice ? 'tarifa média / noite' : 'por noite'}
+                     </span>
                   </div>
                 </div>
 

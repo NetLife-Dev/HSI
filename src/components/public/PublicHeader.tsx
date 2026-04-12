@@ -71,18 +71,33 @@ export function PublicHeader() {
       {/* Mobile Menu — fullscreen overlay */}
       <div
         className={cn(
-          'fixed inset-0 z-40 flex flex-col justify-center px-10 transition-all duration-500 md:hidden',
+          'fixed inset-0 z-[100] flex flex-col justify-center px-10 transition-all duration-500 md:hidden',
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         )}
       >
-        {/* Backdrop */}
+        {/* Backdrop for mobile menu */}
         <div
-          className="absolute inset-0 bg-black/95 backdrop-blur-xl"
+          className="absolute inset-0 bg-black/98 backdrop-blur-2xl"
           onClick={() => setMobileMenuOpen(false)}
         />
+        
+        {/* Close Button Inside Menu */}
+        <button 
+          className="absolute top-6 right-6 p-2 text-white/50 hover:text-accent transition-colors z-20"
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          <X size={32} />
+        </button>
 
         {/* Nav links */}
-        <nav className="relative z-10 flex flex-col gap-1 max-w-xs mx-auto w-full">
+        <nav className="relative z-10 flex flex-col gap-2 max-w-xs mx-auto w-full">
+          <div className="mb-12">
+            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-1">
+              <span className="font-black text-3xl tracking-tighter leading-none text-white">Host</span>
+              <span className="text-3xl tracking-tighter leading-none text-accent italic font-display font-semibold">SI</span>
+            </Link>
+          </div>
+          
           {[
             { href: '/', label: 'Página Inicial' },
             { href: '/imoveis', label: 'Santuários' },
@@ -93,21 +108,21 @@ export function PublicHeader() {
               key={item.href}
               href={item.href}
               onClick={() => setMobileMenuOpen(false)}
-              className="text-3xl font-black uppercase tracking-tighter text-white/60 hover:text-white py-3 border-b border-white/5 transition-colors"
+              className="text-4xl font-black uppercase tracking-tighter text-white/40 hover:text-white py-4 border-b border-white/5 transition-all hover:pl-2"
               style={{
                 transitionDelay: mobileMenuOpen ? `${i * 50}ms` : '0ms',
-                transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-10px)',
+                transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-20px)',
                 opacity: mobileMenuOpen ? 1 : 0,
-                transition: `transform 400ms ease ${i * 50}ms, opacity 400ms ease ${i * 50}ms, color 200ms`,
+                transition: `transform 500ms cubic-bezier(0.16, 1, 0.3, 1) ${i * 50}ms, opacity 500ms ease ${i * 50}ms, color 200ms`,
               }}
             >
               {item.label}
             </Link>
           ))}
 
-          <Link href="/imoveis" onClick={() => setMobileMenuOpen(false)} className="mt-8">
-            <Button className="w-full rounded-2xl h-14 bg-accent text-black hover:bg-white text-base font-black uppercase tracking-widest shadow-lg shadow-accent/20">
-              Agendar Retiro
+          <Link href="/imoveis" onClick={() => setMobileMenuOpen(false)} className="mt-12">
+            <Button className="w-full rounded-2xl h-16 bg-accent text-black hover:bg-white text-lg font-black uppercase tracking-widest shadow-xl shadow-accent/20 border-0">
+              Reservar Agora
             </Button>
           </Link>
         </nav>

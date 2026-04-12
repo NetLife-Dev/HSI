@@ -6,6 +6,7 @@ import { Calendar as CalendarIcon, ShieldCheck, Info, Sparkles, Smartphone, Send
 import { format, parseISO } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { calculateBookingPrice, type BookingPriceBreakdown } from '@/actions/bookings'
 
 import { cn } from '@/lib/utils'
 import { AvailabilityCalendar } from './AvailabilityCalendar'
@@ -27,6 +28,8 @@ export function PropertyBookingEngine({ property }: { property: any }) {
   const [guests, setGuests] = useState(1)
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([])
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
+  const [priceBreakdown, setPriceBreakdown] = useState<BookingPriceBreakdown | null>(null)
+  const [isCalculating, setIsCalculating] = useState(false)
 
   // Sync dates from URL query params
   React.useEffect(() => {
@@ -51,21 +54,44 @@ export function PropertyBookingEngine({ property }: { property: any }) {
     }
   }, [searchParams])
 
+  React.useEffect(() => {
+    const updatePrice = async () => {
+      if (dateRange?.from && dateRange?.to && property.id) {
+        setIsCalculating(true)
+        try {
+          const breakdown = await calculateBookingPrice(
+            property.id,
+            dateRange.from,
+            dateRange.to
+          )
+          setPriceBreakdown(breakdown)
+        } catch (err) {
+          console.error("Failed to calculate price:", err)
+        } finally {
+          setIsCalculating(false)
+        }
+      } else {
+        setPriceBreakdown(null)
+      }
+    }
+    updatePrice()
+  }, [dateRange, property.id])
+
   const nights = dateRange?.from && dateRange?.to 
     ? Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24))
     : 0
 
-  const basePrice = property.basePrice || 0
-  const cleaningFee = property.cleaningFee || 15000
+  const basePrice = priceBreakdown ? priceBreakdown.pricePerNight : (property.basePrice || 0)
+  const cleaningFee = priceBreakdown ? priceBreakdown.cleaningFee : (property.cleaningFee || 15000)
   
   const selectedServices = (property.services || []).filter((s: any) => selectedServiceIds.includes(s.id))
   const servicesTotal = selectedServices.reduce((acc: number, s: any) => {
-    if (s.unit === 'per_day') return acc + (s.price * nights)
+    if (s.unit === 'per_day' || s.unit === 'per_night') return acc + (s.price * nights)
     if (s.unit === 'per_guest') return acc + (s.price * guests)
     return acc + s.price
   }, 0)
 
-  const totalNightsPrice = nights * basePrice
+  const totalNightsPrice = priceBreakdown ? priceBreakdown.totalNightsPrice : nights * basePrice
   const totalPrice = nights > 0 ? totalNightsPrice + cleaningFee + servicesTotal : 0
 
   return (
@@ -235,11 +261,17 @@ export function PropertyBookingEngine({ property }: { property: any }) {
             </Button>
 
             {nights > 0 && (
-              <div className="pt-8 border-t border-white/5 space-y-4 animate-in fade-in slide-in-from-top-4">
+              <div className={cn("pt-8 border-t border-white/5 space-y-4 animate-in fade-in slide-in-from-top-4", isCalculating && "opacity-50 pointer-events-none")}>
                  <div className="flex justify-between items-center text-[13px] font-medium">
-                    <span className="text-white/40">{nights} {nights === 1 ? 'noite' : 'noites'}</span>
+                    <span className="text-white/40">{nights} {nights === 1 ? 'noite' : 'noites'} {priceBreakdown && <span className="text-[10px] ml-1">(valor dinâmico)</span>}</span>
                     <span className="text-white">{(totalNightsPrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                  </div>
+                 {priceBreakdown?.discounts.map((discount, i) => (
+                    <div key={i} className="flex justify-between items-center text-[13px] font-medium text-emerald-400">
+                      <span className="opacity-80">{discount.name}</span>
+                      <span>-{(discount.amount / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    </div>
+                 ))}
                  <div className="flex justify-between items-center text-[13px] font-medium">
                     <span className="text-white/40">Taxa de Limpeza</span>
                     <span className="text-white">{(cleaningFee / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
@@ -252,7 +284,10 @@ export function PropertyBookingEngine({ property }: { property: any }) {
                   )}
                  <Separator className="bg-white/5 my-4" />
                  <div className="flex justify-between items-center pt-2">
-                    <span className="text-[10px] uppercase font-black tracking-widest text-white/60">Total Final</span>
+                    <div className="flex flex-col">
+                       <span className="text-[10px] uppercase font-black tracking-widest text-white/60">Total Final</span>
+                       {isCalculating && <span className="text-[8px] text-accent animate-pulse uppercase font-bold">Calculando melhor tarifa...</span>}
+                    </div>
                     <span className="text-3xl font-black text-accent tracking-tighter">
                        {(totalPrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                     </span>
