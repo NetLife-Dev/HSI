@@ -209,7 +209,9 @@ const HomePage = () => {
           >
             <source src="/images/afterhero.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+          {/* Enhanced Vignette overlay for readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/40 to-black" />
+          <div className="absolute inset-0 bg-black/20" /> 
         </div>
 
         <motion.div 
@@ -219,10 +221,10 @@ const HomePage = () => {
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="relative z-10 text-center space-y-4 px-6"
         >
-          <h3 className="text-6xl md:text-[8rem] font-black uppercase tracking-tighter text-white drop-shadow-2xl">
+          <h3 className="text-6xl md:text-[8rem] font-black uppercase tracking-tighter text-white drop-shadow-[0_10px_50px_rgba(0,0,0,0.8)]">
             O <span className="text-accent italic">Acesso.</span>
           </h3>
-          <p className="text-accent uppercase tracking-[0.5em] font-black text-sm">A porta para o extraordinário está aberta.</p>
+          <p className="text-accent uppercase tracking-[0.5em] font-black text-xs md:text-sm drop-shadow-lg">A porta para o extraordinário está aberta.</p>
         </motion.div>
       </section>
 
