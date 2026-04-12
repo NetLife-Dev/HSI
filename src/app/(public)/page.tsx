@@ -110,19 +110,28 @@ const HomePage = () => {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Smooth cinematic zoom into "Estadia" — Disabled on mobile
-  const estadiaScale = useTransform(scrollYProgress, [0, 0.4], [1, isMobile ? 1 : 2.2])
-  const estadiaOpacity = useTransform(scrollYProgress, [0.3, 0.4], [1, isMobile ? 1 : 0])
-  const videoScale = useTransform(scrollYProgress, [0, 0.4], [1, isMobile ? 1 : 1.2])
-
-  // Fade "Sua" faster on mobile to avoid long scroll lag
+  // Ranges for transformations
+  const desktopZoomRange = [0, 0.4]
+  const mobileZoomRange = [0, 0.15]
+  
+  // 1. SCALES
+  const estadiaScale = useTransform(scrollYProgress, isMobile ? mobileZoomRange : desktopZoomRange, [1, isMobile ? 1.1 : 2.5])
+  const videoScale = useTransform(scrollYProgress, isMobile ? mobileZoomRange : desktopZoomRange, [1, isMobile ? 1 : 1.3])
+  
+  // 2. OPACITIES
   const suaOpacity = useTransform(scrollYProgress, [0, isMobile ? 0.05 : 0.1], [1, 0])
+  const estadiaOpacity = useTransform(scrollYProgress, isMobile ? [0, 0.1] : [0.3, 0.4], [1, 0])
+  
+  // 3. Y-AXIS MOTION (DIFFERENT DIRECTIONS)
+  // Mobile goes UP, Desktop goes DOWN for Estadia
+  const suaY = useTransform(scrollYProgress, [0, 0.1], [0, isMobile ? -40 : 0])
+  const estadiaY = useTransform(scrollYProgress, isMobile ? [0, 0.1] : [0, 0.4], [0, isMobile ? -60 : 150])
 
   return (
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
       
       {/* 1. CINEMATIC HERO SECTION (SCROLL ZOOM PORTAL) */}
-      <div ref={containerRef} className={cn("relative", isMobile ? "h-[130vh]" : "h-[250vh]")}>
+      <div ref={containerRef} className={cn("relative", isMobile ? "h-[120vh]" : "h-[300vh]")}>
         <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
           {/* Background Video */}
           <motion.div style={{ scale: videoScale }} className="absolute inset-0 z-0 will-change-transform">
@@ -145,27 +154,27 @@ const HomePage = () => {
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 0.8 }}
                className="space-y-1 flex flex-col items-center"
-               style={{ 
-                 y: useTransform(scrollYProgress, [0, isMobile ? 0.2 : 0.4], [0, isMobile ? -100 : 0]),
-                 opacity: suaOpacity 
-               }}
             >
-               <div className="flex items-center justify-center gap-2 mb-2">
-                  <div className="w-5 h-px bg-accent/30" />
-                  <span className="text-accent uppercase tracking-[1em] font-black text-[8px]">Exclusivo</span>
-                  <div className="w-5 h-px bg-accent/30" />
-               </div>
-               
-               {/* "Sua" - Balanced */}
-               <motion.span 
-                  className="text-white text-xl md:text-2xl font-black uppercase tracking-widest block"
-               >
-                  Sua
-               </motion.span>
+               <motion.div style={{ opacity: suaOpacity, y: suaY }} className="flex flex-col items-center">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                     <div className="w-5 h-px bg-accent/30" />
+                     <span className="text-accent uppercase tracking-[1em] font-black text-[8px]">Exclusivo</span>
+                     <div className="w-5 h-px bg-accent/30" />
+                  </div>
+                  
+                  {/* "Sua" - Balanced */}
+                  <span className="text-white text-xl md:text-2xl font-black uppercase tracking-widest block">
+                     Sua
+                  </span>
+               </motion.div>
 
-               {/* "Estadia" - The Portal Zoom (Limited to 2x) */}
+               {/* "Estadia" - The Portal Zoom */}
                <motion.div 
-                  style={{ scale: estadiaScale, opacity: isMobile ? suaOpacity : estadiaOpacity }}
+                  style={{ 
+                    scale: estadiaScale, 
+                    opacity: estadiaOpacity,
+                    y: estadiaY
+                  }}
                   className="will-change-transform"
                >
                   <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
