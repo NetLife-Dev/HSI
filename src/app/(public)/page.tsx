@@ -121,7 +121,7 @@ const HomePage = () => {
     <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
       
       {/* 1. CINEMATIC HERO SECTION (SCROLL ZOOM PORTAL) */}
-      <div ref={containerRef} className="relative h-[250vh]">
+      <div ref={containerRef} className={cn("relative", isMobile ? "h-[130vh]" : "h-[250vh]")}>
         <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
           {/* Background Video */}
           <motion.div style={{ scale: videoScale }} className="absolute inset-0 z-0 will-change-transform">
@@ -144,6 +144,10 @@ const HomePage = () => {
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 0.8 }}
                className="space-y-1 flex flex-col items-center"
+               style={{ 
+                 y: useTransform(scrollYProgress, [0, isMobile ? 0.2 : 0.4], [0, isMobile ? -100 : 0]),
+                 opacity: suaOpacity 
+               }}
             >
                <div className="flex items-center justify-center gap-2 mb-2">
                   <div className="w-5 h-px bg-accent/30" />
@@ -153,7 +157,6 @@ const HomePage = () => {
                
                {/* "Sua" - Balanced */}
                <motion.span 
-                  style={{ opacity: suaOpacity }}
                   className="text-white text-xl md:text-2xl font-black uppercase tracking-widest block"
                >
                   Sua
@@ -161,7 +164,7 @@ const HomePage = () => {
 
                {/* "Estadia" - The Portal Zoom (Limited to 2x) */}
                <motion.div 
-                  style={{ scale: estadiaScale, opacity: estadiaOpacity }}
+                  style={{ scale: estadiaScale, opacity: isMobile ? suaOpacity : estadiaOpacity }}
                   className="will-change-transform"
                >
                   <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
@@ -175,7 +178,7 @@ const HomePage = () => {
 
           {/* Scroll Indicator */}
           <motion.div 
-            style={{ opacity: useTransform(scrollYProgress, [0, 0.1], [1, 0]) }}
+            style={{ opacity: useTransform(scrollYProgress, [0, 0.05], [1, 0]) }}
             className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
           >
             <span className="text-[10px] uppercase tracking-[0.4em] font-black text-accent/60">Scroll para explorar</span>
