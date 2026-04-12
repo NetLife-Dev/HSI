@@ -1,249 +1,223 @@
 'use client'
 
-import Image from 'next/image'
+import { useRef, useEffect, useState } from 'react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { ArrowRight, Play, ShieldCheck, Sparkles, Diamond } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useEffect, useState, useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { db } from '@/db/index' // Note: This will need a Client Components check or be moved to a Server Component wrapper
-import { PropertyCard } from '@/components/public/PropertyCard'
-import { MOCK_PROPERTIES } from '@/lib/mock-data'
+import { ArrowRight, Calendar, MapPin, Star, Shield, Zap, Heart, Search } from 'lucide-react'
 
-export default function HomePage() {
-  const [featuredProperties, setFeaturedProperties] = useState<any[]>([])
+// Featured Properties Mock (Should fetch from DB in Phase 2)
+const FeaturedProperties = () => {
+  const [properties, setProperties] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Fetch properties on client side since we need interactivity for the scroll effects
   useEffect(() => {
-    async function getProperties() {
+    const fetchFeatured = async () => {
       try {
-        const res = await fetch('/api/properties/featured')
+        const res = await fetch('/api/properties?featured=true')
         const data = await res.json()
-        if (data.success && data.properties.length > 0) {
-          setFeaturedProperties(data.properties)
-        } else if (!data.success) {
-           // Only use mocks if the request/db failed, not if it's just empty
-           setFeaturedProperties(MOCK_PROPERTIES.filter(p => p.featured))
-        } else {
-           setFeaturedProperties([]) // It's empty because the user deleted them
-        }
-      } catch (error) {
-        setFeaturedProperties(MOCK_PROPERTIES.filter(p => p.featured))
+        setProperties(data)
+      } catch (err) {
+        console.error('Error fetching featured properties:', err)
       } finally {
         setLoading(false)
       }
     }
-    getProperties()
+    fetchFeatured()
   }, [])
 
-  const containerRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  })
-
-  // Optimised transformations for performance (Reduced scale overhead)
-  const heroScale = useTransform(scrollYProgress, [0, 0.4], [1, 2]) 
-  const heroOpacity = useTransform(scrollYProgress, [0.4, 0.5], [1, 0])
-  const heroTextScale = useTransform(scrollYProgress, [0, 0.4], [1.1, 4]) 
-  const heroTextOpacity = useTransform(scrollYProgress, [0.35, 0.45], [1, 0]) 
-  
-  // AfterHero Video transformations
-  const afterHeroScale = useTransform(scrollYProgress, [0.2, 0.5], [0.85, 1])
-  const afterHeroOpacity = useTransform(scrollYProgress, [0.35, 0.45], [0, 1])
-  
-  // AfterHero Content (Balanced duration)
-  const afterHeroContentOpacity = useTransform(scrollYProgress, [0.45, 0.55, 0.85, 0.95], [0, 1, 1, 0])
-  const afterHeroContentY = useTransform(scrollYProgress, [0.45, 0.55, 0.85, 0.95], [30, 0, 0, -30])
+  if (loading) return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {[1, 2, 3].map((i) => (
+        <div key={i} className="aspect-[4/5] bg-zinc-900 animate-pulse rounded-2xl" />
+      ))}
+    </div>
+  )
 
   return (
-    <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
-      {/* 1 & 2. CINEMATIC SCROLL ZOOM BRIDGE (OPTIMIZED FOR PERFORMANCE) */}
-      <div ref={containerRef} className="relative h-[400vh] z-0">
-         <div className="sticky top-0 h-screen w-full overflow-hidden">
-            {/* Layer 1: Hero Video (Hardware Accelerated) */}
-            <motion.div 
-               style={{ scale: heroScale, opacity: heroOpacity }}
-               className="absolute inset-0 z-10 overflow-hidden will-change-transform"
-            >
-               <video 
-                  autoPlay 
-                  muted 
-                  loop 
-                  playsInline 
-                  className="w-full h-full object-cover"
-               >
-                  <source src="/images/hero-video.mp4" type="video/mp4" />
-               </video>
-               <div className="absolute inset-0 bg-black/20" />
-            </motion.div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+      {properties.map((prop) => (
+        <motion.div 
+          key={prop.id}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="group cursor-pointer"
+        >
+          <Link href={`/imovel/${prop.slug}`}>
+            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl mb-6">
+              <img 
+                src={prop.images?.[0]?.url || 'https://images.unsplash.com/photo-1600585154340-be6199fbfd00?auto=format&fit=crop&q=80'} 
+                alt={prop.name}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+              
+              <div className="absolute top-6 left-6">
+                <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
+                  <span className="text-white text-xs font-black uppercase tracking-widest">Premium</span>
+                </div>
+              </div>
 
-            {/* Layer 1.1: Hero Text (Optimised Size) */}
-            <motion.div 
-               style={{ scale: heroTextScale, opacity: heroTextOpacity }}
-               className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 will-change-transform pointer-events-none"
-            >
-               <div className="space-y-4">
-                  <div className="flex items-center justify-center gap-3 mb-2">
-                     <div className="w-8 h-px bg-accent opacity-50" />
-                     <span className="text-accent uppercase tracking-[0.6em] font-black text-[9px]">Exclusivo</span>
-                     <div className="w-8 h-px bg-accent opacity-50" />
-                  </div>
-                  <h1 className="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-[0.85] text-white drop-shadow-2xl">
-                     Sua <br />
-                     <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 not-italic">
-                        Estadia.
-                     </span>
-                  </h1>
-               </div>
-            </motion.div>
-
-            {/* Layer 2: AfterHero Video (Discovery Phase) */}
-            <motion.div 
-               style={{ scale: afterHeroScale, opacity: afterHeroOpacity }}
-               className="absolute inset-0 z-0 will-change-transform"
-            >
-               <video 
-                  autoPlay 
-                  muted 
-                  loop 
-                  playsInline 
-                  className="w-full h-full object-cover"
-               >
-                  <source src="/images/afterhero.mp4" type="video/mp4" />
-               </video>
-               <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
-               
-               <motion.div 
-                  style={{ opacity: afterHeroContentOpacity, y: afterHeroContentY }}
-                  className="relative z-10 h-full flex flex-col items-center justify-center text-center space-y-4 px-6 will-change-transform"
-               >
-                  <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white drop-shadow-2xl">
-                     O <span className="text-accent italic">Acesso.</span>
-                  </h3>
-                  <p className="text-accent uppercase tracking-[0.4em] font-black text-xs">A porta para o extraordinário está aberta.</p>
-               </motion.div>
-            </motion.div>
-         </div>
-      </div>
-
-      {/* The Exclusive Collection */}
-      <section id="colecao" className="py-32 bg-[#050505] relative z-20 pb-0 shadow-[0_-50px_100px_rgba(0,0,0,1)]">
-         <div className="container mx-auto px-4 max-w-7xl">
-            <div className="flex flex-col gap-6 mb-20 text-center items-center">
-               <div className="w-1 h-12 bg-accent rounded-full" />
-               <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">
-                  O <span className="text-accent">Portfólio.</span>
-               </h2>
-               <p className="text-white/50 font-medium tracking-widest uppercase text-xs">
-                  {featuredProperties.length > 0 ? 'Sem intermediários. Sem regras ocultas.' : 'Nenhum imóvel disponível no momento.'}
-               </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-               {featuredProperties.map((property) => (
-                  <PropertyCard key={property.id} property={property} />
-               ))}
-            </div>
-         </div>
-      </section>
-
-      {/* Individual Experience / Immersion Section (Optimized for performance) */}
-      <section className="relative h-[60vh] min-h-[500px] overflow-hidden flex items-center justify-center bg-black">
-         <div className="absolute inset-0 z-0 opacity-40">
-            <Image 
-               src="/images/mock/bedroom.png"
-               alt="Luxury Interior"
-               fill
-               className="object-cover scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
-         </div>
-         
-         <div className="relative z-10 container mx-auto px-6 text-center space-y-8">
-            <div className="flex flex-col items-center gap-4">
-                <span className="text-accent uppercase tracking-[0.5em] font-black text-[10px]">Imersão Total</span>
-                <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] text-white">
-                   Entre no seu<br /><span className="text-accent underline decoration-white/10 decoration-8 underline-offset-8 italic">Próprio Mundo.</span>
-                </h2>
-                <p className="text-lg text-white/40 max-w-2xl font-medium tracking-tight">
-                   A experiência individual de cada propriedade é desenhada para ser sentida. Cada detalhe, uma descoberta.
-                </p>
-            </div>
-         </div>
-      </section>
-
-      {/* Premium Concierge Services */}
-      <section className="py-32 bg-black relative z-20 pb-0">
-         <div className="container mx-auto px-4 max-w-7xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-               <div className="space-y-8">
-                  <div className="flex items-center gap-3">
-                     <div className="w-12 h-1 bg-accent" />
-                     <span className="text-accent uppercase tracking-[0.4em] font-black text-xs">Exigência</span>
-                  </div>
-                  <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">
-                     Serviços <br /><span className="text-white/40">Sob Demanda.</span>
-                  </h2>
-                  <p className="text-xl text-white/50 leading-relaxed font-medium">
-                     Serviços que podem ser oferecidos na sua residência para elevar a experiência de hospedagem ao nível máximo de exclusividade.
+              <div className="absolute bottom-8 left-8 right-8 text-white">
+                <div className="flex items-center gap-2 mb-2">
+                  <MapPin className="w-4 h-4 text-accent" />
+                  <span className="text-sm font-medium tracking-wide">{prop.locationAddress?.split(',')[0]}</span>
+                </div>
+                <h4 className="text-2xl font-black uppercase tracking-tight mb-2">{prop.name}</h4>
+                <div className="flex items-center justify-between">
+                  <p className="text-accent font-black">
+                    R$ {(prop.basePrice / 100).toLocaleString('pt-BR')} <span className="text-white/60 text-[10px] ml-1 uppercase">/ noite</span>
                   </p>
-                  
-                  <div className="grid grid-cols-2 gap-8 pt-8 border-t border-white/5">
-                     <div className="space-y-2">
-                        <ShieldCheck size={32} className="text-accent" />
-                        <h4 className="text-lg font-black uppercase tracking-widest mt-4">Segurança</h4>
-                        <p className="text-xs text-white/40 font-bold uppercase tracking-[0.2em]">Escoltas Privadas</p>
-                     </div>
-                     <div className="space-y-2">
-                        <Diamond size={32} className="text-accent" />
-                        <h4 className="text-lg font-black uppercase tracking-widest mt-4">Concierge</h4>
-                        <p className="text-xs text-white/40 font-bold uppercase tracking-[0.2em]">Helicópteros e Iates</p>
-                     </div>
+                  <div className="flex items-center gap-1">
+                    <Star className="w-3 h-3 fill-accent text-accent" />
+                    <span className="text-xs font-bold">5.0</span>
                   </div>
-               </div>
-               
-               <div className="relative aspect-square w-full rounded-[3rem] overflow-hidden group shadow-2xl shadow-accent/10 border border-white/5">
-                  <video 
-                     autoPlay 
-                     muted 
-                     loop 
-                     playsInline 
-                     className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-[2s]"
-                  >
-                     <source src="/images/individual.mp4" type="video/mp4" />
-                  </video>
-                  <div className="absolute inset-0 bg-accent/20 mix-blend-overlay pointer-events-none" />
-               </div>
+                </div>
+              </div>
             </div>
-         </div>
+          </Link>
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
+const HomePage = () => {
+  return (
+    <div className="relative bg-black text-white min-h-screen selection:bg-accent selection:text-black mt-[-4rem]">
+      
+      {/* 1. CINEMATIC HERO SECTION */}
+      <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+        {/* Background Video */}
+        <div className="absolute inset-0 z-0">
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            className="w-full h-full object-cover opacity-80"
+          >
+            <source src="/images/hero-video.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black" />
+        </div>
+
+        {/* Hero Content */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="relative z-10 text-center px-4"
+        >
+          <div className="space-y-4">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="flex items-center justify-center gap-3 mb-2"
+            >
+              <div className="w-8 h-px bg-accent/50" />
+              <span className="text-accent uppercase tracking-[1em] font-black text-[10px]">Exclusivo</span>
+              <div className="w-8 h-px bg-accent/50" />
+            </motion.div>
+            <h1 className="text-6xl md:text-[10rem] font-black tracking-tighter uppercase leading-[0.8] text-white drop-shadow-[0_10px_50px_rgba(0,0,0,0.5)]">
+              Sua <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30 italic">
+                Estadia.
+              </span>
+            </h1>
+          </div>
+          
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 1 }}
+            className="absolute bottom-[-10vh] left-1/2 -translate-x-1/2"
+          >
+            <div className="w-px h-24 bg-gradient-to-b from-accent to-transparent" />
+          </motion.div>
+        </motion.div>
       </section>
 
+      {/* 2. AFTERHERO DISCOVERY SECTION */}
+      <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+        <div className="absolute inset-0 z-0">
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            className="w-full h-full object-cover"
+          >
+            <source src="/images/afterhero.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+        </div>
 
-      {/* Immersive CTA */}
-      <section className="h-[70vh] min-h-[600px] relative overflow-hidden flex items-center justify-center">
-         <div className="absolute inset-0 z-0">
-           <Image
-             src="/images/mock/living.png"
-             alt="Living Room"
-             fill
-             className="object-cover opacity-40 scale-105"
-           />
-           <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
-         </div>
-         
-         <div className="container mx-auto px-6 relative z-10 text-center space-y-12">
-            <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] text-white">
-               A Noite <span className="text-accent">Começa</span><br />Aqui.
-            </h2>
-            <div className="pt-4 flex justify-center">
-               <Button size="lg" className="h-20 px-16 text-xl uppercase tracking-widest font-black bg-white text-black hover:bg-accent hover:scale-110 transition-transform shadow-2xl">
-                  Agendar Diretamente
-               </Button>
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="relative z-10 text-center space-y-4 px-6"
+        >
+          <h3 className="text-6xl md:text-[8rem] font-black uppercase tracking-tighter text-white drop-shadow-2xl">
+            O <span className="text-accent italic">Acesso.</span>
+          </h3>
+          <p className="text-accent uppercase tracking-[0.5em] font-black text-sm">A porta para o extraordinário está aberta.</p>
+        </motion.div>
+      </section>
+
+      {/* 3. DYNAMIC PORTFOLIO COLLECTION */}
+      <section className="relative py-24 bg-black">
+        <div className="container mx-auto px-6 lg:px-12">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16"
+          >
+            <div className="space-y-4 border-l-4 border-accent pl-8">
+              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight">
+                Nossos <br /> <span className="text-accent italic">Santuários</span>
+              </h2>
+              <p className="text-gray-400 font-medium tracking-wide max-w-md">
+                Uma curadoria exclusiva de refúgios onde o luxo encontra a paz absoluta.
+              </p>
             </div>
-         </div>
+          </motion.div>
+
+          <FeaturedProperties />
+        </div>
+      </section>
+
+      {/* CTA / Footer Promo */}
+      <section className="relative py-32 overflow-hidden bg-zinc-950">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-accent/20 via-transparent to-transparent" />
+        </div>
+        
+        <div className="container mx-auto px-6 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="space-y-8"
+          >
+            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">Pronto para o Próximo <br /><span className="text-accent">Capítulo?</span></h2>
+            <p className="text-gray-400 max-w-2xl mx-auto font-medium">Garanta sua reserva nos destinos mais cobiçados do país com o suporte personalizado que você merece.</p>
+            <Link 
+              href="/imoveis"
+              className="inline-flex items-center gap-4 bg-white text-black px-12 py-5 font-black uppercase tracking-widest hover:bg-accent transition-all duration-500 hover:scale-105 group"
+            >
+              Explorar Todos
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+            </Link>
+          </motion.div>
+        </div>
       </section>
     </div>
   )
 }
+
+export default HomePage
