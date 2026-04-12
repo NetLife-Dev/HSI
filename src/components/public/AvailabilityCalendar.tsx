@@ -73,25 +73,25 @@ export function AvailabilityCalendar({
       </div>
       
       {range?.from && (
-        <div className="flex items-center justify-between px-8 py-6 bg-accent/5 rounded-[2rem] border border-accent/10 animate-in fade-in zoom-in duration-500">
+        <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-6 bg-accent/5 rounded-[1.5rem] sm:rounded-[2rem] border border-accent/10 animate-in fade-in zoom-in duration-500">
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] uppercase font-black tracking-widest text-accent/50">Período de Estadia</span>
-            <div className="text-base font-black text-white flex items-center gap-2">
-              {format(range.from, "dd 'de' MMM", { locale: ptBR })}
+            <span className="text-[8px] sm:text-[10px] uppercase font-black tracking-widest text-accent/50">Período</span>
+            <div className="text-sm sm:text-base font-black text-white flex items-center gap-1 sm:gap-2">
+              {format(range.from, "dd MMM", { locale: ptBR })}
               {range.to && (
                 <>
                   <span className="text-accent/30">—</span>
-                  {format(range.to, "dd 'de' MMM", { locale: ptBR })}
+                  {format(range.to, "dd MMM", { locale: ptBR })}
                 </>
               )}
             </div>
           </div>
           {range.to && range.from.getTime() !== range.to.getTime() && (
             <div className="text-right flex flex-col gap-1">
-              <span className="text-[10px] uppercase font-black tracking-widest text-accent/50">Total</span>
-              <div className="text-2xl font-black text-accent tracking-tighter">
+              <span className="text-[8px] sm:text-[10px] uppercase font-black tracking-widest text-accent/50">Total</span>
+              <div className="text-xl sm:text-2xl font-black text-accent tracking-tighter">
                 {Math.ceil((range.to.getTime() - range.from.getTime()) / (1000 * 60 * 60 * 24))}
-                <span className="text-xs ml-1 uppercase text-white/40 tracking-normal">Noites</span>
+                <span className="text-[10px] ml-1 uppercase text-white/40 tracking-normal">Noites</span>
               </div>
             </div>
           )}

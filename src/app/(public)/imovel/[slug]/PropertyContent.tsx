@@ -1,5 +1,6 @@
 'use client'
 
+import React, { Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -185,9 +186,11 @@ export function PropertyContent({ property }: { property: any }) {
                <p className="text-white/40 uppercase tracking-[0.2em] font-bold text-xs">O mundo pertence a quem agenda primeiro.</p>
             </div>
             
-            <div className="p-1 max-w-4xl mx-auto rounded-[3rem] bg-gradient-to-b from-white/10 to-transparent">
+             <div className="p-1 max-w-4xl mx-auto rounded-[3rem] bg-gradient-to-b from-white/10 to-transparent">
               <div className="bg-[#111] rounded-[3rem] p-4 md:p-8">
-                 <PropertyBookingEngine property={property} />
+                 <React.Suspense fallback={<div className="h-96 animate-pulse bg-white/5 rounded-3xl" />}>
+                    <PropertyBookingEngine property={property} />
+                 </React.Suspense>
               </div>
             </div>
          </div>

@@ -185,10 +185,10 @@ export const BookingCalendarSection = () => {
                   <Button 
                     disabled={!date?.from || !date?.to}
                     onClick={handleBooking}
-                    className="w-full rounded-[2rem] py-8 bg-white text-black hover:bg-accent text-sm font-black uppercase tracking-[0.3em] transition-all disabled:opacity-20 disabled:grayscale group shadow-2xl shadow-accent/10"
+                    className="w-full rounded-[2rem] py-6 md:py-8 bg-white text-black hover:bg-accent text-[10px] md:text-sm font-black uppercase tracking-widest md:tracking-[0.3em] transition-all disabled:opacity-20 disabled:grayscale group shadow-2xl shadow-accent/10"
                   >
                     Confirmar Estadia Exclusive
-                    <ArrowRight className="ml-4 w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                    <ArrowRight className="ml-2 md:ml-4 w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform" />
                   </Button>
                   
                   <p className="text-center text-white/20 text-[9px] uppercase font-black tracking-widest pt-2">

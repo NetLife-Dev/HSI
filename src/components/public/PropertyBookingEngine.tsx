@@ -3,9 +3,9 @@
 import React, { useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { Calendar as CalendarIcon, ShieldCheck, Info, Sparkles, Smartphone, Send, Zap, Users } from 'lucide-react'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
 import { AvailabilityCalendar } from './AvailabilityCalendar'
@@ -22,10 +22,34 @@ import {
 
 export function PropertyBookingEngine({ property }: { property: any }) {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [dateRange, setDateRange] = useState<DateRange | undefined>()
   const [guests, setGuests] = useState(1)
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([])
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
+
+  // Sync dates from URL query params
+  React.useEffect(() => {
+    const from = searchParams.get('from')
+    const to = searchParams.get('to')
+    
+    if (from && to) {
+      try {
+        const fromDate = parseISO(from)
+        const toDate = parseISO(to)
+        if (!isNaN(fromDate.getTime()) && !isNaN(toDate.getTime())) {
+          setDateRange({ from: fromDate, to: toDate })
+          // Smooth scroll to booking section
+          setTimeout(() => {
+            const el = document.getElementById('booking')
+            if (el) el.scrollIntoView({ behavior: 'smooth' })
+          }, 800)
+        }
+      } catch (e) {
+        console.error("Invalid dates in URL", e)
+      }
+    }
+  }, [searchParams])
 
   const nights = dateRange?.from && dateRange?.to 
     ? Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24))
@@ -122,10 +146,10 @@ export function PropertyBookingEngine({ property }: { property: any }) {
                     </div>
                   </div>
                 </DialogTrigger>
-                <DialogContent className="bg-[#111] border-white/10 text-white rounded-[3.5rem] p-0 overflow-hidden sm:max-w-md border shadow-[0_0_100px_rgba(224,176,80,0.15)]">
-                   <div className="p-10 space-y-8">
+                <DialogContent className="bg-[#111] border-white/10 text-white rounded-t-[2.5rem] sm:rounded-[3.5rem] p-0 overflow-hidden sm:max-w-md border shadow-[0_0_100px_rgba(224,176,80,0.15)] bottom-0 sm:bottom-auto translate-y-0 sm:-translate-y-1/2">
+                   <div className="p-6 sm:p-10 space-y-6 sm:space-y-8">
                       <DialogHeader>
-                        <DialogTitle className="text-3xl font-black uppercase tracking-tighter text-center">Datas da Estadia</DialogTitle>
+                        <DialogTitle className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-center">Datas da Estadia</DialogTitle>
                       </DialogHeader>
                       <AvailabilityCalendar initialRange={dateRange} onRangeSelect={(r) => {
                         setDateRange(r)
