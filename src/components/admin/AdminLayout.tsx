@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { type Session } from 'next-auth'
 import { Sidebar } from './Sidebar'
