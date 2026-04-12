@@ -101,7 +101,7 @@ const HomePage = () => {
   })
 
   // Smooth cinematic zoom into "Estadia"
-  const estadiaScale = useTransform(scrollYProgress, [0, 0.4], [1, 3])
+  const estadiaScale = useTransform(scrollYProgress, [0, 0.4], [1, 2.2])
   const estadiaOpacity = useTransform(scrollYProgress, [0.3, 0.4], [1, 0])
   const videoScale = useTransform(scrollYProgress, [0, 0.4], [1, 1.2])
 
@@ -128,31 +128,31 @@ const HomePage = () => {
           {/* Centered Portal Text */}
           <div className="relative z-10 text-center px-4 pointer-events-none">
             <motion.div 
-               initial={{ opacity: 0, y: 20 }}
+               initial={{ opacity: 0, y: 15 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 0.8 }}
-               className="space-y-2 flex flex-col items-center"
+               className="space-y-1 flex flex-col items-center"
             >
-               <div className="flex items-center justify-center gap-3 mb-2">
-                  <div className="w-6 h-px bg-accent/30" />
-                  <span className="text-accent uppercase tracking-[1em] font-black text-[9px]">Exclusivo</span>
-                  <div className="w-6 h-px bg-accent/30" />
+               <div className="flex items-center justify-center gap-2 mb-2">
+                  <div className="w-5 h-px bg-accent/30" />
+                  <span className="text-accent uppercase tracking-[1em] font-black text-[8px]">Exclusivo</span>
+                  <div className="w-5 h-px bg-accent/30" />
                </div>
                
-               {/* "Sua" - Static/Fading */}
+               {/* "Sua" - Balanced */}
                <motion.span 
                   style={{ opacity: useTransform(scrollYProgress, [0, 0.1], [1, 0]) }}
-                  className="text-white text-2xl md:text-4xl font-black uppercase tracking-tighter block mb-[-0.25rem]"
+                  className="text-white text-xl md:text-2xl font-black uppercase tracking-widest block"
                >
                   Sua
                </motion.span>
 
-               {/* "Estadia" - The Portal Zoom (Limited to 3x) */}
+               {/* "Estadia" - The Portal Zoom (Limited to 2x) */}
                <motion.div 
                   style={{ scale: estadiaScale, opacity: estadiaOpacity }}
                   className="will-change-transform"
                >
-                  <h1 className="text-6xl md:text-8xl font-black tracking-tighter uppercase leading-none text-white drop-shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                  <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                      <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 italic">
                         Estadia.
                      </span>

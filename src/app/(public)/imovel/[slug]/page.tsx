@@ -10,11 +10,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   let property: any = null
   try {
-    property = await db.query.properties.findFirst({
-      where: eq(properties.slug, slug),
-    })
+    const results = await db.select().from(properties).where(eq(properties.slug, slug))
+    property = results[0]
   } catch(e) {
-    property = { name: "Vila Ocean View UX Demo", description: "Aproveite esta demo maravilhosa" }
+    property = null
   }
 
   if (!property) return { title: 'Imóvel não encontrado' }
@@ -30,20 +29,21 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
   let property: any = null
 
   try {
-    property = await db.query.properties.findFirst({
-      where: eq(properties.slug, slug),
-      with: {
-        images: {
-          orderBy: (images: any, { asc }: any) => [asc(images.order)],
-        },
-      },
-    })
+    const results = await db.select().from(properties).where(eq(properties.slug, slug))
+    property = results[0]
     
     if (!property) {
       notFound()
     }
+
+    // Manual enrichment for images and relations to ensure stability
+    const images = await db.select().from(propertyImages)
+      .where(eq(propertyImages.propertyId, property.id))
+      .orderBy(propertyImages.order)
+    
+    property = { ...property, images }
   } catch(e) {
-    console.error(e)
+    console.error("Property Detail Fetch Error:", e)
     notFound()
   }
 

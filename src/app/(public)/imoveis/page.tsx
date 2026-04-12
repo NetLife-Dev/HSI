@@ -11,17 +11,18 @@ import { MOCK_PROPERTIES } from '@/lib/mock-data'
 export default async function CatalogPage() {
   let allProperties: any[] = []
   try {
-    allProperties = await db.query.properties.findMany({
-      where: eq(properties.status, 'active'),
-      with: {
-        images: {
-          limit: 1,
-        },
-      },
-      orderBy: (properties, { desc }) => [desc(properties.createdAt)],
-    })
+    // Robust direct select to bypass relation inference issues in production
+    allProperties = await db.select().from(properties).where(eq(properties.status, 'active'))
+    
+    // Enrich with images manually to ensure reliability
+    const propertiesWithImages = await Promise.all(allProperties.map(async (p) => {
+       const images = await db.select().from(propertyImages).where(eq(propertyImages.propertyId, p.id)).limit(1)
+       return { ...p, images }
+    }))
+    
+    allProperties = propertiesWithImages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
   } catch (error) {
-    console.log("Mock Mode Active for Catalog (Database Error)")
+    console.error("Database Fetch Error for Catalog:", error)
   }
 
   const displayProperties = allProperties || []

@@ -7,16 +7,16 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const featuredProperties = await db.query.properties.findMany({
-      where: and(eq(properties.status, 'active'), eq(properties.featured, true)),
-      with: {
-        images: {
-          orderBy: (images: any, { asc }: any) => [asc(images.order)],
-          limit: 1,
-        },
-      },
-      limit: 6,
-    })
+    // Robust direct select to bypass relation inference issues
+    const allActive = await db.select().from(properties)
+      .where(and(eq(properties.status, 'active'), eq(properties.featured, true)))
+      .limit(6)
+    
+    // Enrich with images manually for stability
+    const featuredProperties = await Promise.all(allActive.map(async (p) => {
+       const images = await db.select().from(propertyImages).where(eq(propertyImages.propertyId, p.id)).limit(1)
+       return { ...p, images }
+    }))
 
     return NextResponse.json({ success: true, properties: featuredProperties })
   } catch (error) {
